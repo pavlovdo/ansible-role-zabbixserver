@@ -185,31 +185,16 @@ zabbix_web_hosts:
 
   
 zabbix_usergroups:
-  - name: KSB Services Administrators
+  - name: Portal Services Administrators
     rights:
-      - host_group: KSB Services
+      - host_group: Portal Services
         permission: read-write
 
-  - name: Outside Services Administrators
+  - name: VPN Services Administrators
     rights:
-      - host_group: Outside Services
+      - host_group: VPN Services
         permission: read-write
 
-  - name: RC Services Administrators
-    rights:
-      - host_group: RC Services
-        permission: read-write
-
-  - name: SUM1 Services Administrators
-    rights:
-      - host_group: SUM1 API Services
-        permission: read-write
-      - host_group: SUM1 Client Services
-        permission: read-write
-      - host_group: SUM1 Developer Services
-        permission: read-write
-      - host_group: SUM1 Participant Services
-        permission: read-write
 
 zabbix_actions:
   - name: VPN Services
