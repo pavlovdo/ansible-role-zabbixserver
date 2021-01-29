@@ -102,9 +102,9 @@ List of your common actions (for all your zabbix servers):
     zabbix_actions:
 
 
-# Zabbix Housekeeping settings
-# https://www.zabbix.com/documentation/current/manual/api/reference/housekeeping/object#housekeeping
-# https://www.zabbix.com/documentation/current/manual/web_interface/frontend_sections/administration/general#housekeeper
+Zabbix Housekeeping settings:
+https://www.zabbix.com/documentation/current/manual/api/reference/housekeeping/object#housekeeping
+https://www.zabbix.com/documentation/current/manual/web_interface/frontend_sections/administration/general#housekeeper
     zabbix_hk_events_mode: 1
     zabbix_hk_events_trigger: 365d
     zabbix_hk_events_internal: 1d
@@ -126,7 +126,7 @@ List of your common actions (for all your zabbix servers):
     zabbix_compress_older: 7d        
 
 
-# define that variables in playbooks of zabbix servers - expand variables for specific monitoring server
+Define that variables in playbooks of zabbix servers - expand variables for specific monitoring server:
     zabbix_server_url: "http://mon.example.com/api_jsonrpc.php"
     zabbix_smtp_email_from: "mon@example.com"
 
