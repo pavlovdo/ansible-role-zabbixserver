@@ -195,6 +195,36 @@ zabbix_usergroups:
       - host_group: VPN Services
         permission: read-write
 
+zabbix_users:
+  - alias: username1
+    name: John
+    surname: Doe
+    passwd: "{{ zabbix_username1_password }}"
+    usrgrps:
+      - Portal Services Administrators        
+      - VPN Services Administrators
+    lang: en_GB
+    theme: default
+    autologin: no
+    autologout: '0'
+    refresh: '30'
+    rows_per_page: '200'
+    after_login_url: ''
+    user_medias:
+      - mediatype: EMail
+        sendto: username1@gmail.com
+        period: 1-5,08:00-22:00
+        severity:
+          not_classified: no
+          information: no
+          warning: no
+          average: yes
+          high: yes
+          disaster: yes
+        active: yes
+    type: Zabbix admin
+    role_name: Admin role
+    state: present
 
 zabbix_actions:
   - name: VPN Services
