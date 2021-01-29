@@ -8,17 +8,17 @@ Installation
 ------------
 1) Change directory to your ansible roles directory, for example:
 
-cd ~/src/ansible/roles
+    cd ~/src/ansible/roles
 
 
 2) Clone repo:
 
-git clone https://github.com/pavlovdo/ansible-role-zabbixserver
+    git clone https://github.com/pavlovdo/ansible-role-zabbixserver
 
 
 3) Rename role directory to zabbixserver:
 
-mv ansible-role-zabbixserver zabbixserver
+    mv ansible-role-zabbixserver zabbixserver
 
 
 Requirements
