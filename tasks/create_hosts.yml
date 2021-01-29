@@ -1,0 +1,56 @@
+- name: create ipmi zabbix hosts
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    host_name: "{{ item.hostname }}"
+    visible_name: "{{ item.visiblename }}"
+    description: "{{ item.description }}"
+    host_groups: "{{ item.hostgroups }}"
+    link_templates: "{{ item.linktemplates }}"
+    interfaces: "{{ item.interfaces }}"
+    ipmi_authtype: "{{ item.ipmi_authtype }}"
+    ipmi_password: "{{ item.ipmi_password }}"
+    ipmi_privilege: "{{ item.ipmi_privilege }}"
+    ipmi_username: "{{ item.ipmi_username }}"
+    state: present
+    status: "{{ item.status }}"
+    tags: "{{ item.tags }}"
+  loop: "{{ (zabbix_hosts + zabbix_hosts_custom) | flatten(levels=1) }}"
+  when: item.ipmi is defined and item.ipmi
+
+- name: create zabbix hosts
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    host_name: "{{ item.hostname }}"
+    visible_name: "{{ item.visiblename }}"
+    description: "{{ item.description }}"
+    host_groups: "{{ item.hostgroups }}"
+    link_templates: "{{ item.linktemplates | default(omit) }}"
+    interfaces: "{{ item.interfaces | default(omit) }}"
+    state: present
+    status: "{{ item.status }}"
+    tags: "{{ item.tags }}"
+  loop: "{{ (zabbix_hosts + zabbix_hosts_custom + zabbix_web_hosts + zabbix_web_hosts_custom) | flatten(levels=1) }}"
+  when: item.ipmi is not defined
+
+- name: list of zabbix_hosts with subelements
+  debug:
+    msg: "{{ (zabbix_hosts + zabbix_hosts_custom + zabbix_web_hosts_rc + zabbix_web_hosts_sum1 + zabbix_web_hosts_custom) | subelements('macros', {'skip_missing': True}) }}"
+    verbosity: 2
+
+- name: create zabbix macros for hosts
+  local_action:
+    module: community.zabbix.zabbix_hostmacro
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    host_name: "{{ item.0.hostname }}"
+    macro_name: "{{ item.1.name }}"
+    macro_value: "{{ item.1.value }}"
+    state: present
+  loop: "{{ (zabbix_hosts + zabbix_hosts_custom + zabbix_web_hosts + zabbix_web_hosts_custom) | subelements('macros', {'skip_missing': True}) }}"

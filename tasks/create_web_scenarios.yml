@@ -1,0 +1,92 @@
+- name: get Zabbix WEB Host ID
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: host.get
+      params:
+        filter:
+          host: "{{ item.hostname }}"
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200
+  loop: "{{ (zabbix_web_hosts + zabbix_web_hosts_custom) | flatten(levels=1) }}"
+  when: item.web
+  register: zbx_web_hosts_get
+
+- debug:
+    var: zbx_web_hosts_get
+    verbosity: 2
+
+- name: create Zabbix Web Services Application
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: application.create
+      params:
+        name: Web Services
+        hostid: "{{ item.json.result[0].hostid }}"
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200
+  loop: "{{ zbx_web_hosts_get.results }}"
+  when: item.item.web
+
+- name: get Zabbix Web Service Application
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: application.get
+      params:
+        output: extend
+        hostids: "{{ item.json.result[0].hostid }}"
+        sortfield: name
+        filter:
+          name: Web Services
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200
+  register: zbx_web_hosts_web_application_get
+  loop: "{{ zbx_web_hosts_get.results }}"
+  when: item.item.web
+
+- name: zbx_web_hosts_web_application_get
+  debug:
+    var: zbx_web_hosts_web_application_get
+    verbosity: 3
+
+- name: list of zip zbx_web_hosts_web_application_get.results and zabbix_web_hosts
+  debug:
+    msg: "{{ zbx_web_hosts_web_application_get.results | zip('{{ zabbix_web_hosts_get.results }}') | list }}"
+    verbosity: 2
+
+- name: create Zabbix WEB Scenario
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: httptest.create
+      params:
+        applicationid: "{{ item.0.json.result[0].applicationid }}"
+        delay: "{{ item.0.item.item.webscenario.delay | default(omit) }}"
+        headers: "{{ item.0.item.item.webscenario.headers | default(omit) }}"
+        hostid: "{{ item.0.json.result[0].hostid }}"
+        name: Availability of web service
+        retries: "{{ item.0.item.item.webscenario.retries | default(omit) }}"
+        steps: "{{ item.0.item.item.webscenario.steps }}"
+        verify_peer: "{{ item.0.item.item.webscenario.verify_peer | default(0) }}"
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200
+  loop: "{{ zbx_web_hosts_web_application_get.results | zip('{{ zabbix_web_hosts_get.results }}') | list }}"
+  when: item.0.item.item.web

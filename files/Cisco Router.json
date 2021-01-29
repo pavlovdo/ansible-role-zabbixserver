@@ -1,0 +1,37 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T16:01:50Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Router",
+                "name": "Cisco Router",
+                "templates": [
+                    {
+                        "name": "Cisco IOS SNMP Custom"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$CPU_UTIL_MAX}",
+                        "value": "90"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ]
+    }
+}

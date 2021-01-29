@@ -1,0 +1,853 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T16:03:44Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco WLC",
+                "name": "Cisco WLC",
+                "templates": [
+                    {
+                        "name": "Cisco CISCO-MEMORY-POOL-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco CISCO-PROCESS-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco Inventory SNMP Custom"
+                    },
+                    {
+                        "name": "Generic SNMP"
+                    },
+                    {
+                        "name": "Interfaces Simple SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Parameters"
+                    },
+                    {
+                        "name": "Perfomance"
+                    },
+                    {
+                        "name": "Wi-Fi Users"
+                    },
+                    {
+                        "name": "Wireless"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Current CPU Load of the WLC",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.14179.1.1.5.1.0",
+                        "key": "agentCurrentCPUUtilization",
+                        "units": "percent",
+                        "description": "Current CPU Load of the switch in percentage",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>60",
+                                "name": "High CPU Load on WLC {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Free RAM of the WLC",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.14179.1.1.5.3.0",
+                        "key": "agentFreeMemory",
+                        "value_type": "FLOAT",
+                        "units": "GB",
+                        "description": "Free RAM of the switch in Kbytes",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.00000095367431640625"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total RAM of the WLC",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.14179.1.1.5.2.0",
+                        "key": "agentTotalMemory",
+                        "value_type": "FLOAT",
+                        "units": "GB",
+                        "description": "Total RAM of the switch in Kbytes",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.00000095367431640625"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Current Internal Temperature of the WLC",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.14179.2.3.1.13.0",
+                        "key": "bsnSensorTemperature",
+                        "description": "Current Internal Temperature of the unit",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Internal Temperature Alarm High Limit of WLC",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.14179.2.3.1.15.0",
+                        "key": "bsnTemperatureAlarmHighLimit",
+                        "delay": "1h",
+                        "units": "degrees",
+                        "description": "Internal Temperature Alarm High Limit in Centigrade. If the\nbsnSensorTemperature goes above this limit \nbsnSensedTemperatureTooHigh Alarm will be sent out",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total Number of Wi-Fi Users",
+                        "type": "TRAP",
+                        "key": "TotalNumberofUsers",
+                        "delay": "0",
+                        "applications": [
+                            {
+                                "name": "Wi-Fi Users"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Wireless Access Points IP Addresses",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.14179.2.2.1.1.19]",
+                        "key": "bsnApIpAddress",
+                        "delay": "1h",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "ICMP ping response time from AP with IP $1",
+                                "type": "SIMPLE",
+                                "key": "icmppingsec[{#SNMPVALUE}]",
+                                "value_type": "FLOAT",
+                                "units": "s",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last(0)}=0",
+                                        "name": "AP {#SNMPVALUE} associated with {HOSTNAME} is not responding",
+                                        "status": "DISABLED",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Wireless Access Points",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.14179.2.2.1.1.3]",
+                        "key": "bsnAPName",
+                        "delay": "1h",
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "Admin State of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.37.{#SNMPINDEX}",
+                                "key": "bsnAPAdminStatus.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPAdminStatus"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Admin State of the AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Boot Version of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.9.{#SNMPINDEX}",
+                                "key": "bsnAPBootVersion.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Boot Version of AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Admin status of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.34.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0AdminStatus.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPIfAdminStatus"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Admin status of the interface ID0 AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Channel Utilization of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.3.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0LoadChannelUtilization.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Channel Utilization of interface ID0 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Receiver utilization of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.1.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0LoadRxUtilization.[{#SNMPVALUE}]",
+                                "description": "This is the percentage of time the Airespace AP\nreceiver is busy operating on packets. It is a number \nfrom 0-100 representing a load from 0 to 1.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Receiver utilization of interface ID0 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Transmitter utilization of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.2.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0LoadTxUtilization.[{#SNMPVALUE}]",
+                                "description": "This is the percentage of time the Airespace AP\ntransmitter is busy operating on packets. It is a \nnumber from 0-100 representing a load from 0 to 1.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Transmitter utilization of interface ID0 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of Users associated with this interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.15.{#SNMPINDEX}.0",
+                                "key": "bsnApIfID0NoOfUsers.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wi-Fi Users"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>50",
+                                        "name": "Number of Users associated with interface ID0 AP {#SNMPVALUE} has exceeded 50",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of WLANs currently active on interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.11.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0NumberOfVaps.[{#SNMPVALUE}]",
+                                "description": "Number of WLANs currently active on this AP Interface",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Current channel number of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0PhyChannelNumber.[{#SNMPVALUE}]",
+                                "description": "Current channel number of the AP Interface.\nChannel numbers will be from 1 to 14 for 802.11b interface type.\nChannel numbers will be from 34 to 169 for 802.11a interface \ntype. Allowed channel numbers also depends on the current \nCountry Code set in the Switch. This attribute cannot be set \nunless bsnAPIfPhyChannelAssignment is set to customized else \nthis attribute gets assigned by dynamic algorithm.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "TxPowerLevel currently being used to transmit data Interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.6.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0PhyTxPowerLevel.[{#SNMPVALUE}]",
+                                "description": "The TxPowerLevel currently being used to transmit data.\nSome PHYs also use this value to determine the receiver\nsensitivity requirements for CCA. Valid values are between\n1 to 8,depnding on what radio, and this attribute can be \nset only if bsnAPIfPhyTxPowerControl is set to customized.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of Clients with poor SNR attached to AP $1 interface ID0",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.14179.2.2.13.1.24.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0PoorSNRClients.[{#SNMPVALUE}]",
+                                "description": "This is the number of clients with poor SNR attached to\nthis Airespace AP at the last measurement interval \n( This comes from APF )",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Type of interface ID0 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.2.{#SNMPINDEX}.0",
+                                "key": "bsnAPIfID0Type.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "description": "The type of this interface. dot11b also implies 802.11b/g.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPIfType"
+                                }
+                            },
+                            {
+                                "name": "Admin status of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.34.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1AdminStatus.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPIfAdminStatus"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Admin status of the interface ID1 AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Channel Utilization of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.3.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1LoadChannelUtilization.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Channel Utilization of interface ID1 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Receiver utilization of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.1.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1LoadRxUtilization.[{#SNMPVALUE}]",
+                                "description": "This is the percentage of time the Airespace AP\nreceiver is busy operating on packets. It is a number \nfrom 0-100 representing a load from 0 to 1.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Receiver utilization of interface ID1 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Transmitter utilization of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.13.1.2.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1LoadTxUtilization.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>90",
+                                        "name": "Transmitter utilization of interface ID1 AP {#SNMPVALUE} was exceeded 90%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of Users associated with this interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.15.{#SNMPINDEX}.1",
+                                "key": "bsnApIfID1NoOfUsers.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(120)}>50",
+                                        "name": "Number of Users associated with interface ID1 AP {#SNMPVALUE} has exceeded 50",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of WLANs currently active on interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.11.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1NumberOfVaps.[{#SNMPVALUE}]",
+                                "description": "Number of WLANs currently active on this AP Interface",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Current channel number of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1PhyChannelNumber.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "TxPowerLevel currently being used to transmit data Interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.6.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1PhyTxPowerLevel.[{#SNMPVALUE}]",
+                                "description": "The TxPowerLevel currently being used to transmit data.\nSome PHYs also use this value to determine the receiver\nsensitivity requirements for CCA. Valid values are between\n1 to 8,depnding on what radio, and this attribute can be \nset only if bsnAPIfPhyTxPowerControl is set to customized.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of Clients with poor SNR attached to AP $1 interface ID1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.14179.2.2.13.1.24.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1PoorSNRClients.[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Type of interface ID1 AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.2.1.2.{#SNMPINDEX}.1",
+                                "key": "bsnAPIfID1Type.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPIfType"
+                                }
+                            },
+                            {
+                                "name": "IOS Version of IOS Cisco AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.31.{#SNMPINDEX}",
+                                "key": "bsnAPIOSVersion.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "IOS Version of IOS Cisco AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "IP address of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.19.{#SNMPINDEX}",
+                                "key": "bsnApIpAddress.[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "IP address of the AP. This will not be available when\nthe switch is operating in the Layer2 mode. In this case,\nthe attribute will return 0 as value.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "IP address of the AP {#SNMPVALUE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Mirrored mode of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.20.{#SNMPINDEX}",
+                                "key": "bsnAPMirrorMode.[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "If enabled, then this AP's Client's Data is mirrored and this\nAP's clients are dynamically added to the switch's mirrored \nMAC list",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Mirrored mode of AP {#SNMPVALUE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Model of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.16.{#SNMPINDEX}",
+                                "key": "bsnAPModel.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Model of AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Number of Radio Interfaces on the Airespace AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.2.{#SNMPINDEX}",
+                                "key": "bsnAPNumOfSlots.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "description": "Number of Radio Interfaces on the Airespace AP.\nCurrently maximum two interfaces are supported.\nOne would be of type 802.11a and other of type\n802.11b/g",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Number of Radio Interfaces on the Airespace AP {#SNMPVALUE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Operation State of the AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.6.{#SNMPINDEX}",
+                                "key": "bsnAPOperationStatus.[{#SNMPVALUE}]",
+                                "description": "Operation State of the AP. When AP associates with the\nAirespace Switch its state will be associated. When Airespace\nAP is disassociated from the Switch, its state will be \ndisassociating. The state is downloading when the AP is \ndownloading its firmware.",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bsnAPOperationStatus"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(300)}=1",
+                                        "name": "AP {#SNMPVALUE} is not responding",
+                                        "priority": "HIGH"
+                                    },
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Operation State of the AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Serial Number of the AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.17.{#SNMPINDEX}",
+                                "key": "bsnAPSerialNumber.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Serial Number of the AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Software Version of AP $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.2.1.1.8.{#SNMPINDEX}",
+                                "key": "bsnAPSoftwareVersion.[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff(0)}=1",
+                                        "name": "Software Version of AP {#SNMPVALUE} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "Number of Users associated with AP {#SNMPVALUE}",
+                                "graph_items": [
+                                    {
+                                        "color": "00C800",
+                                        "item": {
+                                            "host": "Cisco WLC",
+                                            "key": "bsnApIfID0NoOfUsers.[{#SNMPVALUE}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "6666FF",
+                                        "item": {
+                                            "host": "Cisco WLC",
+                                            "key": "bsnApIfID1NoOfUsers.[{#SNMPVALUE}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SSIDs",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.14179.2.1.1.1.2]",
+                        "key": "bsnDot11EssSsid",
+                        "delay": "1h",
+                        "description": "SSID assigned to ESS(WLAN)",
+                        "item_prototypes": [
+                            {
+                                "name": "Number of mobile stations associated with SSID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.14179.2.1.1.1.38.{#SNMPINDEX}",
+                                "key": "bsnDot11EssNumberOfMobileStations.[{#SNMPVALUE}]",
+                                "description": "No of Mobile Stations currently associated with the\nWLAN",
+                                "applications": [
+                                    {
+                                        "name": "Wireless"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Cisco WLC:bsnSensorTemperature.last()}/{Cisco WLC:bsnTemperatureAlarmHighLimit.last()}>0.9",
+                "name": "Critical temperature on WLC {HOSTNAME}",
+                "priority": "HIGH"
+            },
+            {
+                "expression": "{Cisco WLC:agentFreeMemory.last()}/{Cisco WLC:agentTotalMemory.last()}<0.2",
+                "name": "High Memory Load on WLC {HOSTNAME}",
+                "priority": "HIGH"
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "bsnAPAdminStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "enable"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "disable"
+                    }
+                ]
+            },
+            {
+                "name": "bsnAPIfAdminStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "enable"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "disable"
+                    }
+                ]
+            },
+            {
+                "name": "bsnAPIfType",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "dot11b"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "dot11a"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "uwb"
+                    }
+                ]
+            },
+            {
+                "name": "bsnAPOperationStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "associated"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "disassociating"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "downloading"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,553 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-17T17:27:57Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "MS Exchange Databases",
+                "name": "MS Exchange Databases",
+                "description": "MS Exchange Server 2016 template\nv0.1.1\n\nLLD:\n - Databases (with PowerShell script)\n\nAll thresholds taken from this page:\nhttps://docs.microsoft.com/ru-ru/exchange/exchange-2013-performance-counters-exchange-2013-help",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Exchange CAS Metrics"
+                    },
+                    {
+                        "name": "Exchange Databases Summary"
+                    },
+                    {
+                        "name": "Exchange EDB Files"
+                    },
+                    {
+                        "name": "Exchange Frontend Transport"
+                    },
+                    {
+                        "name": "Exchange Processes"
+                    },
+                    {
+                        "name": "Exchange Services"
+                    },
+                    {
+                        "name": "Exchange Transport"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Exchange Database Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "exchange.db.discovery[\"{$EXCHANGE.VERSION}\"]",
+                        "delay": "1h",
+                        "lifetime": "2d",
+                        "description": "Discovery all Exchange databases",
+                        "item_prototypes": [
+                            {
+                                "name": "{#DB.NAME} database copy status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Active Manager({#DB.LCNAME})\\Database Copy Role Active\"]",
+                                "delay": "5m",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Is the database {#DB.NAME} copy active?\n0 - passive\n1 - active",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Active Manager: {#DB.NAME}"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Exchange Server 2016 Database Copy State"
+                                }
+                            },
+                            {
+                                "name": "{#DB.NAME} database mounted state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Active Manager({#DB.LCNAME})\\Database Mounted\"]",
+                                "delay": "5m",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Database {#DB.NAME} mounted state.\n0 - not mounted\n1 - mounted",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Active Manager: {#DB.NAME}"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Exchange Server 2016 Database Mounted State"
+                                }
+                            },
+                            {
+                                "name": "{#DB.NAME} page faults per second",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database(Information Store - {#DB.NAME})\\Database Page Fault Stalls/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Indicates the rate of page faults that can't be serviced because there are no pages available for allocation from the database cache.\nIf this counter is above 0, it's an indication that the MSExchange Database\\I/O Database Writes (Attached) Average Latency is too high.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{max(5m)}>1",
+                                        "name": "{#DB.NAME} page faults too high",
+                                        "status": "DISABLED",
+                                        "priority": "AVERAGE",
+                                        "description": "Too much page faults stalls for database \"{#DB.NAME}\".\nThis counter should be 0 on production servers."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} log record stalls",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database(Information Store - {#DB.NAME})\\Log Record Stalls/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Indicates the number of log records that can't be added to the log buffers per second because the log buffers are full.\n\nThe average value should be below 10 per second.\nSpikes (maximum values) shouldn't be higher than 100 per second.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(10m)}>100",
+                                        "name": "{#DB.NAME} log records stalls too high: {ITEM.VALUE}",
+                                        "priority": "AVERAGE",
+                                        "description": "Stalled log records too high for database \"{#DB.NAME}\".\nThe average value should be less than 10 threads waiting."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} log threads waiting",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database(Information Store - {#DB.NAME})\\Log Threads Waiting\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Indicates the number of threads waiting to complete an update of the database by writing their data to the log.\n\nThe average value should be less than 10 threads waiting.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{min(10m)}>10",
+                                        "name": "{#DB.NAME} log threads waiting too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "Log threads waiing count too high for database \"{#DB.NAME}\".\nThe average value should be less than 10 threads waiting."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} active database read operations per second",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Reads (Attached)/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "description": "Shows the number of database read operations.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} active database read operations latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Reads (Attached) Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "Shows the average length of time, in milliseconds (ms), per database read operation. Should be less than 20ms on average.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{min(10m)}>20",
+                                        "name": "{#DB.NAME} read time latency too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "\"{#DB.NAME}\" average read time latency too high for 5 min."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} passive database read operation latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Reads (Recovery) Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "Shows the average length of time, in ms, per passive database read operation. Should be less than 200ms on average.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} active database writes operations per second",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Writes (Attached)/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "description": "Number of database write operations per second for each attached database instance.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} active database writes operations latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Writes (Attached) Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "Shows the average length of time, in ms, per database write operation. Should be less than 50ms on average.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(10m)}>50",
+                                        "name": "{#DB.NAME} write time latency too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "\"{#DB.NAME}\" average write latency too high.\nIn general, this latency should be less than the \"MSExchange Database\\I/O Database Reads (Attached) Average Latency\" when battery-backed write caching is utilized."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} passive database writes operation latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Database Writes (Recovery) Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "Shows the average length of time, in ms, per passive database write operation. Should be less than the read latency for the same instance, as measured by the MSExchange Database ==> Instances(\\*)\\I/O Database Reads (Recovery) Average Latency counter.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} log writes operations per second",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Log Writes/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "description": "Shows the number of log writes per second.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} log writes operations latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Database ==> Instances(Information Store - {#DB.NAME}/_Total)\\I/O Log Writes Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "Shows the average length of time, in ms, per Log write operation. Should be less than 10ms on average.\n\nIf this counter is greater than 10, it's an indication that the MSExchange Database\\I/O Database Writes (Attached) Average Latency is too high.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Database Instances: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{min(10m)}>10",
+                                        "name": "{#DB.NAME} log write latency too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "Log writes latency too high for database \"{#DB.NAME}\"."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} active mailboxes count",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchangeIS Store({#DB.LCNAME})\\Active mailboxes\"]",
+                                "delay": "5m",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Database {#DB.NAME} number of active mailboxes.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} database state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchangeIS Store({#DB.LCNAME})\\Database State\"]",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Database {#DB.NAME} state",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Exchange Server 2016 Database State"
+                                }
+                            },
+                            {
+                                "name": "{#DB.NAME} RPC requests latency",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchangeIS Store({#DB.LCNAME})\\RPC Average Latency\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "units": "ms",
+                                "description": "RPC Latency average (msec) is the average latency in milliseconds of RPC requests per database. Average is calculated over all RPCs since exrpc32 was loaded. Should be less than 50ms at all times, with spikes less than 100ms.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(10m)}>100",
+                                        "name": "{#DB.NAME} RPC Requests latancy too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "RPC Requests latancy too high for database \"{#DB.NAME}\"."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} RPC requests per second",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchangeIS Store({#DB.LCNAME})\\RPC Operations/sec\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "description": "Shows the number of RPC operations per second for each database instance.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} RPC requests total",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchangeIS Store({#DB.LCNAME})\\RPC requests\",{$PERFCOUNTER_PERIOD}]",
+                                "history": "{$HISTORY}",
+                                "trends": "{$TRENDS}",
+                                "value_type": "FLOAT",
+                                "description": "Indicates the overall RPC requests currently executing within the information store process.\nShould be below 70 at all times.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchangeIS: {#DB.NAME}"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(10m)}>70",
+                                        "name": "{#DB.NAME} RPC Requests too high: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "RPC Requests count for database \"{#DB.NAME}\" too high."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#DB.NAME} content index state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "perf_counter[\"\\MSExchange Search Indexes({#DB.LCNAME})\\Indexing Status\"]",
+                                "delay": "5m",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "FLOAT",
+                                "description": "Database {#DB.NAME} content index state.",
+                                "application_prototypes": [
+                                    {
+                                        "name": "MSExchange Search Indexes: {#DB.NAME}"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Exchange Server 2016 Database Content Index States"
+                                }
+                            },
+                            {
+                                "name": "{#DB.NAME} edb file size",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "vfs.file.size[{#DB.EDBPATH}]",
+                                "delay": "5m",
+                                "history": "{$HISTORY}",
+                                "units": "B",
+                                "description": "Database {#DB.NAME} edb file size.",
+                                "applications": [
+                                    {
+                                        "name": "Exchange EDB Files"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "10m"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$DB_READ_LAT}",
+                        "value": "100"
+                    },
+                    {
+                        "macro": "{$DB_WRITE_LAT}",
+                        "value": "1000"
+                    },
+                    {
+                        "macro": "{$EXCHANGE.VERSION}",
+                        "value": "2016"
+                    },
+                    {
+                        "macro": "{$HISTORY}",
+                        "value": "14d"
+                    },
+                    {
+                        "macro": "{$PERFCOUNTER_PERIOD}",
+                        "value": "30"
+                    },
+                    {
+                        "macro": "{$TRENDS}",
+                        "value": "180d"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Exchange Server 2016 Database Content Index States",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Unknown"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Healthy"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Crawling"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Failed"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Seeding"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "FailedAndSuspended"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Suspended"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Disabled"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "AutoSuspended"
+                    },
+                    {
+                        "value": "9",
+                        "newvalue": "HealthyAndUpgrading"
+                    },
+                    {
+                        "value": "10",
+                        "newvalue": "DiskUnavailable"
+                    }
+                ]
+            },
+            {
+                "name": "Exchange Server 2016 Database Copy State",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Passive"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Active"
+                    }
+                ]
+            },
+            {
+                "name": "Exchange Server 2016 Database Mounted State",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Not mounted"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Mounted"
+                    }
+                ]
+            },
+            {
+                "name": "Exchange Server 2016 Database State",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Dismounted"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Mounted"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Healthy"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-03T18:04:37Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Xerox 3052",
+                "name": "Xerox 3052",
+                "templates": [
+                    {
+                        "name": "Xerox BW"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ]
+            }
+        ]
+    }
+}

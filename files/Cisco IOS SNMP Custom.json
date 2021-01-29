@@ -1,0 +1,46 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T15:13:47Z",
+        "groups": [
+            {
+                "name": "Templates/Network devices"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco IOS SNMP Custom",
+                "name": "Cisco IOS SNMP Custom",
+                "description": "Template Cisco IOS Software releases 12.2(3.5) or later\n\nKnown Issues:\n\n  Description: no if(in|out)(Errors|Discards) are available for vlan ifType\n  Version: IOS for example: 12.1(22)EA11, 15.4(3)M2\n  Device: C2911, C7600\n\nTemplate tooling version used: 0.34",
+                "templates": [
+                    {
+                        "name": "Cisco CISCO-ENVMON-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco CISCO-MEMORY-POOL-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco CISCO-PROCESS-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco Inventory SNMP Custom"
+                    },
+                    {
+                        "name": "EtherLike-MIB SNMP"
+                    },
+                    {
+                        "name": "Generic SNMP"
+                    },
+                    {
+                        "name": "Interfaces SNMP Custom"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Network devices"
+                    }
+                ]
+            }
+        ]
+    }
+}

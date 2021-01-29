@@ -1,0 +1,22 @@
+- name: get Zabbix API Token for using ansible module URI
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: user.login
+      params:
+        user: "{{ zabbix_api_user }}"
+        password: "{{ zabbix_api_password }}"
+      id: 1
+      auth: null
+  register: zbx_api_token_json
+
+- debug:
+    var: zbx_api_token_json
+    verbosity: 2
+
+- name: "Set zabbix api token as fact"
+  set_fact:
+    zbx_api_token: "{{ zbx_api_token_json.json.result }}"

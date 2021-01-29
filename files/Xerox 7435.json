@@ -1,0 +1,386 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-03T18:05:11Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Xerox 7435",
+                "name": "Xerox 7435",
+                "templates": [
+                    {
+                        "name": "Xerox 7xxx"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Marker Supplies Level  Bias Transfer Roll",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.10",
+                        "key": "prtMarkerSuppliesLevelBiasTransferRoll",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Black Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.6",
+                        "key": "prtMarkerSuppliesLevelBlackDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Cyan Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.9",
+                        "key": "prtMarkerSuppliesLevelCyanDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Cyan Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.4",
+                        "key": "prtMarkerSuppliesLevelCyanTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Fuser Assembly",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.12",
+                        "key": "prtMarkerSuppliesLevelFuserAssembly",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Magenta Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.8",
+                        "key": "prtMarkerSuppliesLevelMagentaDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Magenta Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.3",
+                        "key": "prtMarkerSuppliesLevelMagentaTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Transfer Belt",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.11",
+                        "key": "prtMarkerSuppliesLevelTransferBelt",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Transfer Belt Cleaner",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.17",
+                        "key": "prtMarkerSuppliesLevelTransferBeltCleaner",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Waste Toner Container",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.5",
+                        "key": "prtMarkerSuppliesLevelWasteTonerContainer",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Yellow Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.7",
+                        "key": "prtMarkerSuppliesLevelYellowDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Yellow Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.2",
+                        "key": "prtMarkerSuppliesLevelYellowTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Bias Transfer Roll",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.10",
+                        "key": "prtMarkerSuppliesMaxCapacityBiasTransferRoll",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Black Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.6",
+                        "key": "prtMarkerSuppliesMaxCapacityBlackDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Cyan Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.9",
+                        "key": "prtMarkerSuppliesMaxCapacityCyanDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Cyan Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.4",
+                        "key": "prtMarkerSuppliesMaxCapacityCyanTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Fuser Assembly",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.12",
+                        "key": "prtMarkerSuppliesMaxCapacityFuserAssembly",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Magenta Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.8",
+                        "key": "prtMarkerSuppliesMaxCapacityMagentaDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Magenta Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.3",
+                        "key": "prtMarkerSuppliesMaxCapacityMagentaTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Transfer Belt",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.11",
+                        "key": "prtMarkerSuppliesMaxCapacityTransferBelt",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Transfer Belt Cleaner",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.17",
+                        "key": "prtMarkerSuppliesMaxCapacityTransferBeltCleaner",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Waste Toner Container",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.5",
+                        "key": "prtMarkerSuppliesMaxCapacityWasteTonerContainer",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Yellow Drum Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.7",
+                        "key": "prtMarkerSuppliesMaxCapacityYellowDrumCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Yellow Toner Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.2",
+                        "key": "prtMarkerSuppliesMaxCapacityYellowTonerCartridge",
+                        "delay": "30s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelBiasTransferRoll.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityBiasTransferRoll.last(0)}*100=0",
+                "name": "Bias Transfer Roll on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelBlackDrumCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityBlackDrumCartridge.last(0)}*100=0",
+                "name": "Black Drum Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelCyanDrumCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityCyanDrumCartridge.last(0)}*100=0",
+                "name": "Cyan Drum Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelCyanTonerCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityCyanTonerCartridge.last(0)}*100=0",
+                "name": "Cyan Toner Cartridge PN 106R01077 on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelFuserAssembly.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityFuserAssembly.last(0)}*100=0",
+                "name": "Fuser Assembly on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelMagentaDrumCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityMagentaDrumCartridge.last(0)}*100=0",
+                "name": "Magenta Drum Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelMagentaTonerCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityMagentaTonerCartridge.last(0)}*100=0",
+                "name": "Magenta Toner Cartridge PN 106R01078 on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelTransferBeltCleaner.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityTransferBeltCleaner.last(0)}*100=0",
+                "name": "Transfer Belt Cleaner on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelTransferBelt.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityTransferBelt.last(0)}*100=0",
+                "name": "Transfer Belt on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelWasteTonerContainer.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityWasteTonerContainer.last(0)}*100=0",
+                "name": "Waste Toner Container on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING",
+                "description": "prtMarkerSuppliesLevelWasteTonerContainer"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelYellowDrumCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityYellowDrumCartridge.last(0)}*100=0",
+                "name": "Yellow Drum Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7435:prtMarkerSuppliesLevelYellowTonerCartridge.avg(300)}/{Xerox 7435:prtMarkerSuppliesMaxCapacityYellowTonerCartridge.last(0)}*100=0",
+                "name": "Yellow Toner Cartridge PN 106R01079 on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            }
+        ]
+    }
+}

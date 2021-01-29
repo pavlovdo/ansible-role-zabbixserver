@@ -1,0 +1,690 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-23T22:12:43Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "UPS Eaton Powerware",
+                "name": "UPS Eaton Powerware",
+                "templates": [
+                    {
+                        "name": "Generic SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Battery"
+                    },
+                    {
+                        "name": "Bypass"
+                    },
+                    {
+                        "name": "Information(s)"
+                    },
+                    {
+                        "name": "Input"
+                    },
+                    {
+                        "name": "Output"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Alarm(s)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.7.1.0",
+                        "key": "xupsAlarms",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{diff(0)}>0",
+                                "name": "Detected alarm(s)",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Battery capacity",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.2.4.0",
+                        "key": "xupsBatCapacity",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Battery"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Battery current",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.2.3.0",
+                        "key": "xupsBatCurrent",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "A",
+                        "applications": [
+                            {
+                                "name": "Battery"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Battery status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.2.5.0",
+                        "key": "xupsBatteryAbmStatus",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Battery"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "xupsBatteryAbmStatus"
+                        }
+                    },
+                    {
+                        "name": "Battery time remaining",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.2.1.0",
+                        "key": "xupsBatTimeRemaining",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Battery"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<300",
+                                "name": "Battery time remaining is CRITICAL",
+                                "priority": "DISASTER"
+                            },
+                            {
+                                "expression": "{last(0)}>300 and {last(0)}<600",
+                                "name": "Battery time remaining is LOW",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Battery voltage",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.2.2.0",
+                        "key": "xupsBatVoltage",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "V",
+                        "applications": [
+                            {
+                                "name": "Battery"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Manufacter Name",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.534.1.1.1.0",
+                        "key": "xupsIdentManufacturer",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "TAG",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Model Name",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.534.1.1.2.0",
+                        "key": "xupsIdentModel",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "TYPE",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Input frequency",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.3.1.0",
+                        "key": "xupsInputFrequency",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "Hz",
+                        "applications": [
+                            {
+                                "name": "Input"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.1"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of deviations from normal frequency or voltage",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.3.2.0",
+                        "key": "xupsInputLineBads",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Input"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Input source",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.3.5.0",
+                        "key": "xupsInputSource",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Input"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "xupsInputSource"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<3",
+                                "name": "Input source failure",
+                                "priority": "DISASTER"
+                            },
+                            {
+                                "expression": "{last(0)}=4",
+                                "name": "On bypass",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Output frequency",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.4.2.0",
+                        "key": "xupsOutputFrequency",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "Hz",
+                        "applications": [
+                            {
+                                "name": "Output"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.1"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Output power source",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.4.5.0",
+                        "key": "xupsOutputSource",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Output"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "xupsOutputSource"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}=4",
+                                "name": "On automatic bypass",
+                                "priority": "WARNING"
+                            },
+                            {
+                                "expression": "{last(0)}=5",
+                                "name": "On battery",
+                                "priority": "HIGH"
+                            },
+                            {
+                                "expression": "{last(0)}=11",
+                                "name": "On manual bypass",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Battery test status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.534.1.8.2.0",
+                        "key": "xupsTestBatteryStatus",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "xupsTestBatteryStatus"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}=3",
+                                "name": "Battery test FAILED",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Bypass",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.534.1.5.3.1.1]",
+                        "key": "xupsBypassPhase",
+                        "delay": "5m",
+                        "lifetime": "1w",
+                        "item_prototypes": [
+                            {
+                                "name": "Bypas voltage on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.5.3.1.2.{#SNMPINDEX}",
+                                "key": "xupsBypassVoltage[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "history": "1w",
+                                "units": "V",
+                                "applications": [
+                                    {
+                                        "name": "Bypass"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Input",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.534.1.3.4.1.1]",
+                        "key": "xupsInputPhase",
+                        "delay": "5m",
+                        "lifetime": "1w",
+                        "item_prototypes": [
+                            {
+                                "name": "Input current on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.3.4.1.3.{#SNMPINDEX}",
+                                "key": "xupsInputCurrent[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "history": "1w",
+                                "units": "A",
+                                "applications": [
+                                    {
+                                        "name": "Input"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Input power on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.3.4.1.4.{#SNMPINDEX}",
+                                "key": "xupsInputPower[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "history": "1w",
+                                "units": "Watt",
+                                "applications": [
+                                    {
+                                        "name": "Input"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Input voltage on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.3.4.1.2.{#SNMPINDEX}",
+                                "key": "xupsInputVoltage[{#SNMPVALUE}]",
+                                "delay": "5m",
+                                "history": "1w",
+                                "units": "V",
+                                "applications": [
+                                    {
+                                        "name": "Input"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Output",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.534.1.4.4.1.1]",
+                        "key": "xupsOutputPhase",
+                        "delay": "1h",
+                        "lifetime": "1w",
+                        "item_prototypes": [
+                            {
+                                "name": "Output current on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.4.4.1.3.{#SNMPINDEX}",
+                                "key": "xupsOutputCurrent[{#SNMPVALUE}]",
+                                "history": "1w",
+                                "units": "A",
+                                "applications": [
+                                    {
+                                        "name": "Output"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(300)}>{$CURR_WARN:\"\"}",
+                                        "name": "High output current on phase {#SNMPVALUE}",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Output voltage on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.4.4.1.2.{#SNMPINDEX}",
+                                "key": "xupsOutputVoltage[{#SNMPVALUE}]",
+                                "history": "1w",
+                                "units": "V",
+                                "applications": [
+                                    {
+                                        "name": "Output"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Output power on phase $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.534.1.4.4.1.3.{#SNMPINDEX}",
+                                "key": "xupsOutputWatts[{#SNMPVALUE}]",
+                                "history": "1w",
+                                "units": "Watt",
+                                "applications": [
+                                    {
+                                        "name": "Output"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$CURR_WARN}",
+                        "value": "16"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{UPS Eaton Powerware:xupsBatCurrent.last(0)}<0 and {UPS Eaton Powerware:xupsBatteryAbmStatus.last(0)}=2",
+                "name": "Battery is discharging",
+                "priority": "AVERAGE"
+            }
+        ],
+        "graphs": [
+            {
+                "name": "Battery capacity",
+                "graph_items": [
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "09C0E3",
+                        "item": {
+                            "host": "UPS Eaton Powerware",
+                            "key": "xupsBatCapacity"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Battery current",
+                "graph_items": [
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "09C0E3",
+                        "item": {
+                            "host": "UPS Eaton Powerware",
+                            "key": "xupsBatCurrent"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Battery status",
+                "graph_items": [
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "09C0E3",
+                        "item": {
+                            "host": "UPS Eaton Powerware",
+                            "key": "xupsBatteryAbmStatus"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Battery time remaining",
+                "graph_items": [
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "09C0E3",
+                        "item": {
+                            "host": "UPS Eaton Powerware",
+                            "key": "xupsBatTimeRemaining"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Number of deviations from normal frequency or voltage",
+                "graph_items": [
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "09C0E3",
+                        "item": {
+                            "host": "UPS Eaton Powerware",
+                            "key": "xupsInputLineBads"
+                        }
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "xupsBatteryAbmStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "Battery charging"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Battery discharging"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Battery floating"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Battery resting"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Unknown"
+                    }
+                ]
+            },
+            {
+                "name": "xupsInputSource",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "Other"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "None"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Primary Utility"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Bypass Feed"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Secondary Utility"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Generator"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Fly wheel"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "Fuel cell"
+                    }
+                ]
+            },
+            {
+                "name": "xupsOutputSource",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "Other"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "None"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Normal"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Bypass"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Battery"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Booster"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Reducer"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "Parallel capacity"
+                    },
+                    {
+                        "value": "9",
+                        "newvalue": "Parallel redundant"
+                    },
+                    {
+                        "value": "10",
+                        "newvalue": "High efficiency mode"
+                    },
+                    {
+                        "value": "11",
+                        "newvalue": "Maintenance bypass"
+                    }
+                ]
+            },
+            {
+                "name": "xupsTestBatteryStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "Unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Passed"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Failed"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "In progress"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Not supported"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Inhibited"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Scheduled"
+                    }
+                ]
+            }
+        ]
+    }
+}

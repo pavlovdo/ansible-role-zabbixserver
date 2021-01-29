@@ -1,0 +1,390 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-25T11:08:57Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "OpenVPN",
+                "name": "OpenVPN",
+                "description": "Based on the work here:\nhttps://github.com/staltrans/zabbix-openvpn",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Openvpn clients"
+                    },
+                    {
+                        "name": "Openvpn instances"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Online clients",
+                        "key": "openvpn.users_number",
+                        "delay": "3m",
+                        "applications": [
+                            {
+                                "name": "Openvpn instances"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1"
+                                ],
+                                "error_handler": "CUSTOM_VALUE",
+                                "error_handler_params": "0"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}>0",
+                                "name": "Online OpenVPN clients count",
+                                "priority": "INFO"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Openvpn instances",
+                        "key": "openvpn.instances",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "CPU usage of instance {#OPENVPN_INSTANCE}",
+                                "key": "proc.cpu.util[openvpn,,,{#OPENVPN_INSTANCE}]",
+                                "delay": "10m",
+                                "history": "30d",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn instances"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Memory consumption of instance {#OPENVPN_INSTANCE}",
+                                "key": "proc.mem[openvpn,,,{#OPENVPN_INSTANCE}]",
+                                "delay": "10m",
+                                "history": "30d",
+                                "units": "byte",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn instances"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Processes number of instance {#OPENVPN_INSTANCE}",
+                                "key": "proc.num[openvpn,,,{#OPENVPN_INSTANCE}]",
+                                "delay": "3m",
+                                "history": "30d",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn instances"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=0",
+                                        "name": "No process for {#OPENVPN_INSTANCE}",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "CPU load of openvpn:{#OPENVPN_INSTANCE}",
+                                "graph_items": [
+                                    {
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "proc.cpu.util[openvpn,,,{#OPENVPN_INSTANCE}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Memory usage of openvpn:{#OPENVPN_INSTANCE}",
+                                "graph_items": [
+                                    {
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "proc.mem[openvpn,,,{#OPENVPN_INSTANCE}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Openvpn clients",
+                        "key": "openvpn.users",
+                        "delay": "30m",
+                        "item_prototypes": [
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} raw data",
+                                "key": "openvpn.user[{#OPENVPN_CLIENT}]",
+                                "delay": "3m;3m/1-7,00:00-24:00",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(5m)}=1",
+                                        "name": "No data from {#OPENVPN_CLIENT}",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} download rate",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_download[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "units": "byte/s",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user_received[{#OPENVPN_CLIENT}]"
+                                }
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} real IP address",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_real_addr[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.real_addr"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user[{#OPENVPN_CLIENT}]"
+                                }
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} incoming bytes",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_received[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "units": "byte",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.received"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user[{#OPENVPN_CLIENT}]"
+                                }
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} outgoing bytes",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_sent[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "units": "byte",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.sent"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user[{#OPENVPN_CLIENT}]"
+                                }
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} session start time",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_start[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.start"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user[{#OPENVPN_CLIENT}]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{change()}<0",
+                                        "name": "Client {#OPENVPN_CLIENT} has gone offline",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    },
+                                    {
+                                        "expression": "{change()}>0 and \n{last(#2)}=0",
+                                        "name": "Client {#OPENVPN_CLIENT} has gone online",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    },
+                                    {
+                                        "expression": "{change()}>0 and {last(#2)}>0",
+                                        "name": "Client {#OPENVPN_CLIENT} has restarted session",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} upload rate",
+                                "type": "DEPENDENT",
+                                "key": "openvpn.user_upload[{#OPENVPN_CLIENT}]",
+                                "delay": "0",
+                                "history": "30d",
+                                "units": "byte/s",
+                                "applications": [
+                                    {
+                                        "name": "Openvpn clients"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "openvpn.user_sent[{#OPENVPN_CLIENT}]"
+                                }
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} download/upload rates",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "openvpn.user_download[{#OPENVPN_CLIENT}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "F63100",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "openvpn.user_upload[{#OPENVPN_CLIENT}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Client's {#OPENVPN_CLIENT} traffic",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "openvpn.user_sent[{#OPENVPN_CLIENT}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "F63100",
+                                        "item": {
+                                            "host": "OpenVPN",
+                                            "key": "openvpn.user_received[{#OPENVPN_CLIENT}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "Online clients",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "OpenVPN",
+                            "key": "openvpn.users_number"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

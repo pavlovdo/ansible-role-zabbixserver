@@ -1,0 +1,57 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-28T13:25:40Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "SEH MyUTN USB Dongle Server",
+                "name": "SEH MyUTN USB Dongle Server",
+                "templates": [
+                    {
+                        "name": "EtherLike-MIB SNMP"
+                    },
+                    {
+                        "name": "Generic SNMP"
+                    },
+                    {
+                        "name": "Interfaces Simple SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Services"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "USB-to-LAN service is running",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,9200]",
+                        "applications": [
+                            {
+                                "name": "Services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{max(3)}=0",
+                                "name": "USB-to-LAN service is down on {HOST.NAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

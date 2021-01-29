@@ -1,0 +1,46 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T11:32:39Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "OpenVPN Service",
+                "name": "OpenVPN Service",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "OpenVPN"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "OpenVPN service state",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,443]",
+                        "applications": [
+                            {
+                                "name": "OpenVPN"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{max(#2)}=0",
+                                "name": "OpenVPN service is down on {HOST.NAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

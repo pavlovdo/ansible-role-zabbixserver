@@ -1,0 +1,13 @@
+- name: create zabbix action
+  community.zabbix.zabbix_action:
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    name: Report about problems with {{ item.name }}
+    status: enabled
+    state: present
+    event_source: 'trigger'
+    esc_period: '30m'
+    conditions: "{{ item.conditions }}"
+    operations: "{{ item.operations }}"
+  loop: "{{ (zabbix_actions + zabbix_actions_custom) | flatten(levels=1) }}"

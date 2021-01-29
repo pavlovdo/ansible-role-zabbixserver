@@ -1,0 +1,63 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T17:15:55Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Access Switch",
+                "name": "Cisco Access Switch",
+                "templates": [
+                    {
+                        "name": "Cisco IOS SNMP Custom"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "SNMP Trap Interface Error Disable",
+                        "type": "SNMP_TRAP",
+                        "key": "snmptrap[\"enterprises.9.9.548.0.2\"]",
+                        "delay": "0",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "logtimefmt": "hh:mm:ss yyyy/MM/dd",
+                        "triggers": [
+                            {
+                                "expression": "{str(snmpTrapOID.0                  type=6  value=enterprises.9.9.548.0.2)}=1 and {nodata(600)}=0",
+                                "name": "Interface Error Disable",
+                                "status": "DISABLED",
+                                "priority": "AVERAGE",
+                                "description": "Last value: {ITEM.LASTVALUE1}."
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$NET.IF.IFALIAS.NOT_MATCHES}",
+                        "value": "(^ACS|^Axis|^Kantech|^Noolite|^SKD)"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ]
+    }
+}

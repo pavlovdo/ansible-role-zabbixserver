@@ -1,0 +1,658 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-20T12:07:46Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Tape Library IBM",
+                "name": "Tape Library IBM",
+                "templates": [
+                    {
+                        "name": "Network Generic Device SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Errors"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "SCSI ID of the device",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.5.1",
+                        "key": "DeviceSCSIID",
+                        "description": "SCSI ID of the device.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SCSI Lun of the device",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.6.1",
+                        "key": "DeviceSCSILun",
+                        "description": "SCSI Lun of the device.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device state",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.2.1",
+                        "key": "DeviceState",
+                        "description": "Device state",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>4",
+                                "name": "Device status of {HOSTNAME} changed to \"Critical\"",
+                                "priority": "WARNING"
+                            },
+                            {
+                                "expression": "{last(0)}=4",
+                                "name": "Device status of {HOSTNAME} changed to \"Non-Critical\"",
+                                "priority": "INFO"
+                            },
+                            {
+                                "expression": "{last(0)}=1",
+                                "name": "Device status of {HOSTNAME} changed to \"Other\"",
+                                "priority": "WARNING"
+                            },
+                            {
+                                "expression": "{last(0)}=2",
+                                "name": "Device status of {HOSTNAME} changed to \"Unknown\"",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "State of the door(s) of this library",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.20.1",
+                        "key": "DoorState",
+                        "description": "State of the door(s) of this library.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>3",
+                                "name": "State of the door(s) on {HOSTNAME} is changed",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Cleaning State of the Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.13.1",
+                        "key": "Drive1CleaningState",
+                        "description": "Cleaning State of the device. The interpretation of this value is vendor specific.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>26",
+                                "name": "Drive 1 on {HOSTNAME} transfered to cleaning state",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hard read error count for current cartridge in Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.18.1",
+                        "key": "Drive1CurrentCartridgeHardReadErrorCount",
+                        "description": "Hard read error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Hard read error occured for current cartridge in Drive 1 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hard write error count for current cartridge in Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.16.1",
+                        "key": "Drive1CurrentCartridgeHardWriteErrorCount",
+                        "description": "Hard write error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Hard write error occured for current cartridge in Drive 1 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Recovered soft read error count for current cartridge in Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.17.1",
+                        "key": "Drive1CurrentCartridgeRecoveredSoftReadErrorCount",
+                        "description": "Recovered soft read error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Recovered soft read error occured for current cartridge in Drive 1 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Recovered soft write error count for current cartridge in Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.15.1",
+                        "key": "Drive1CurrentCartridgeRecoveredSoftWriteErrorCount",
+                        "description": "Recovered soft write error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Recovered soft write error occured for current cartridge in Drive 1 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 1 firmware level as would be reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.9.1",
+                        "key": "Drive1Firmware",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device firmware level as would be reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 1 Model as would be reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.8.1",
+                        "key": "Drive1Model",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device Model as would be reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SCSI ID of the Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.5.1",
+                        "key": "Drive1SCSIID",
+                        "description": "SCSI ID of the Drive.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 1 SCSI State",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.2.1",
+                        "key": "Drive1SCSIState",
+                        "description": "Drive SCSI State.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>2",
+                                "name": "Drive 1 SCSI State on {HOSTNAME} is changed",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 1 serial number as reported in SCSI Inquiry command, page 0x80",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.10.1",
+                        "key": "Drive1SN",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device serial number as reported in SCSI Inquiry command, page 0x80.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total cartridge loads for the Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.14.1",
+                        "key": "Drive1TotalCartridgeLoads",
+                        "description": "Total cartridge loads for the drive.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total drive motion hours of Drive 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.12.1",
+                        "key": "Drive1TotalDriveMotionHours",
+                        "description": "Total drive motion hours of this device.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Cleaning State of the Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.13.3",
+                        "key": "Drive2CleaningState",
+                        "description": "Cleaning State of the device. The interpretation of this value is vendor specific.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>26",
+                                "name": "Drive 2 on {HOSTNAME} transfered to cleaning state",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hard read error count for current cartridge in Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.18.3",
+                        "key": "Drive2CurrentCartridgeHardReadErrorCount",
+                        "description": "Hard read error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Hard read error occured for current cartridge in Drive 2 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Hard write error count for current cartridge in Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.16.3",
+                        "key": "Drive2CurrentCartridgeHardWriteErrorCount",
+                        "description": "Hard write error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Hard write error occured for current cartridge in Drive 2 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Recovered soft read error count for current cartridge in Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.17.3",
+                        "key": "Drive2CurrentCartridgeRecoveredSoftReadErrorCount",
+                        "description": "Recovered soft read error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Recovered soft read error occured for current cartridge in Drive 2 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Recovered soft write error count for current cartridge in Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.15.3",
+                        "key": "Drive2CurrentCartridgeRecoveredSoftWriteErrorCount",
+                        "description": "Recovered soft write error count for current cartridge",
+                        "applications": [
+                            {
+                                "name": "Errors"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Recovered soft write error occured for current cartridge in Drive 2 on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 2 firmware level as would be reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.9.3",
+                        "key": "Drive2Firmware",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device firmware level as would be reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 2 Model as would be reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.8.3",
+                        "key": "Drive2Model",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device Model as would be reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SCSI ID of the Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.5.3",
+                        "key": "Drive2SCSIID",
+                        "description": "SCSI ID of the Drive.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 2 SCSI State",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.2.3",
+                        "key": "Drive2SCSIState",
+                        "description": "Drive SCSI State.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>2",
+                                "name": "Drive 2 SCSI State on {HOSTNAME} is changed",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Drive 2 serial number as reported in SCSI Inquiry command, page 0x80",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.10.3",
+                        "key": "Drive2SN",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Device serial number as reported in SCSI Inquiry command, page 0x80.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total cartridge loads for the Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.14.3",
+                        "key": "Drive2TotalCartridgeLoads",
+                        "description": "Total cartridge loads for the drive.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total drive motion hours of Drive 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.2.1.12.3",
+                        "key": "Drive2TotalDriveMotionHours",
+                        "description": "Total drive motion hours of this device.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "State of the Import/Export element(s) of this library",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.21.1",
+                        "key": "ImportExportElementState",
+                        "description": "State of the Import/Export element(s) of this library",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "IBMTapeLibraryImpExpState"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>3",
+                                "name": "State of the Import/Export element(s) on {HOSTNAME} is changed",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The library Fault description",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.24.1",
+                        "key": "LibraryFaultDescription",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "The library Fault description.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The library Fault error code",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.22.1",
+                        "key": "LibraryFaultErrorCode",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "Error is occured on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The library Fault severity",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.23.1",
+                        "key": "LibraryFaultSeverity",
+                        "description": "The library Fault severity.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Library Firmware level as reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.9.1",
+                        "key": "LibraryFirmwareLevel",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Library Firmware level as reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Library Product Id string as reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.8.1",
+                        "key": "LibraryProductID",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Library Product Id string as reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Library serial number as reported in SCSI Inquiry command, page 0x80",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.10.1",
+                        "key": "LibrarySerialNumber",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Library serial number as reported in SCSI Inquiry command, page 0x80.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Library Vendor ID string as reported in a SCSI Inquiry command",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.2.6.211.3.1.1.7.1",
+                        "key": "LibraryVendorID",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Library Vendor ID string as reported in a SCSI Inquiry command.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of move operations done by this library",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.2.6.211.3.1.1.15.1",
+                        "key": "MoveOperationsTotalNumber",
+                        "description": "Total number of move operations done by this library.",
+                        "applications": [
+                            {
+                                "name": "General"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "IBMTapeLibraryImpExpState",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "open"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "closed"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "locked"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,775 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-23T15:45:40Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco ASA 55xx",
+                "name": "Cisco ASA 55xx",
+                "templates": [
+                    {
+                        "name": "Cisco CISCO-MEMORY-POOL-MIB SNMP"
+                    },
+                    {
+                        "name": "Cisco Inventory SNMP Custom"
+                    },
+                    {
+                        "name": "Generic SNMP"
+                    },
+                    {
+                        "name": "Interfaces SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Firewall"
+                    },
+                    {
+                        "name": "Parameters"
+                    },
+                    {
+                        "name": "Perfomance"
+                    },
+                    {
+                        "name": "VPN"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Number of connections currently in use by the entire firewall",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.147.1.2.2.2.1.5.40.6",
+                        "key": "cfwConnectionStatValue.protoIp.currentInUse",
+                        "units": "conns",
+                        "description": "The number of connections currently in use by the entire firewall",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Highest number of connections in use at any one time since system startup",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.147.1.2.2.2.1.5.40.7",
+                        "key": "cfwConnectionStatValue.protoIp.high",
+                        "units": "conns",
+                        "description": "The highest number of connections in use at any one time since system startup",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of currently active IPsec Phase-1 IKE Tunnels",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.2.1.1.0",
+                        "key": "cikeGlobalActiveTunnels.0",
+                        "units": "tunnels",
+                        "description": "The number of currently active IPsec\nPhase-1 IKE Tunnels",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of octets received by all currently and previously active IPsec Phase-1 IKE Tunnels",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.2.1.3.0",
+                        "key": "cikeGlobalInOctets.0",
+                        "units": "Byte",
+                        "description": "The total number of octets received by all currently\nand previously active IPsec Phase-1 IKE Tunnels",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "8"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of octets sent by all currently and previously active and IPsec Phase-1 IKE Tunnels",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.2.1.11.0",
+                        "key": "cikeGlobalOutOctets.0",
+                        "units": "Byte",
+                        "description": "The total number of octets sent by all currently\nand previously active and IPsec Phase-1 IKE Tunnels",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "8"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of currently active IPsec Phase-2 Tunnels",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.3.1.1.0",
+                        "key": "cipSecGlobalActiveTunnels.0",
+                        "units": "tunnels",
+                        "description": "The total number of currently active IPsec Phase-2 Tunnels.",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of octets received by all current and previous IPsec Phase-2 Tunnel",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.3.1.3.0",
+                        "key": "cipSecGlobalInOctets.0",
+                        "units": "Byte",
+                        "description": "The total number of octets received by all\ncurrent and previous IPsec Phase-2 Tunnels.\nThis value is accumulated BEFORE determining whether or not the packet should be decompressed. See also\ncipSecGlobalInOctWraps for the number of times\nthis counter has wrapped",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "8"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of octets sent by all current and previous IPsec Phase-2 Tunnel",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.3.1.16.0",
+                        "key": "cipSecGlobalOutOctets.0",
+                        "units": "Byte",
+                        "description": "The total number of octets sent by all\ncurrent and previous IPsec Phase-2 Tunnels.\nThis value is accumulated AFTER determining\nwhether or not the packet should be compressed.\nSee also cipSecGlobalOutOctWraps for the\nnumber of times this counter has wrapped",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "8"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Active IKE Peers",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.171.1.2.1.1.0",
+                        "key": "ciscoIKEPeers",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "IOS Version",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-SMI::mib-2.47.1.1.1.1.10.1",
+                        "key": "ciscoIOS",
+                        "delay": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "inventory_link": "OS_FULL",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ROMMON Versoin",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-SMI::mib-2.47.1.1.1.1.9.1",
+                        "key": "ciscoROMMON",
+                        "delay": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "inventory_link": "OS_SHORT",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "CPU Utilization avg last 1 min",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.109.1.1.1.1.4.1",
+                        "key": "cpmCPUTotal1minRev",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(5m)}>{$CPU_UTIL_MAX}",
+                                "name": "High CPU Load",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "CPU Utilization avg last 5 min",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.109.1.1.1.1.3.1",
+                        "key": "cpmCPUTotal5minRev",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of currently active LAN to LAN sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.29.0",
+                        "key": "crasL2LNumSessions.0",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{diff(0)}>0",
+                                "name": "Number of L2L sessions was changed on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of user groups whose members have active sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.4.0",
+                        "key": "crasNumGroups.0",
+                        "units": "groups",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of currently active sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.1.0",
+                        "key": "crasNumSessions.0",
+                        "units": "sessions",
+                        "description": "A session is a connection terminating on the managed entity which has been established to provide remote access connectivity to a user. A session is said to be 'active' if it is ready to carry application traffic         between the user and the managed entity. A session which is not active is defined to be 'dormant'.",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of users who have active sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.3.0",
+                        "key": "crasNumUsers.0",
+                        "units": "users",
+                        "description": "The The number of users who have active sessions.",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of currently active Webvpn sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.38.0",
+                        "key": "crasWebvpnNumSessionss.0",
+                        "applications": [
+                            {
+                                "name": "VPN"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of connections which the firewall establishing per second, averaged over the last 60 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.1.10.0",
+                        "key": "cufwConnGlobalConnSetupRate1.0",
+                        "units": "conns/s",
+                        "description": "The averaged number of connections which the firewall\nestablishing per second, averaged over the last 60\nseconds",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of connections which the firewall establishing per second, averaged over the last 300 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.1.11.0",
+                        "key": "cufwConnGlobalConnSetupRate5.0",
+                        "units": "conns/s",
+                        "description": "The averaged number of connections which the firewall\nestablishing per second, averaged over the last 300\nseconds",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of TCP connections which the firewall establishing per second, averaged over the last 60 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.4.1.1.9.7",
+                        "key": "cufwConnSetupRate1.tcp",
+                        "units": "conns/s",
+                        "description": "The averaged number of TCP connections which the firewall establishing per second, averaged over the last 60 seconds",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of UDP connections which the firewall establishing per second, averaged over the last 60 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.4.1.1.9.6",
+                        "key": "cufwConnSetupRate1.udp",
+                        "units": "conns/s",
+                        "description": "The averaged number of UDP connections which the firewall establishing per second, averaged over the last 60 seconds",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of TCP connections which the firewall establishing per second, averaged over the last 300 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.4.1.1.10.7",
+                        "key": "cufwConnSetupRate5.tcp",
+                        "units": "conns/s",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The averaged number of UDP connections which the firewall establishing per second, averaged over the last 300 seconds",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.491.1.1.4.1.1.10.6",
+                        "key": "cufwConnSetupRate5.udp",
+                        "units": "conns/s",
+                        "description": "The averaged number of UDP connections which the firewall establishing per second, averaged over the last 300 seconds",
+                        "applications": [
+                            {
+                                "name": "Firewall"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Chassis Version",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-SMI::mib-2.47.1.1.1.1.8.1",
+                        "key": "deviceChassis",
+                        "delay": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "inventory_link": "CHASSIS",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Vendor Name",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-SMI::mib-2.47.1.1.1.1.12.1",
+                        "key": "deviceVendor",
+                        "delay": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "inventory_link": "VENDOR",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The indication of whether this entity is acting as an IPv4 router",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.4.1.0",
+                        "key": "ipForwarding",
+                        "value_type": "FLOAT",
+                        "description": "The indication of whether this entity is acting as an IPv4 router in respect to the forwarding of datagrams received by, but not addressed to, this entity. IPv4 routers forward datagrams. IPv4 hosts do not (except those source-routed via the host).\n\nWhen this object is written, the entity should save the change to non-volatile storage and restore the object from non-volatile storage upon reinitialization of the system. \n\nNote: a stronger requirement is not used because this object was previously defined.",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "The maximum number of remote access sessions",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.1.1.0",
+                        "key": "MaxNumberRAS",
+                        "delay": "4h",
+                        "units": "sessions",
+                        "description": "The maximum number of remote access sessions\nthat may be supported on this device.\nIf the device imposes no arbitrary limit on the\nmaximum number of sessions, it should return a\nvalue of 0",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "sysUpTime",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.1.3.0",
+                        "key": "sysUpTimeInstance",
+                        "delay": "5m",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.01"
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<600",
+                                "name": "{HOST.NAME} reloaded",
+                                "priority": "INFO",
+                                "description": "{HOST.NAME} reloaded"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Remote Access Groups",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.9.9.392.1.3.21.1.2]",
+                        "key": "crasGroup",
+                        "delay": "5m",
+                        "lifetime": "2d",
+                        "item_prototypes": [
+                            {
+                                "name": "The total number of octets received by {#SNMPVALUE} Session",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.21.1.35.{#SNMPINDEX}",
+                                "key": "crasSessionInOctets.[{#SNMPVALUE}]",
+                                "units": "Byte",
+                                "applications": [
+                                    {
+                                        "name": "VPN"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Speed of receiving packets from {#SNMPVALUE}",
+                                "type": "CALCULATED",
+                                "key": "crasSessionInOctetsSpeed.[{#SNMPVALUE}]",
+                                "units": "bps",
+                                "params": "delta(\"crasSessionInOctets.[{#SNMPVALUE}]\",#2)/60",
+                                "applications": [
+                                    {
+                                        "name": "VPN"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "The total number of octets transmitted by {#SNMPVALUE} Session",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.21.1.36.{#SNMPINDEX}",
+                                "key": "crasSessionOutOctets.[{#SNMPVALUE}]",
+                                "units": "Byte",
+                                "applications": [
+                                    {
+                                        "name": "VPN"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Speed of transmitting packets to {#SNMPVALUE}",
+                                "type": "CALCULATED",
+                                "key": "crasSessionOutOctetsSpeed.[{#SNMPVALUE}]",
+                                "units": "bps",
+                                "params": "delta(\"crasSessionOutOctets.[{#SNMPVALUE}]\",#2)/60",
+                                "applications": [
+                                    {
+                                        "name": "VPN"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "$1 Description",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.9.9.392.1.3.21.1.2.{#SNMPINDEX}",
+                                "key": "Description.[{#SNMPVALUE}]",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "VPN"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Physical Entities Fan Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SENSOR_INFO},1.3.6.1.2.1.47.1.1.1.1.2]",
+                        "key": "net.physent.fan.discovery",
+                        "delay": "60",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#SENSOR_INFO}",
+                                    "value": "Fan (1|2|3|4|5) Sensor",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "description": "A textual description of physical entity. This object should contain a string that identifies the manufacturer's name for the physical entity, and should be set to a\ndistinct value for each version or model of the physical entity",
+                        "item_prototypes": [
+                            {
+                                "name": "{#SENSOR_INFO}: Fan speed",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.99.1.1.1.4.{#SNMPINDEX}",
+                                "key": "net.physent.fan.rpm[entPhySensorValue.{#SNMPINDEX}]",
+                                "delay": "60",
+                                "applications": [
+                                    {
+                                        "name": "Status"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Physical Entities Temperature Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SENSOR_INFO},1.3.6.1.2.1.47.1.1.1.1.2]",
+                        "key": "net.physent.temperature.discovery",
+                        "delay": "60",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#SENSOR_INFO}",
+                                    "value": "Temperature (1|2|3|4|5) Sensor",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "{#SENSOR_INFO}: Temperature",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.99.1.1.1.4.{#SNMPINDEX}",
+                                "key": "net.physent.temperature[entPhySensorValue.{#SNMPINDEX}]",
+                                "delay": "60",
+                                "applications": [
+                                    {
+                                        "name": "Status"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$MAX_SPEED_DISCARD_PACKETS}",
+                        "value": "100"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "ASA Connections",
+                "type": "STACKED",
+                "graph_items": [
+                    {
+                        "color": "999900",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cfwConnectionStatValue.protoIp.currentInUse"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ASA VPN Sessions and Tunnels",
+                "graph_items": [
+                    {
+                        "color": "009900",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cikeGlobalActiveTunnels.0"
+                        }
+                    },
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "FF00FF",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "crasNumUsers.0"
+                        }
+                    },
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "000099",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cipSecGlobalActiveTunnels.0"
+                        }
+                    },
+                    {
+                        "color": "FF0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "crasNumSessions.0"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Cisco IKE Throughput",
+                "graph_items": [
+                    {
+                        "drawtype": "BOLD_LINE",
+                        "color": "009900",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cikeGlobalInOctets.0"
+                        }
+                    },
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "0000FF",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cikeGlobalOutOctets.0"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Cisco IPSEC Throughput",
+                "graph_items": [
+                    {
+                        "drawtype": "BOLD_LINE",
+                        "color": "009900",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cipSecGlobalInOctets.0"
+                        }
+                    },
+                    {
+                        "drawtype": "FILLED_REGION",
+                        "color": "0000FF",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "Cisco ASA 55xx",
+                            "key": "cipSecGlobalOutOctets.0"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

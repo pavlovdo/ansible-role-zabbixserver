@@ -1,0 +1,9 @@
+- name: Creating zabbix user groups
+  community.zabbix.zabbix_usergroup:
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    name: "{{ item.name }}"
+    rights: "{{ item.rights }}"
+    state: present
+  loop: "{{ (zabbix_usergroups + zabbix_usergroups_custom) | flatten(levels=1) }}"

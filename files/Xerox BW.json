@@ -1,0 +1,59 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-03T18:05:32Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Xerox BW",
+                "name": "Xerox BW",
+                "templates": [
+                    {
+                        "name": "Printer Generic"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Marker Supplies Level Black",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.1",
+                        "key": "prtMarkerSuppliesLevelBlack",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Black",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.1",
+                        "key": "prtMarkerSuppliesMaxCapacityBlack",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Xerox BW:prtMarkerSuppliesLevelBlack.avg(300)}/{Xerox BW:prtMarkerSuppliesMaxCapacityBlack.last(0)}*100=0",
+                "name": "Black Toner Cartridge is end. Replace this detail.",
+                "priority": "WARNING"
+            }
+        ]
+    }
+}

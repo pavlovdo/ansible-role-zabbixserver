@@ -1,0 +1,277 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-24T10:17:20Z",
+        "groups": [
+            {
+                "name": "Templates/Operating systems"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Windows by Zabbix agent active Custom",
+                "name": "Windows by Zabbix agent active Custom",
+                "description": "Official Windows template. Requires agent of Zabbix 4.4 and newer.\n\n\nYou can discuss this template or leave feedback on our forum https://www.zabbix.com/forum/zabbix-suggestions-and-feedback/387224-discussion-thread-for-official-zabbix-template-for-windows\n\nTemplate tooling version used: 0.37",
+                "templates": [
+                    {
+                        "name": "Windows CPU by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows filesystems by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows generic by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows memory by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows network by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows physical disks by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows services by Zabbix agent active"
+                    },
+                    {
+                        "name": "Zabbix agent active"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Operating systems"
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$PROC_MAX_NUM}",
+                        "value": "1000"
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "name": "System performance",
+                        "widgets": [
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "CPU usage",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "x": "12",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "ITEM",
+                                        "name": "itemid",
+                                        "value": {
+                                            "key": "perf_counter_en[\"\\System\\Processor Queue Length\"]",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "y": "5",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Memory utilization",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "x": "12",
+                                "y": "5",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Swap usage",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "y": "10",
+                                "width": "24",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "{#FSNAME}: Disk space usage",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "y": "15",
+                                "width": "24",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "{#DEVNAME}: Disk read/write rates",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "y": "20",
+                                "width": "24",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "{#DEVNAME}: Disk utilization and queue",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "y": "25",
+                                "width": "24",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Interface {#IFNAME}({#IFALIAS}): Network traffic",
+                                            "host": "Windows by Zabbix agent active Custom"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Windows by Zabbix agent active Custom:proc.num[].avg(5)}>{$PROC_MAX_NUM}",
+                "name": "The number of processes is increased {$PROC_MAX_NUM}",
+                "priority": "AVERAGE"
+            }
+        ]
+    }
+}

@@ -1,0 +1,1780 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-10T11:36:13Z",
+        "groups": [
+            {
+                "name": "Templates/Databases"
+            }
+        ],
+        "templates": [
+            {
+                "template": "PostgreSQL zabbix-extensions Custom",
+                "name": "PostgreSQL zabbix-extensions Custom",
+                "description": "Template providing PostgreSQL monitoring (part of https://github.com/lesovsky/zabbix-extensions). Template was formerly known as pgCayenne.",
+                "groups": [
+                    {
+                        "name": "Templates/Databases"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Internal Items"
+                    },
+                    {
+                        "name": "PostgreSQL"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "PostgreSQL buffers: clear",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.buffercache.clear",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.clear"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.buffercache[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL buffers: dirty",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.buffercache.dirty",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.dirty"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.buffercache[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL buffers: popular",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.buffercache.popular",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.popular"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.buffercache[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL buffers: total",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.buffercache.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.total"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.buffercache[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL buffers: used",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.buffercache.used",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.used"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.buffercache[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL pg_buffercache (internal item)",
+                        "key": "pgsql.buffercache[{$PG_CONNINFO}]",
+                        "history": "1d",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Internal item to fetch all pg_buffercache values in a single call",
+                        "applications": [
+                            {
+                                "name": "Internal Items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: blocks hit per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.blks_hit",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of times disk blocks were found already in the buffer cache, so that a read was not necessary (this only includes hits in the PostgreSQL buffer cache, not the operating system's file system cache)",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.blks_hit"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: blocks read per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.blks_read",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of disk blocks read per second",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.blks_read"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: registered conflicts",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.conflicts",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of queries canceled due to conflicts with recovery in this database. (Conflicts occur only on standby servers; see pg_stat_database_conflicts for details.).",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.conflicts"
+                                ]
+                            },
+                            {
+                                "type": "SIMPLE_CHANGE",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last()}>{$PG_CONFLICTS_THRESHOLD}",
+                                "name": "PostgreSQL recovery conflict occured on {HOSTNAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: registered deadlocks",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.deadlocks",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of deadlocks detected.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.deadlocks"
+                                ]
+                            },
+                            {
+                                "type": "SIMPLE_CHANGE",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last()}>{$PG_DEADLOCKS_THRESHOLD}",
+                                "name": "PostgreSQL deadlock occured on {HOSTNAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: temp_bytes written",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.temp_bytes",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Total amount of data written to temporary files by queries. All temporary files are counted, regardless of why the temporary file was created, and regardless of the log_temp_files setting.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.temp_bytes"
+                                ]
+                            },
+                            {
+                                "type": "SIMPLE_CHANGE",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: temp_files created",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.temp_files",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of temporary files created by queries. All temporary files are counted, regardless of why the temporary file was created (e.g., sorting or hashing), and regardless of the log_temp_files setting.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.temp_files"
+                                ]
+                            },
+                            {
+                                "type": "SIMPLE_CHANGE",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: tuples deleted per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.tup_deleted",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of rows deleted by queries.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.tup_deleted"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: tuples fetched per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.tup_fetched",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of rows fetched by queries.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.tup_fetched"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: tuples inserted per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.tup_inserted",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of rows inserted by queries.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.tup_inserted"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: tuples returned per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.tup_returned",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of rows returned by queries.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.tup_returned"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: tuples updated per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.tup_updated",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of rows updated by queries.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.tup_updated"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgresSQL dbstat: commits per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.xact_commit",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of transactions that have been committed.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.xact_commit"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat: rollbacks per second",
+                        "type": "DEPENDENT",
+                        "key": "pgsql.dbstat.sum.xact_rollback",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of transactions that have been rolled back.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.xact_rollback"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]"
+                        }
+                    },
+                    {
+                        "name": "PostgreSQL dbstat (internal item)",
+                        "key": "pgsql.dbstat.sum[{$PG_CONNINFO}]",
+                        "delay": "2m",
+                        "history": "1d",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Internal item to fetch all pg_stat_database sum values in a single call",
+                        "applications": [
+                            {
+                                "name": "Internal Items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL pg_stat_statements: average query time",
+                        "key": "pgsql.pgstatstatements.avg_query_time[{$PG_CONNINFO}]",
+                        "delay": "60",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL streaming replication: stand-by count",
+                        "key": "pgsql.streaming.count[{$PG_CONNINFO}]",
+                        "delay": "120",
+                        "history": "7d",
+                        "description": "Streaming replication stand-bys count.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL streaming replication: recovery state",
+                        "key": "pgsql.streaming.state[{$PG_CONNINFO}]",
+                        "delay": "3600",
+                        "history": "7d",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Streaming replication state: t (true) if service is in recovery mode, and f (false) if server in master mode.",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL: number of running processes $1",
+                        "key": "proc.num[{$PG_PROCESS_NAME}]",
+                        "history": "7d",
+                        "applications": [
+                            {
+                                "name": "PostgreSQL"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "PostgreSQL service not running on {HOSTNAME}",
+                                "status": "DISABLED",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "PostgreSQL streaming stand-by discovery",
+                        "key": "pgsql.streaming.discovery[{$PG_CONNINFO}]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#HOTSTANDBY}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "lifetime": "3d",
+                        "description": "Low level discovery for streaming replication servers which connected to this server.",
+                        "item_prototypes": [
+                            {
+                                "name": "PostgreSQL packet loss with {#HOTSTANDBY}, %",
+                                "type": "SIMPLE",
+                                "key": "icmppingloss[{#HOTSTANDBY},10,100,,]",
+                                "delay": "60",
+                                "history": "7d",
+                                "units": "%",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>{$PG_SR_PACKET_LOSS}",
+                                        "name": "PostgreSQL packet loss between {HOSTNAME} and {#HOTSTANDBY} too high ({ITEM.LASTVALUE})",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL streaming lag with {#HOTSTANDBY} in bytes",
+                                "key": "pgsql.streaming.lag.bytes[{$PG_CONNINFO},{#HOTSTANDBY}]",
+                                "delay": "60",
+                                "history": "7d",
+                                "units": "b",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>{$PG_SR_LAG_BYTE}",
+                                        "name": "PostgreSQL streaming lag between {HOSTNAME} and {#HOTSTANDBY} too high ({ITEM.LASTVALUE})",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL streaming lag with {#HOTSTANDBY} in seconds",
+                                "key": "pgsql.streaming.lag.seconds[{$PG_CONNINFO_STANDBY},{#HOTSTANDBY}]",
+                                "delay": "60",
+                                "history": "7d",
+                                "value_type": "FLOAT",
+                                "units": "s",
+                                "description": "ATTENTION: This check requires access to the remote server postgresql service, respectively, should be determined access in pg_hba.conf on remote server.\nExample:\nhost zabbix postgres 1.2.3.4/32 trust",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>{$PG_SR_LAG_SEC}",
+                                        "name": "PostgreSQL streaming lag between {HOSTNAME} and {#HOTSTANDBY} too high ({ITEM.LASTVALUE})",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "PostgreSQL streaming replication lag with {#HOTSTANDBY}",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.streaming.lag.bytes[{$PG_CONNINFO},{#HOTSTANDBY}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "00CC00",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.streaming.lag.seconds[{$PG_CONNINFO_STANDBY},{#HOTSTANDBY}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "PostgreSQL database tables discovery",
+                        "key": "pgsql.table.discovery[{$PG_CONNINFO}]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#TABLENAME}",
+                                    "value": "^public.(products|customers|sessions)$",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "lifetime": "3d",
+                        "description": "PostgreSQL tables discovery. Use regular expressions to configure search.\nDisabled by default because may add too many items.",
+                        "item_prototypes": [
+                            {
+                                "name": "PostgreSQL: table {#TABLENAME} indexes size",
+                                "key": "pgsql.index.size[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "900",
+                                "history": "7d",
+                                "value_type": "FLOAT",
+                                "units": "b",
+                                "description": "PostgreSQL all indexes size which belongs to a single table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL: table {#TABLENAME} size",
+                                "key": "pgsql.table.size[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "900",
+                                "history": "7d",
+                                "value_type": "FLOAT",
+                                "units": "b",
+                                "description": "PostgreSQL single table size.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: analyzes",
+                                "key": "pgsql.table.stat.analyze_count[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "600",
+                                "history": "7d",
+                                "description": "Number of analyze operations performed on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: autoanalyzes",
+                                "key": "pgsql.table.stat.autoanalyze_count[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "600",
+                                "history": "7d",
+                                "description": "Number of autoanalyze operations performed on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: autovacuums",
+                                "key": "pgsql.table.stat.autovacuum_count[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "600",
+                                "history": "7d",
+                                "description": "Number of autovacuum operations performed on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: cache blocks hits per second",
+                                "key": "pgsql.table.stat.heap_blks_hit[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of buffer hits in this table",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: cache blocks read per second",
+                                "key": "pgsql.table.stat.heap_blks_read[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of disk blocks read from this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: index blocks hit per second",
+                                "key": "pgsql.table.stat.idx_blks_hit[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of buffer hits in all indexes on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: index blocks read per second",
+                                "key": "pgsql.table.stat.idx_blks_read[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of disk blocks read from all indexes on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: index scans",
+                                "key": "pgsql.table.stat.idx_scan[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of index scans initiated on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: tuples read per second by index scans",
+                                "key": "pgsql.table.stat.idx_tup_fetch[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of live rows fetched by index scans.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: dead rows",
+                                "key": "pgsql.table.stat.n_dead_tup[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Estimated number of dead rows.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: live rows",
+                                "key": "pgsql.table.stat.n_live_tup[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Estimated number of live rows.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: rows deleted per second",
+                                "key": "pgsql.table.stat.n_tup_del[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of rows deleted.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: rows HOT updated per second",
+                                "key": "pgsql.table.stat.n_tup_hot_upd[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of rows HOT updated (i.e., with no separate index update required).",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: rows inserted per second",
+                                "key": "pgsql.table.stat.n_tup_ins[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of rows inserted.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: rows updated per second",
+                                "key": "pgsql.table.stat.n_tup_upd[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of rows updated.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: sequential scans",
+                                "key": "pgsql.table.stat.seq_scan[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of sequential scans initiated on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: tuples read per second by sequential scans",
+                                "key": "pgsql.table.stat.seq_tup_read[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of live rows fetched by sequential scans.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: disk blocks hits per second from TOAST indexes",
+                                "key": "pgsql.table.stat.tidx_blks_hit[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of buffer hits in this table's TOAST table index (if any).",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: disk blocks read per second from TOAST indexes",
+                                "key": "pgsql.table.stat.tidx_blks_read[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of disk blocks read from this table's TOAST table index (if any).",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: disk blocks hits per second from TOAST",
+                                "key": "pgsql.table.stat.toast_blks_hit[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of buffer hits in this table's TOAST table (if any).",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: disk blocks read per second from TOAST",
+                                "key": "pgsql.table.stat.toast_blks_read[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "120",
+                                "history": "7d",
+                                "description": "Number of disk blocks read from this table's TOAST table (if any).",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "CHANGE_PER_SECOND",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} stat: vacuums",
+                                "key": "pgsql.table.stat.vacuum_count[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "600",
+                                "history": "7d",
+                                "description": "Number of vacuum operations performed on this table.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "SIMPLE_CHANGE",
+                                        "parameters": [
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL: table {#TABLENAME} rows count",
+                                "key": "pgsql.table.tuples[{$PG_CONNINFO},{#TABLENAME}]",
+                                "delay": "900",
+                                "history": "7d",
+                                "value_type": "FLOAT",
+                                "description": "PostgreSQL single table rows count.",
+                                "applications": [
+                                    {
+                                        "name": "PostgreSQL"
+                                    }
+                                ]
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} maintenance",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "color": "00CC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.analyze_count[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.autoanalyze_count[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "CC0000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.autovacuum_count[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "color": "CCCC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.vacuum_count[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} read stats",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "color": "00CC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.heap_blks_hit[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "000000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.heap_blks_read[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "99FFFF",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.toast_blks_hit[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "color": "FFFF99",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.tidx_blks_hit[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "4",
+                                        "color": "00CCCC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.toast_blks_read[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "5",
+                                        "color": "CCCC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.tidx_blks_read[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "6",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.idx_blks_hit[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "7",
+                                        "color": "CC0000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.idx_blks_read[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} rows",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "00CC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_live_tup[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "666666",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_dead_tup[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_tup_del[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "color": "CC0000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_tup_hot_upd[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "4",
+                                        "color": "00CCCC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_tup_ins[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "5",
+                                        "color": "CCCC00",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.n_tup_upd[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} scans",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "color": "00CC00",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.idx_scan[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "000000",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.seq_scan[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.idx_tup_fetch[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "color": "CC0000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.stat.seq_tup_read[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "PostgreSQL table {#TABLENAME} size",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "0000CC",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.size[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "CC0000",
+                                        "yaxisside": "RIGHT",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.index.size[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "00CC00",
+                                        "item": {
+                                            "host": "PostgreSQL zabbix-extensions Custom",
+                                            "key": "pgsql.table.tuples[{$PG_CONNINFO},{#TABLENAME}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$PG_CACHE_HIT_RATIO}",
+                        "value": "90"
+                    },
+                    {
+                        "macro": "{$PG_CHECKPOINTS_REQ_THRESHOLD}",
+                        "value": "5"
+                    },
+                    {
+                        "macro": "{$PG_CONFLICTS_THRESHOLD}",
+                        "value": "0"
+                    },
+                    {
+                        "macro": "{$PG_CONNINFO}",
+                        "value": "-h 127.0.0.1 -p 5432 -U zbx_monitor -d postgres"
+                    },
+                    {
+                        "macro": "{$PG_CONNINFO_STANDBY}",
+                        "value": "-p 5432 -U postgres -d zabbix"
+                    },
+                    {
+                        "macro": "{$PG_CONN_IDLE_IN_TRANSACTION}",
+                        "value": "3"
+                    },
+                    {
+                        "macro": "{$PG_CONN_TOTAL_PCT}",
+                        "value": "90"
+                    },
+                    {
+                        "macro": "{$PG_CONN_WAITING}",
+                        "value": "0"
+                    },
+                    {
+                        "macro": "{$PG_DATABASE_DISCOVERY_FILTER}",
+                        "value": "(test|db_.*)"
+                    },
+                    {
+                        "macro": "{$PG_DATABASE_SIZE_THRESHOLD}",
+                        "value": "100000000000"
+                    },
+                    {
+                        "macro": "{$PG_DEADLOCKS_THRESHOLD}",
+                        "value": "0"
+                    },
+                    {
+                        "macro": "{$PG_LONG_QUERY_THRESHOLD}",
+                        "value": "30"
+                    },
+                    {
+                        "macro": "{$PG_PING_THRESHOLD_MS}",
+                        "value": "1000"
+                    },
+                    {
+                        "macro": "{$PG_PROCESS_NAME}",
+                        "value": "postgres"
+                    },
+                    {
+                        "macro": "{$PG_SR_LAG_BYTE}",
+                        "value": "50000000"
+                    },
+                    {
+                        "macro": "{$PG_SR_LAG_SEC}",
+                        "value": "600"
+                    },
+                    {
+                        "macro": "{$PG_SR_PACKET_LOSS}",
+                        "value": "10"
+                    },
+                    {
+                        "macro": "{$PG_UPTIME_THRESHOLD}",
+                        "value": "600"
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "PostgreSQL buffers",
+                "show_work_period": "NO",
+                "show_triggers": "NO",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "EEEEEE",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.buffercache.total"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "drawtype": "FILLED_REGION",
+                        "color": "0000EE",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.buffercache.used"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "drawtype": "FILLED_REGION",
+                        "color": "00EE00",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.buffercache.clear"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "FC6EA3",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.buffercache.popular"
+                        }
+                    },
+                    {
+                        "sortorder": "4",
+                        "drawtype": "FILLED_REGION",
+                        "color": "EE0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.buffercache.dirty"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PostgreSQL service response",
+                "graph_items": [
+                    {
+                        "sortorder": "1",
+                        "color": "CC0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.pgstatstatements.avg_query_time[{$PG_CONNINFO}]"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PostgreSQL summary db stats: block hit/read",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "color": "00CC00",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.blks_hit"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "CC0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.blks_read"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PostgreSQL summary db stats: events",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "00CC00",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.xact_commit"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "0000CC",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.conflicts"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "000000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.deadlocks"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "CC0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.xact_rollback"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PostgreSQL summary db stats: temp files",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "CC0000",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.temp_bytes"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "0000CC",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.temp_files"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PostgreSQL summary db stats: tuples",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "color": "000000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.tup_deleted"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "00CC00",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.tup_inserted"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "CC0000",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.tup_updated"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "0000CC",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.tup_fetched"
+                        }
+                    },
+                    {
+                        "sortorder": "4",
+                        "color": "CC00CC",
+                        "yaxisside": "RIGHT",
+                        "item": {
+                            "host": "PostgreSQL zabbix-extensions Custom",
+                            "key": "pgsql.dbstat.sum.tup_returned"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

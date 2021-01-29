@@ -1,0 +1,211 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T12:29:48Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Windows Logs",
+                "name": "Windows Logs",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Logs"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Log Active Directory Web Services Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Active Directory Web Services,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log ADAM (VMwareVCMSDS) Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[ADAM (VMwareVCMSDS),,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Application Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Application,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log DFS Replication Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[DFS Replication,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Directory Service Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Directory Service,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log DNS Server Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[DNS Server,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log File Replication Service Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[File Replication Service,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Key Management Service Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Key Management Service,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log MSExchange Management Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[MSExchange Management,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Microsoft Office Alerts",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[OAlerts]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Security Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Security,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Setup",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Setup]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log System Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[System,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Volume Activation Management Tool Warnings",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Volume Activation Management Tool,,\"Warning|Error\"]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-23T11:29:06Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Libvirt vHDD Backups",
+                "name": "Libvirt vHDD Backups",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "vHDD Backups"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Backup vHDD files count",
+                        "key": "libvirt.vhdd.backup.files.count[{$VHDDBACKUPPATH},{$VHDDBACKUPMINAGE}]",
+                        "delay": "5m;0/1-7,22:00-23:59;0/1-7,00:00-10:00",
+                        "applications": [
+                            {
+                                "name": "vHDD Backups"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "All vHDD backups are older than {$VHDDBACKUPMINAGE}h",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$VHDDBACKUPMINAGE}",
+                        "value": "168"
+                    },
+                    {
+                        "macro": "{$VHDDBACKUPPATH}",
+                        "value": "/mnt/backup"
+                    }
+                ]
+            }
+        ]
+    }
+}

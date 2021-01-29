@@ -1,0 +1,248 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-03T18:05:22Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Xerox 7500",
+                "name": "Xerox 7500",
+                "templates": [
+                    {
+                        "name": "Xerox Color"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Marker Supplies Level Black Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.9",
+                        "key": "prtMarkerSuppliesLevelBlackImagingUnit",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Cyan Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.10",
+                        "key": "prtMarkerSuppliesLevelCyanImagingUnit",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Fuser Belt Cleaner Assembly",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.6",
+                        "key": "prtMarkerSuppliesLevelFuserBeltCleanerAssembly",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Magenta Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.11",
+                        "key": "prtMarkerSuppliesLevelMagentaImagingUnit",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Transfer Roller",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.5",
+                        "key": "prtMarkerSuppliesLevelTransferRoller",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Waste Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.9.1.7",
+                        "key": "prtMarkerSuppliesLevelWasteCartridge",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Level Yellow Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.9.1.12",
+                        "key": "prtMarkerSuppliesLevelYellowImagingUnit",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Black Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.43.11.1.1.8.1.9",
+                        "key": "prtMarkerSuppliesMaxCapacityBlackImagingUnit",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Cyan Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.10",
+                        "key": "prtMarkerSuppliesMaxCapacityCyanImagingUnit",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Fuser Belt Cleaner Assembly",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.6",
+                        "key": "prtMarkerSuppliesMaxCapacityFuserBeltCleanerAssembly",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Magenta Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.11",
+                        "key": "prtMarkerSuppliesMaxCapacityMagentaImagingUnit",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Transfer Roller",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.5",
+                        "key": "prtMarkerSuppliesMaxCapacityTransferRoller",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Waste Cartridge",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.7",
+                        "key": "prtMarkerSuppliesMaxCapacityWasteCartridge",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Supplies Max Capacity Yellow Imaging Unit",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.11.1.1.8.1.12",
+                        "key": "prtMarkerSuppliesMaxCapacityYellowImagingUnit",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelBlackImagingUnit.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityBlackImagingUnit.last(0)}*100=0",
+                "name": "Black Imaging Unit on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelBlack.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityBlack.last(0)}*100=0",
+                "name": "Black Toner Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelCyanImagingUnit.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityCyanImagingUnit.last(0)}*100=0",
+                "name": "Cyan Imaging Unit on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelCyan.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityCyan.last(0)}*100=0",
+                "name": "Cyan Toner Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelFuserBeltCleanerAssembly.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityFuserBeltCleanerAssembly.last(0)}*100=0",
+                "name": "Fuser Belt Cleaner Assembly on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelMagentaImagingUnit.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityMagentaImagingUnit.last(0)}*100=0",
+                "name": "Magenta Imaging Unit on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelMagenta.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityMagenta.last(0)}*100=0",
+                "name": "Magenta Toner Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelTransferRoller.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityTransferRoller.last(0)}*100=0",
+                "name": "Transfer Roller on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelWasteCartridge.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityWasteCartridge.last()}*100=0",
+                "name": "Waste Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelYellowImagingUnit.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityYellowImagingUnit.last(0)}*100=0",
+                "name": "Yellow Imaging Unit on printer {HOSTNAME} is end. Replace this detail.",
+                "priority": "WARNING"
+            },
+            {
+                "expression": "{Xerox 7500:prtMarkerSuppliesLevelYellow.avg(300)}/{Xerox 7500:prtMarkerSuppliesMaxCapacityYellow.last(0)}*100=0",
+                "name": "Yellow Toner Cartridge on printer {HOSTNAME} is end. Replace this detail.",
+                "status": "DISABLED",
+                "priority": "WARNING"
+            }
+        ]
+    }
+}

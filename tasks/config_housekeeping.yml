@@ -1,0 +1,32 @@
+# https://www.zabbix.com/documentation/current/manual/api/reference/housekeeping
+- name: Config Housekeeping settings
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: housekeeping.update
+      params:
+        hk_events_mode: "{{ zabbix_hk_events_mode }}"
+        hk_events_trigger: "{{ zabbix_hk_events_trigger }}"
+        hk_events_internal: "{{ zabbix_hk_events_internal }}"
+        hk_events_discovery: "{{ zabbix_hk_events_discovery }}"
+        hk_events_autoreg: "{{ zabbix_hk_events_autoreg }}"
+        hk_services_mode: "{{ zabbix_hk_services_mode }}"
+        hk_services: "{{ zabbix_hk_services }}"
+        hk_audit_mode: "{{ zabbix_hk_audit_mode }}"
+        hk_audit: "{{ zabbix_hk_audit }}"
+        hk_sessions_mode: "{{ zabbix_hk_sessions_mode }}"
+        hk_sessions: "{{ zabbix_hk_sessions }}"
+        hk_history_mode: "{{ zabbix_hk_history_mode }}"
+        hk_history_global: "{{ zabbix_hk_history_global }}"
+        hk_history: "{{ zabbix_hk_history }}"
+        hk_trends_mode: "{{ zabbix_hk_trends_mode }}"    
+        hk_trends_global: "{{ zabbix_hk_trends_global }}"
+        hk_trends: "{{ zabbix_hk_trends }}"
+        compression_status: "{{ zabbix_compression_status }}"
+        compress_older: "{{ zabbix_compress_older }}"                                                                                             
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200

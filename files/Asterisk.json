@@ -1,0 +1,299 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-23T13:51:28Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Asterisk",
+                "name": "Asterisk",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Asterisk"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "SIP Extensions Online",
+                        "key": "asterisk.sipextensionsonline",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}>200",
+                                "name": "Number of SIP extensions online exceeds 200",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SIP Peers Online",
+                        "key": "asterisk.sippeersonline",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SIP Trunks Online",
+                        "key": "asterisk.siptrunksonline",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{delta(180)}<>0",
+                                "name": "Number of SIP trunks online is changed",
+                                "status": "DISABLED",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Log Asterisk Full Service Unavailable",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/asterisk/full\",\"Service Unavailable\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "LOG",
+                        "description": "log[\"l\",\"Service Unavailable\",\"UTF-8\"]",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ],
+                        "logtimefmt": "MM dd hh:mm:ss",
+                        "triggers": [
+                            {
+                                "expression": "{str(\"Unavailable\")}=1 and {nodata(300)}=0",
+                                "name": "SIP Service Unavailable on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Log Asterisk Full Temporarily Unavailable",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/asterisk/full\",\"Temporarily Unavailable\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ],
+                        "logtimefmt": "MM dd hh:mm:ss",
+                        "triggers": [
+                            {
+                                "expression": "{str(\"Unavailable\")}=1 and {nodata(300)}=0",
+                                "name": "SIP Temporarily Unavailable on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Log Asterisk Full",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/asterisk/full\",,\"UTF-8\"]",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Asterisk"
+                            }
+                        ],
+                        "logtimefmt": "yyyy-MM-dd hh:mm:ss"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "SIP Trunks Discovery",
+                        "key": "asterisk.siptks.discovery",
+                        "delay": "1h",
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "Active channels for SIP trunk {#SIPTKNAME}",
+                                "key": "asterisk.siptkchansactive[{#SIPTKNAME}]",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>{$SIP_TRUNK_LIMIT}",
+                                        "name": "Active channels number for SIP trunk {#SIPTKNAME} exceeds {$SIP_TRUNK_LIMIT}",
+                                        "priority": "WARNING",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Peer IP address for SIP trunk $1",
+                                "key": "asterisk.siptkpeerip[{#SIPTKNAME}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Peer status for SIP trunk $1",
+                                "key": "asterisk.siptkpeerstatus[{#SIPTKNAME}]",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(UNREACHABLE,#2)}=1",
+                                        "name": "Peer status of SIP trunk {#SIPTKNAME} is unreachable",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Response time for SIP trunk $1",
+                                "key": "asterisk.siptkrptime[{#SIPTKNAME}]",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(120)}=1",
+                                        "name": "Peer from SIP trunk {#SIPTKNAME} is not responding",
+                                        "status": "DISABLED",
+                                        "priority": "HIGH"
+                                    },
+                                    {
+                                        "expression": "{last(#2)}>500",
+                                        "name": "Response time for SIP trunk {#SIPTKNAME} exceeds 500 ms",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Log Asterisk Full Service Unavailable for SIP trunk {#SIPTKNAME}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[\"/var/log/asterisk/full\",\"Service Unavailable*{#SIPTKIP}\",\"UTF-8\",100]",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "description": "log[\"l\",\"Service Unavailable\",\"UTF-8\"]",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ],
+                                "logtimefmt": "MM dd hh:mm:ss",
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(Unavailable)}=1 and {nodata(300)}=0",
+                                        "name": "SIP Service Unavailable for SIP trunk {#SIPTKNAME}",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Log Asterisk Full Temporarily Unavailable for SIP trunk {#SIPTKNAME}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[\"/var/log/asterisk/full\",\"Temporarily Unavailable*{#SIPTKIP}\",\"UTF-8\",100]",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ],
+                                "logtimefmt": "MM dd hh:mm:ss",
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(Unavailable)}=1 and {nodata(300)}=0",
+                                        "name": "SIP Temporarily Unavailable for SIP trunk {#SIPTKNAME}",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Trunk IP Addresses Discovery",
+                        "key": "asterisk.tkips.discovery",
+                        "delay": "1h",
+                        "status": "DISABLED",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#TKIP}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "Active channels for trunk $1",
+                                "key": "asterisk.tkchansactive[{#TKIP}]",
+                                "delay": "30s",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Trunk Names Discovery",
+                        "key": "asterisk.tknames.discovery",
+                        "delay": "1h",
+                        "status": "DISABLED",
+                        "item_prototypes": [
+                            {
+                                "name": "Response time for trunk $1",
+                                "key": "asterisk.tkrptime[{#TKNAME}]",
+                                "delay": "30s",
+                                "units": "ms",
+                                "applications": [
+                                    {
+                                        "name": "Asterisk"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SIP_TRUNK_LIMIT}",
+                        "value": "50"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,226 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T12:31:11Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Windows Performance",
+                "name": "Windows Performance",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "CPU"
+                    },
+                    {
+                        "name": "Filesystems"
+                    },
+                    {
+                        "name": "Memory"
+                    },
+                    {
+                        "name": "Services"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Size of modified pages is waiting to be written to disk",
+                        "key": "perf_counter[\"\\Memory\\Modified Page List Bytes\"]",
+                        "units": "B",
+                        "description": "Number of infrequently accessed modified pages that are destined for the hard disk. However, be aware that not all the memory on the modified page list is written out to disk. Typically, several hundred megabytes of memory remains resident on the modified list.",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory Working Set",
+                        "key": "perf_counter[\"\\Process(_Total)\\Working Set\"]",
+                        "units": "B",
+                        "description": "Total amount of resident pages allocated in RAM that all the processes that are running on the system can address without causing a Page Fault",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Processor Kernel Time, in %",
+                        "key": "perf_counter[\"\\Processor(_Total)\\% Privileged Time\"]",
+                        "value_type": "FLOAT",
+                        "description": "Percentage of time the processor spends on execution of Microsoft Windows kernel commands, such as processing of SQL Server I/O requests. If this counter is consistently high when the Physical Disk counters are high, consider installing a faster or more efficient disk subsystem.",
+                        "applications": [
+                            {
+                                "name": "CPU"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Processor Time for executing a thread that is not idle, in %",
+                        "key": "perf_counter[\"\\Processor(_Total)\\% Processor Time\"]",
+                        "value_type": "FLOAT",
+                        "description": "This counter monitors the amount of time the CPU spends executing a thread that is not idle",
+                        "applications": [
+                            {
+                                "name": "CPU"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Processor User Time, in %",
+                        "key": "perf_counter[\"\\Processor(_Total)\\% User Time\"]",
+                        "value_type": "FLOAT",
+                        "description": "Percentage of time that the processor spends on executing user processes",
+                        "applications": [
+                            {
+                                "name": "CPU"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "File read bytes per second",
+                        "key": "perf_counter[\\2\\16]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "Bps",
+                        "description": "Full counter name: \\System\\File Read Bytes/sec",
+                        "applications": [
+                            {
+                                "name": "Filesystems"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "File write bytes per second",
+                        "key": "perf_counter[\\2\\18]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "Bps",
+                        "description": "Full counter name: \\System\\File Write Bytes/sec",
+                        "applications": [
+                            {
+                                "name": "Filesystems"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory cache faults per second",
+                        "key": "perf_counter[\\4\\36]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory page reads per second",
+                        "key": "perf_counter[\\4\\42]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory pages output per second",
+                        "key": "perf_counter[\\4\\48]",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory page writes per second",
+                        "key": "perf_counter[\\4\\50]",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory Pool Paged Bytes",
+                        "key": "perf_counter[\\4\\56]",
+                        "units": "B",
+                        "description": "Memory\\Pool Paged Bytes.\nPool Paged Bytes is the size, in bytes, of the paged pool, an area of system memory (memory used by the operating system) for objects that can be written to disk when they are not being used.\nMemory\\Pool Paged Bytes is calculated differently than Process\\Pool Paged Bytes, so it might not equal Process\\Pool Paged Bytes_Total. This counter displays the last observed value only; it is not an average.",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory Available",
+                        "key": "perf_counter[\\4\\1382]",
+                        "units": "B",
+                        "description": "Available MBytes is the amount of memory that is available for use by applications and processes.",
+                        "applications": [
+                            {
+                                "name": "Memory"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1048576"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Average disk read queue length",
+                        "key": "perf_counter[\\234(_Total)\\1402]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "description": "Full counter name: \\PhysicalDisk(_Total)\\Avg. Disk Read Queue Length",
+                        "applications": [
+                            {
+                                "name": "Filesystems"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Average disk write queue length",
+                        "key": "perf_counter[\\234(_Total)\\1404]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "description": "Full counter name: \\PhysicalDisk(_Total)\\Avg. Disk Write Queue Length",
+                        "applications": [
+                            {
+                                "name": "Filesystems"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$MAX_PROC_COUNT}",
+                        "value": "300"
+                    },
+                    {
+                        "macro": "{$MIN_FREE_DISK_SPACE}",
+                        "value": "5"
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "name": "System performance"
+                    }
+                ]
+            }
+        ]
+    }
+}

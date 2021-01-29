@@ -1,0 +1,717 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-22T18:06:29Z",
+        "groups": [
+            {
+                "name": "Templates/Network devices"
+            }
+        ],
+        "templates": [
+            {
+                "template": "QNAP Storage",
+                "name": "QNAP Storage",
+                "templates": [
+                    {
+                        "name": "Network Generic Device SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Network devices"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Disks"
+                    },
+                    {
+                        "name": "iSCSI & LUN"
+                    },
+                    {
+                        "name": "Pools"
+                    },
+                    {
+                        "name": "RAID"
+                    },
+                    {
+                        "name": "System Hardware"
+                    },
+                    {
+                        "name": "System Information"
+                    },
+                    {
+                        "name": "Volumes"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "CPU Temperature",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.4.2.0",
+                        "key": "cpu.temp",
+                        "delay": "30m",
+                        "history": "7d",
+                        "trends": "7d",
+                        "applications": [
+                            {
+                                "name": "System Hardware"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{min(15m)}>={$CPU_TEMPERATURE_ALARM}",
+                                "name": "High CPU temperature (>{$CPU_TEMPERATURE_ALARM} for 15m)",
+                                "opdata": "Current temperature: {ITEM.VALUE}",
+                                "priority": "WARNING",
+                                "description": "The CPU temperature is exceeding the threshold."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Disk IOPS",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.11.5.6.2.1.3.1",
+                        "key": "disk.iops",
+                        "delay": "15m",
+                        "history": "7d",
+                        "trends": "7d",
+                        "applications": [
+                            {
+                                "name": "Disks"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Disk latency",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.11.5.6.2.1.4.1",
+                        "key": "disk.latency",
+                        "delay": "15m",
+                        "history": "7d",
+                        "trends": "7d",
+                        "applications": [
+                            {
+                                "name": "Disks"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{min(15m)}>={$DISK_LATENCY_ALARM}",
+                                "name": "Disk latency is high (>{$DISK_LATENCY_ALARM} for 15m)",
+                                "opdata": "Current latency: {ITEM.VALUE}",
+                                "priority": "WARNING",
+                                "description": "The latency of the disks are higher than the threshhold for 15 minutes."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "System Temperature",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.1.2.1.7.1",
+                        "key": "system.temp",
+                        "delay": "30m",
+                        "history": "7d",
+                        "trends": "7d",
+                        "applications": [
+                            {
+                                "name": "System Hardware"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Disk Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#HDDINDEX},1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.1]",
+                        "key": "disk.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "HDD {#HDDINDEX}: Capacity",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.9.{#HDDINDEX}",
+                                "key": "hdd.capacity[{#HDDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "HDD {#HDDINDEX}: Model",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.8.{#HDDINDEX}",
+                                "key": "hdd.model[{#HDDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "HDD {#HDDINDEX}: Hot Spare",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.7.{#HDDINDEX}",
+                                "key": "hdd.spare[{#HDDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "QNAP Hot Spare"
+                                }
+                            },
+                            {
+                                "name": "HDD {#HDDINDEX}: State",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.3.11.1.4.{#HDDINDEX}",
+                                "key": "hdd.state[{#HDDINDEX}]",
+                                "delay": "5m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=1",
+                                        "name": "HDD {#HDDINDEX} (hotspare) is in operation",
+                                        "priority": "WARNING",
+                                        "description": "Harddisk was previously a hot spare but is now in operation."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "HDD {#HDDINDEX}: SMART Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.5.{#HDDINDEX}",
+                                "key": "hdd.status[{#HDDINDEX}]",
+                                "delay": "30m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "QNAP S.M.A.R.T State"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<>0",
+                                        "name": "Faulty SMART state of HDD {#HDDINDEX}",
+                                        "opdata": "Current state: {ITEM.LASTVALUE1}",
+                                        "priority": "HIGH",
+                                        "description": "S.M.A.R.T has alerted a faulty state of the disk."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "HDD {#HDDINDEX}: Temperature",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.6.{#HDDINDEX}",
+                                "key": "hdd.temp[{#HDDINDEX}]",
+                                "delay": "30m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Disks"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{min(15m)}>{$HDD_TEMPERATURE_ALARM}",
+                                        "name": "Temperature of HDD {#HDDINDEX} is excessive for 15m",
+                                        "opdata": "Current temperature: {ITEM.VALUE}",
+                                        "priority": "WARNING",
+                                        "description": "Harddisk temperature is higher than the threshold for 15 minutes.",
+                                        "dependencies": [
+                                            {
+                                                "name": "Temperature of HDD {#HDDINDEX} is high for 5m",
+                                                "expression": "{QNAP Storage:hdd.temp[{#HDDINDEX}].min(5m)}>{$HDD_TEMPERATURE_ALARM}"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "expression": "{min(5m)}>{$HDD_TEMPERATURE_ALARM}",
+                                        "name": "Temperature of HDD {#HDDINDEX} is high for 5m",
+                                        "opdata": "Current temperature: {ITEM.VALUE}",
+                                        "priority": "INFO",
+                                        "description": "Harddisk temperature is higher than the threshold for 5 minutes."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "FAN Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#FANINDEX},1.3.6.1.4.1.24681.1.4.1.1.1.1.2.2.1.1]",
+                        "key": "fan.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "FAN {#FANINDEX}: Name",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.3.15.1.2.{#FANINDEX}",
+                                "key": "fan.name[{#FANINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "System Hardware"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "FAN {#FANINDEX}: Speed",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.2.2.1.5.{#FANINDEX}",
+                                "key": "fan.speed[{#FANINDEX}]",
+                                "delay": "30m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "System Hardware"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "FAN {#FANINDEX}: Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.1.2.2.1.4.{#FANINDEX}",
+                                "key": "fan.status[{#FANINDEX}]",
+                                "delay": "30m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "System Hardware"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Alarm state"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "LUN Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#LUNINDEX},1.3.6.1.4.1.24681.1.4.1.1.2.1.11.2.1.1]",
+                        "key": "lun.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "LUN {#LUNINDEX}: Name",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.2.1.11.2.1.3.{#LUNINDEX}",
+                                "key": "lun.name[{#LUNINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "iSCSI & LUN"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "LUN {#LUNINDEX}: Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.2.1.11.2.1.5.{#LUNINDEX}",
+                                "key": "lun.status[{#LUNINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "iSCSI & LUN"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "QNAP LUN Status"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<0",
+                                        "name": "State of LUN {#LUNINDEX} is disconnected",
+                                        "priority": "WARNING",
+                                        "description": "The target of LUN is disconnected."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Pool Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#POOLINDEX},1.3.6.1.4.1.24681.1.4.1.1.1.2.2.2.1.1]",
+                        "key": "pool.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "Pool {#POOLINDEX}: Capacity",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.2.2.1.3.{#POOLINDEX}",
+                                "key": "pool.capacity[{#POOLINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Pools"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pool {#POOLINDEX}: Free size in %",
+                                "type": "CALCULATED",
+                                "key": "pool.freepercentage[{#POOLINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "params": "last(\"pool.freeSize[{#POOLINDEX}]\")/last(\"pool.capacity[{#POOLINDEX}]\")*100",
+                                "applications": [
+                                    {
+                                        "name": "Pools"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<{$POOL_SIZE_ALARM}",
+                                        "name": "Reaching threshold for pool {#POOLINDEX} (<{$POOL_SIZE_ALARM}%)",
+                                        "opdata": "Current %: {ITEM.LASTVALUE1}",
+                                        "priority": "WARNING",
+                                        "description": "The free size of the pool is reaching the threshold."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pool {#POOLINDEX}: Free size",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.2.2.1.4.{#POOLINDEX}",
+                                "key": "pool.freeSize[{#POOLINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Pools"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Pool {#POOLINDEX}: Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.2.2.1.5.{#POOLINDEX}",
+                                "key": "pool.status[{#POOLINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Pools"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<>0",
+                                        "name": "Faulty state of Pool {#POOLINDEX}",
+                                        "priority": "HIGH",
+                                        "description": "A faulty state has been reported by the pool."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "RAID Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#RAIDINDEX},1.3.6.1.4.1.24681.1.4.1.1.1.2.1.2.1.1]",
+                        "key": "raid.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "RAID {#RAIDINDEX}: Capacity",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.1.2.1.3.{#RAIDINDEX}",
+                                "key": "raid.capacity[{#RAIDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "RAID"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "RAID {#RAIDINDEX}: Free size",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.1.2.1.4.{#RAIDINDEX}",
+                                "key": "raid.freeSize[{#RAIDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "RAID"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "RAID {#RAIDINDEX}: Level",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.1.2.1.7.{#RAIDINDEX}",
+                                "key": "raid.level[{#RAIDINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "RAID"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "RAID {#RAIDINDEX}: State",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.1.2.1.5.{#RAIDINDEX}",
+                                "key": "raid.state[{#RAIDINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "RAID"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{iregexp(\"^Ready|Synchronizing\")}=0",
+                                        "name": "Faulty state of RAID {#RAIDINDEX}",
+                                        "opdata": "Current state: {ITEM.VALUE}",
+                                        "priority": "HIGH",
+                                        "description": "RAID has reported a faulty state.",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Volume Discovery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#VOLUMEINDEX},1.3.6.1.4.1.24681.1.4.1.1.1.2.3.2.1.1]",
+                        "key": "volume.discovery",
+                        "delay": "15m",
+                        "item_prototypes": [
+                            {
+                                "name": "Volume {#VOLUMEINDEX}: Capacity",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.3.2.1.3.{#VOLUMEINDEX}",
+                                "key": "volume.capacity[{#VOLUMEINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Volumes"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Volume {#VOLUMEINDEX}: Free size in %",
+                                "type": "CALCULATED",
+                                "key": "volume.freePercentage[{#VOLUMEINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "params": "last(volume.freeSize[{#VOLUMEINDEX}])/last(volume.capacity[{#VOLUMEINDEX}])*100",
+                                "applications": [
+                                    {
+                                        "name": "Volumes"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<{$VOLUME_SIZE_ALARM}",
+                                        "name": "Reaching threshold for volume {#VOLUMEINDEX} (<{$VOLUME_SIZE_ALARM}%)",
+                                        "opdata": "Current state: {ITEM.LASTVALUE1}",
+                                        "priority": "WARNING",
+                                        "description": "The free size of the volume is reaching the threshold."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Volume {#VOLUMEINDEX}: Free size",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.3.2.1.4.{#VOLUMEINDEX}",
+                                "key": "volume.freeSize[{#VOLUMEINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Volumes"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Volume {#VOLUMEINDEX}: Name",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.3.2.1.8.{#VOLUMEINDEX}",
+                                "key": "volume.name[{#VOLUMEINDEX}]",
+                                "delay": "1h",
+                                "history": "7d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Volumes"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Volume {#VOLUMEINDEX}: Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.24681.1.4.1.1.1.2.3.2.1.5.{#VOLUMEINDEX}",
+                                "key": "volume.status[{#VOLUMEINDEX}]",
+                                "delay": "15m",
+                                "history": "7d",
+                                "trends": "7d",
+                                "applications": [
+                                    {
+                                        "name": "Volumes"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<>0",
+                                        "name": "Faulty state of volume {#VOLUMEINDEX}",
+                                        "priority": "DISASTER",
+                                        "description": "Volume is in a faulty state. Check as soon as possible."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$CPU_TEMPERATURE_ALARM}",
+                        "value": "65",
+                        "description": "Amount in centigrade when an alarm shall be raised"
+                    },
+                    {
+                        "macro": "{$DISK_LATENCY_ALARM}",
+                        "value": "30",
+                        "description": "Amount in ms when an alarm shall be raised"
+                    },
+                    {
+                        "macro": "{$HDD_TEMPERATURE_ALARM}",
+                        "value": "50",
+                        "description": "Amount in centigrade when an alarm shall be raised"
+                    },
+                    {
+                        "macro": "{$POOL_SIZE_ALARM}",
+                        "value": "15",
+                        "description": "Amount in % when an alarm shall be raised"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Alarm state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Ok"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Alarm"
+                    }
+                ]
+            },
+            {
+                "name": "QNAP Hot Spare",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "No"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Yes"
+                    }
+                ]
+            },
+            {
+                "name": "QNAP LUN Status",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Disconnected"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Connected"
+                    }
+                ]
+            },
+            {
+                "name": "QNAP S.M.A.R.T State",
+                "mappings": [
+                    {
+                        "value": "-1",
+                        "newvalue": "Error"
+                    },
+                    {
+                        "value": "0",
+                        "newvalue": "Good"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Warning"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Abnormal"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,122 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-04T12:38:31Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "NFS Service",
+                "name": "NFS Service",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "NFS Service"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "NFS sunrpc tcp response time",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service.perf[tcp,,111]",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NFS nfsrdma tcp response time",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service.perf[tcp,,2049]",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NFS mountd tcp response time",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service.perf[tcp,,20048]",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NFS sunrpc tcp is running",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,111]",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{last()}=1",
+                                "name": "NFS sunrpc  is not available on TCP/111",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NFS nfsrdma tcp is running",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,2049]",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{last()}=1",
+                                "name": "NFS nfsdrma is not available on TCP/2049",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NFS mountd tcp is running",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,20048]",
+                        "applications": [
+                            {
+                                "name": "NFS Service"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{last()}=1",
+                                "name": "NFS mountd is not available on TCP/20048",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

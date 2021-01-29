@@ -1,0 +1,288 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-22T12:46:39Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "SUM1 Sync Mail Logs",
+                "name": "SUM1 Sync Mail Logs",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "SUM1 Sync Mail"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Count ot lines in log  sync_mail/error",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log.count[/var/log/sum1/sync_mail/error.log]",
+                        "delay": "{$ERROR_LINES_TIMEOUT}",
+                        "applications": [
+                            {
+                                "name": "SUM1 Sync Mail"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}>0",
+                                "name": "There is a new error in mail_sync/error.log",
+                                "priority": "WARNING",
+                                "tags": [
+                                    {
+                                        "tag": "App",
+                                        "value": "sync_mail"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count ot lines in log  sync_mail/start",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log.count[/var/log/sum1/sync_mail/start.log]",
+                        "delay": "{$NEW_LINES_TIMEOUT}",
+                        "applications": [
+                            {
+                                "name": "SUM1 Sync Mail"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "There has been no new lines in mail_sync/start.log for {$NEW_LINES_TIMEOUT}",
+                                "priority": "WARNING",
+                                "tags": [
+                                    {
+                                        "tag": "App",
+                                        "value": "sync_mail"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Discover existing ORA_SIDs",
+                        "key": "find.syncmail.logs",
+                        "delay": "1h",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Count of lines in log {#ORA_SID}_add",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_add.log]",
+                                "delay": "{$NEW_LINES_TIMEOUT}",
+                                "history": "2w",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Count of lines in log {#ORA_SID}_delete",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_delete.log]",
+                                "delay": "{$NEW_LINES_TIMEOUT}",
+                                "history": "2w",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Count of lines in log {#ORA_SID}_maillist",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_maillist.log]",
+                                "delay": "{$NEW_LINES_TIMEOUT}",
+                                "history": "2w",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Count of lines in log {#ORA_SID}_source",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_source.log]",
+                                "delay": "{$NEW_LINES_TIMEOUT}",
+                                "history": "2w",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Count of lines in log {#ORA_SID}_start",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_start.log]",
+                                "delay": "{$NEW_LINES_TIMEOUT}",
+                                "history": "2w",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#ORA_SID}_delete.log errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_delete.log,\"^.*(FATAL|ORA-\\d+|ERROR SQLSTATE\\[\\d+\\])(|:)\\s+(.*)$\",,,,\"\\1: \\3\"]",
+                                "delay": "{$ERROR_LINES_TIMEOUT}",
+                                "history": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata({$ERROR_LINES_TIMEOUT})}=0",
+                                        "name": "There is a new error in {#ORA_SID}_delete.log",
+                                        "priority": "WARNING",
+                                        "tags": [
+                                            {
+                                                "tag": "App",
+                                                "value": "sync_mail"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#ORA_SID}_maillist.log errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_maillist.log,\"^.*(FATAL|ORA-\\d+|ERROR SQLSTATE\\[\\d+\\])(|:)\\s+(.*)$\",,,,\"\\1: \\3\"]",
+                                "delay": "{$ERROR_LINES_TIMEOUT}",
+                                "history": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata({$ERROR_LINES_TIMEOUT})}=0",
+                                        "name": "There is a new error in {#ORA_SID}_maillist.log",
+                                        "priority": "WARNING",
+                                        "tags": [
+                                            {
+                                                "tag": "App",
+                                                "value": "sync_mail"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#ORA_SID}_source.log errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_source.log,\"^.*(FATAL|ORA-\\d+|ERROR SQLSTATE\\[\\d+\\])(|:)\\s+(.*)$\",,,,\"\\1: \\3\"]",
+                                "delay": "{$ERROR_LINES_TIMEOUT}",
+                                "history": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata({$ERROR_LINES_TIMEOUT})}=0",
+                                        "name": "There is a new error in {#ORA_SID}_source.log",
+                                        "priority": "WARNING",
+                                        "tags": [
+                                            {
+                                                "tag": "App",
+                                                "value": "sync_mail"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "{#ORA_SID}_start.log errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_start.log,\"^.*(FATAL|ORA-\\d+|ERROR SQLSTATE\\[\\d+\\])(|:)\\s+(.*)$\",,,,\"\\1: \\3\"]",
+                                "delay": "{$ERROR_LINES_TIMEOUT}",
+                                "history": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "SUM1 Sync Mail"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata({$ERROR_LINES_TIMEOUT})}=0",
+                                        "name": "There is a new error in {#ORA_SID}_start.log",
+                                        "priority": "WARNING",
+                                        "tags": [
+                                            {
+                                                "tag": "App",
+                                                "value": "sync_mail"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "trigger_prototypes": [
+                            {
+                                "expression": "{SUM1 Sync Mail Logs:logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_start.log].last()}=0 or\n{SUM1 Sync Mail Logs:logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_source.log].last()}=0 or\n{SUM1 Sync Mail Logs:logrt.count[/var/log/sum1/sync_mail/{#ORA_SID}/{#ORA_SID}_maillist.log].last()}=0",
+                                "name": "There has been no new {#ORA_SID} mail_sync log records for {$NEW_LINES_TIMEOUT}",
+                                "status": "DISABLED",
+                                "priority": "WARNING",
+                                "manual_close": "YES",
+                                "tags": [
+                                    {
+                                        "tag": "App",
+                                        "value": "sync_mail"
+                                    }
+                                ]
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var lld = [];\nvar lines = value.split(\"\\n\");\nvar lines_num = lines.length;\nfor (i = 0; i < lines_num; i++)\n{\n  var row = {};\n  row[\"{#ORA_SID}\"] = lines[i].split(\"/\").pop();\n  lld.push(row);\n}\nreturn JSON.stringify(lld);"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$ERROR_LINES_TIMEOUT}",
+                        "value": "1m"
+                    },
+                    {
+                        "macro": "{$NEW_LINES_TIMEOUT}",
+                        "value": "5m"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,663 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-23T22:12:40Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "UPS APC",
+                "name": "UPS APC",
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Information(s)"
+                    },
+                    {
+                        "name": "Operational"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Device Manufacter Name",
+                        "type": "EXTERNAL",
+                        "key": "echo.something[\"APC\"]",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "TAG",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device reachability using ICMP",
+                        "type": "SIMPLE",
+                        "key": "icmpping",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Host status"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "BOOL_TO_DECIMAL",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}=0",
+                                "name": "{HOST.NAME} is UNREACHABLE or DOWN",
+                                "priority": "DISASTER"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Contact",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-MIB::sysContact.0",
+                        "key": "sysContact",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "CONTACT",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Software version (full)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-MIB::sysDescr.0",
+                        "key": "sysDescr",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "OS_FULL",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Location",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-MIB::sysLocation.0",
+                        "key": "sysLocation",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "LOCATION",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Name",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-MIB::sysName.0",
+                        "key": "sysName",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "NAME",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Uptime",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "SNMPv2-MIB::sysUpTime.0",
+                        "key": "sysUpTime",
+                        "delay": "5m",
+                        "history": "31d",
+                        "units": "uptime",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.01"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS battery capacity (%)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.318.1.1.1.2.2.1.0",
+                        "key": "upsAdvBatteryCapacity",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS battery temperature",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.2.2.2.0",
+                        "key": "upsAdvBatteryTemperature",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "\u00b0C",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>50",
+                                "name": "High battery temperature on {HOSTNAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Software version",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.1.2.1.0",
+                        "key": "upsAdvIdentFirmwareRevision",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "OS",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Serial Number",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.1.2.3.0",
+                        "key": "upsAdvIdentSerialNumber",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "SERIALNO_A",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS input voltage",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.318.1.1.1.3.2.1.0",
+                        "key": "upsAdvInputVoltage",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "VAC",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS current load (Amps)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.4.2.4.0",
+                        "key": "upsAdvOutputCurrent",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "amp",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS output frequency",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.318.1.1.1.4.2.2.0",
+                        "key": "upsAdvOutputFrequency",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "Hz",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS output load (%)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.4.2.3.0",
+                        "key": "upsAdvOutputLoad",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>90",
+                                "name": "Output load too high on {HOSTNAME}",
+                                "priority": "WARNING"
+                            },
+                            {
+                                "expression": "{last(0)}>95",
+                                "name": "Output load too high on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS output voltage",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.318.1.1.1.4.2.1.0",
+                        "key": "upsAdvOutputVoltage",
+                        "delay": "5m",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "VAC",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS replace battery indicator",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.2.2.4.0",
+                        "key": "upsAdvReplaceBatteryIndicator",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "APC Battery Replacement Status"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>1",
+                                "name": "Replace battery on {HOSTNAME}",
+                                "priority": "DISASTER"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS run time remaining",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.2.2.3.0",
+                        "key": "upsAdvRunTimeRemaining",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.01"
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<5",
+                                "name": "Run time remaining CRITICAL on {HOSTNAME}",
+                                "priority": "HIGH"
+                            },
+                            {
+                                "expression": "{last(0)}<10",
+                                "name": "Run time remaining LOW on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS battery status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.2.1.1.0",
+                        "key": "upsBasicBatteryStatus",
+                        "delay": "5m",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "APC Battery Status"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>2",
+                                "name": "Loss of input power on {HOSTNAME}",
+                                "priority": "DISASTER"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS time on battery",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.2.1.2.0",
+                        "key": "upsBasicBatteryTimeOnBattery",
+                        "delay": "5m",
+                        "history": "1w",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.01"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Device Model Name",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.1.1.1.0",
+                        "key": "upsBasicIdentModel",
+                        "delay": "5m",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "inventory_link": "TYPE",
+                        "applications": [
+                            {
+                                "name": "Information(s)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "UPS status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.4.1.318.1.1.1.4.1.1.0",
+                        "key": "upsBasicOutputStatus",
+                        "delay": "5m",
+                        "history": "1w",
+                        "description": "Monitor failure indicates that the UPS is not supplying line voltage to any attached devices.",
+                        "applications": [
+                            {
+                                "name": "Operational"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "APC Status"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>2",
+                                "name": "UPS Status on {HOSTNAME} is not onLine",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "Battery status",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "drawtype": "BOLD_LINE",
+                        "color": "C80000",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsBasicBatteryStatus"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "drawtype": "BOLD_LINE",
+                        "color": "00C800",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvReplaceBatteryIndicator"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "UPS load",
+                "graph_items": [
+                    {
+                        "color": "C80000",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvOutputCurrent"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "0000CC",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvOutputLoad"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "UPS temperature",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "660000",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvBatteryTemperature"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "UPS voltage",
+                "graph_items": [
+                    {
+                        "color": "0000CC",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvOutputVoltage"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "CC0000",
+                        "item": {
+                            "host": "UPS APC",
+                            "key": "upsAdvInputVoltage"
+                        }
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "APC Battery Replacement Status",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "notInstalled"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "ok"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "failed"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "highTemperature"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "replaceImmediately"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "lowCapacity"
+                    }
+                ]
+            },
+            {
+                "name": "APC Battery Status",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "batteryNormal"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "batteryLow"
+                    }
+                ]
+            },
+            {
+                "name": "APC Status",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "onLine"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "onBattery"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "onSmartBoost"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "timedSleeping"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "softwareBypass"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "off"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "rebooting"
+                    },
+                    {
+                        "value": "9",
+                        "newvalue": "switchedBypass"
+                    },
+                    {
+                        "value": "10",
+                        "newvalue": "hardwareFailureBypass"
+                    },
+                    {
+                        "value": "11",
+                        "newvalue": "sleepingUntilPowerReturn"
+                    },
+                    {
+                        "value": "12",
+                        "newvalue": "onSmartTrim"
+                    }
+                ]
+            },
+            {
+                "name": "Host status",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Up"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Unreachable"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,261 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T12:32:45Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "1C Performance",
+                "name": "1C Performance",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "1C Performance"
+                    },
+                    {
+                        "name": "Services"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Process rphost % Kernel Time",
+                        "key": "perf_counter[\"\\Process(rphost)\\% Privileged Time\"]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost % Processor Time",
+                        "key": "perf_counter[\"\\Process(rphost)\\% Processor Time\"]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost % User Time",
+                        "key": "perf_counter[\"\\Process(rphost)\\% User Time\"]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Elapsed Time",
+                        "key": "perf_counter[\"\\Process(rphost)\\Elapsed Time\"]",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Data Bytes/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Data Bytes/sec\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Data Operations/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Data Operations/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Other Bytes/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Other Bytes/sec\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Other Operations/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Other Operations/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Read Bytes/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Read Bytes/sec\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Read Operations/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Read Operations/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Write Bytes/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Write Bytes/sec\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost IO Write Operations/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\IO Write Operations/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Page Faults/sec",
+                        "key": "perf_counter[\"\\Process(rphost)\\Page Faults/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Pool Nonpaged Bytes",
+                        "key": "perf_counter[\"\\Process(rphost)\\Pool Nonpaged Bytes\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Pool Paged Bytes",
+                        "key": "perf_counter[\"\\Process(rphost)\\Pool Paged Bytes\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Private Bytes",
+                        "key": "perf_counter[\"\\Process(rphost)\\Private Bytes\"]",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Thread Count",
+                        "key": "perf_counter[\"\\Process(rphost)\\Thread Count\"]",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Virtual Bytes",
+                        "key": "perf_counter[\"\\Process(rphost)\\Virtual Bytes\"]",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Working Set",
+                        "key": "perf_counter[\"\\Process(rphost)\\Working Set\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Process rphost Page File Bytes",
+                        "key": "perf_counter[\"\\Process(rphost\\Page File Bytes\"]",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "RPHost Memory Consumption",
+                        "key": "proc_info[rphost.exe,wkset,sum]",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "1C Performance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,109 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T17:15:42Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Core Switch",
+                "name": "Cisco Core Switch",
+                "templates": [
+                    {
+                        "name": "Cisco IOS SNMP Custom"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Perfomance"
+                    },
+                    {
+                        "name": "Resources"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Number of discarded Forwarding Database entries (MAC)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.17.4.1.0",
+                        "key": "dot1dTpLearnedEntryDiscards",
+                        "delay": "5m",
+                        "description": "The total number of Forwarding Database entries,\nwhich have been or would have been learned, but\nhave been discarded due to a lack of space to\nstore them in the Forwarding Database. If this\ncounter is increasing, it indicates that the\nForwarding Database is regularly becoming full (a\ncondition which has unpleasant performance effects\non the subnetwork). If this counter has a\nsignificant value but is not presently increasing,\nit indicates that the problem has been occurring\nbut is not persistent.",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{change()}>=1",
+                                "name": "Number of discarded Forwarding Database entries (MAC) is increased",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of ARP Address Table entries",
+                        "type": "TRAP",
+                        "key": "ipNetToMediaNetAddress",
+                        "delay": "0",
+                        "description": "The IpAddress corresponding to the media-dependent\n`physical' address.\n\nThis object predates the rule limiting index objects to a\nmax access value of 'not-accessible' and so continues to use\na value of 'read-create'.",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total Mac Address Space Available",
+                        "type": "TRAP",
+                        "key": "macaddrtotalcountavailable",
+                        "delay": "0",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}<3000",
+                                "name": "Too close to running out of resource: MAC Address Table",
+                                "opdata": "Count of available MACs: {ITEM.LASTVALUE1}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total Mac Address In Use",
+                        "type": "TRAP",
+                        "key": "macaddrtotalcountinuse",
+                        "delay": "0",
+                        "applications": [
+                            {
+                                "name": "Perfomance"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$NET.IF.IFALIAS.NOT_MATCHES}",
+                        "value": "(^MegafonFemto)"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ]
+    }
+}

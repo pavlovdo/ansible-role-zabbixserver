@@ -1,0 +1,40 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-09T09:13:38Z",
+        "groups": [
+            {
+                "name": "Templates/Operating systems"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Windows Custom",
+                "name": "Windows Custom",
+                "templates": [
+                    {
+                        "name": "Windows by Zabbix agent active"
+                    },
+                    {
+                        "name": "Windows Logs"
+                    },
+                    {
+                        "name": "Windows Performance"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Operating systems"
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SERVICE.NAME.NOT_MATCHES}",
+                        "value": "^RemoteReg.*|MMCSS|gupdate|SysmonLog|clr_op.*n_v.+|sppsvc|gpsvc|Pml Driver HPZ12|MapsBroker|dbupdate|DoSvc|BITS|ShellHWDet.+|VeeamVssSup.+|TrustedInst.+|WpnUser.+|CDPSvc.+|CDPUser.+|Wbio.+|OneSync.+|MSExchangeNot.+|tiledata.+|SCardSvr$",
+                        "description": "This macro is used in Service discovery. Can be overridden on the host or linked template level."
+                    }
+                ]
+            }
+        ]
+    }
+}

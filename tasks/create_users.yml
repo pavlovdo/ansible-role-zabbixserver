@@ -1,0 +1,21 @@
+- name: Creating zabbix users
+  community.zabbix.zabbix_user:
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    alias: "{{ item.alias }}"
+    name: "{{ item.name }}"
+    surname: "{{ item.surname }}"
+    usrgrps: "{{ item.usrgrps }}"
+    passwd: "{{ item.passwd }}"
+    lang: "{{ item.lang }}"
+    theme: "{{ item.theme }}"
+    autologin: "{{ item.autologin }}"
+    autologout: "{{ item.autologout }}"
+    refresh: "{{ item.refresh }}"
+    rows_per_page: "{{ item.rows_per_page }}"
+    after_login_url: "{{ item.after_login_url }}"
+    user_medias: "{{ item.user_medias }}"
+    role_name: "{{ item.role_name }}"
+    state: present
+  loop: "{{ (zabbix_users + zabbix_users_custom) | flatten(levels=1) }}"

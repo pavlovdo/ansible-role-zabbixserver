@@ -1,0 +1,232 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-23T11:29:16Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "HP Smart Array",
+                "name": "HP Smart Array",
+                "description": "Discover and monitor HP Smart Array Controllers on Windows with PowerShell.",
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "HP Smart Array Controllers"
+                    },
+                    {
+                        "name": "HP Smart Array Logical Drives"
+                    },
+                    {
+                        "name": "HP Smart Array Physical Drives"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "HP Smart Array Controller Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "hp.smartarray[lld,ctrl]",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "description": "Discovery all HP Smart Array Controllers on the server.",
+                        "item_prototypes": [
+                            {
+                                "name": "Smart Array Controller Battery status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "hp.smartarray[health,ctrl,{#CTRL.SLOT},batt]",
+                                "delay": "{$UPDATE}",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "{#CTRL.MODEL} with s/n {#CTRL.SN}  in slot {#CTRL.SLOT} battery status.",
+                                "applications": [
+                                    {
+                                        "name": "HP Smart Array Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{count(#5,OK,ne)}>3",
+                                        "name": "Smart Array Controller Battery status is not OK",
+                                        "priority": "INFO",
+                                        "description": "Battery status on controller {#CTRL.MODEL} on state {ITEM.LASTVALUE}.",
+                                        "tags": [
+                                            {
+                                                "tag": "hp smart array",
+                                                "value": "battery"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Smart Array Controller Cache status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "hp.smartarray[health,ctrl,{#CTRL.SLOT},cache]",
+                                "delay": "{$UPDATE}",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "{#CTRL.MODEL} with s/n {#CTRL.SN}  in slot {#CTRL.SLOT} cache status.",
+                                "applications": [
+                                    {
+                                        "name": "HP Smart Array Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{count(#5,OK,ne)}>3",
+                                        "name": "Smart Array Controller Cache status is not OK",
+                                        "priority": "INFO",
+                                        "description": "Cache status on controller {#CTRL.MODEL} on state {ITEM.LASTVALUE}.",
+                                        "tags": [
+                                            {
+                                                "tag": "hp smart array",
+                                                "value": "cache"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Smart Array Controller Main status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "hp.smartarray[health,ctrl,{#CTRL.SLOT},main]",
+                                "delay": "{$UPDATE}",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "{#CTRL.MODEL} with s/n {#CTRL.SN}  in slot {#CTRL.SLOT} main status.",
+                                "applications": [
+                                    {
+                                        "name": "HP Smart Array Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{count(#5,OK,ne)}>3",
+                                        "name": "Smart Array Controller Main status is not OK",
+                                        "priority": "INFO",
+                                        "description": "Main status of controller {#CTRL.MODEL} on state {ITEM.LASTVALUE}.",
+                                        "tags": [
+                                            {
+                                                "tag": "hp smart array",
+                                                "value": "main"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "HP Smart Array Logical Drives Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "hp.smartarray[lld,ld]",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "description": "Discover of all logical drives on Smart Array Controller.",
+                        "item_prototypes": [
+                            {
+                                "name": "Logical Drive {#LD.NUM} Status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "hp.smartarray[health,ld,{#CTRL.SLOT},{#LD.NUM}]",
+                                "delay": "{$UPDATE}",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "Status of Logical Drive {#LD.NUM} with capacity of {#LD.CAPACITY}.",
+                                "applications": [
+                                    {
+                                        "name": "HP Smart Array Logical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{count(#5,OK,ne)}>3",
+                                        "name": "Smart Array Controller Logical Drive {#LD.NUM} status is not OK",
+                                        "priority": "HIGH",
+                                        "description": "Logical Drive {#LD.NUM} with capacity {#LD.CAPACITY} status is {ITEM.LASTVALUE}.",
+                                        "tags": [
+                                            {
+                                                "tag": "hp smart array",
+                                                "value": "logical drive"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "HP Smart Array Physical Drives Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "hp.smartarray[lld,pd]",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "description": "Discovery all physical drives on HP Smart Array Controller.",
+                        "item_prototypes": [
+                            {
+                                "name": "Physical Drive {#PD.NUM} Status",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "hp.smartarray[health,pd,{#CTRL.SLOT},\"{#PD.NUM}\"]",
+                                "delay": "{$UPDATE}",
+                                "history": "{$HISTORY}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "Status of Physical Drive {#PD.NUM} on controller in slot {#CTRL.SLOT}.",
+                                "applications": [
+                                    {
+                                        "name": "HP Smart Array Physical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{count(#5,OK,ne)}>3",
+                                        "name": "Smart Array Controller Physical Drive {#PD.NUM} status is not OK",
+                                        "priority": "WARNING",
+                                        "dependencies": [
+                                            {
+                                                "name": "Smart Array Controller Physical Drive {#PD.NUM} status is Predictive Failure",
+                                                "expression": "{HP Smart Array:hp.smartarray[health,pd,{#CTRL.SLOT},\"{#PD.NUM}\"].str(\"Predictive Failure\")}=1"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "expression": "{str(\"Predictive Failure\")}=1",
+                                        "name": "Smart Array Controller Physical Drive {#PD.NUM} status is Predictive Failure",
+                                        "priority": "WARNING",
+                                        "description": "Physical Drive {#PD.NUM} status is {ITEM.LASTVALUE}.",
+                                        "tags": [
+                                            {
+                                                "tag": "hp smart array",
+                                                "value": "physical drive"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$HISTORY}",
+                        "value": "365d"
+                    },
+                    {
+                        "macro": "{$UPDATE}",
+                        "value": "15m"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,772 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-20T12:54:06Z",
+        "groups": [
+            {
+                "name": "Templates/Databases"
+            }
+        ],
+        "templates": [
+            {
+                "template": "MSSQL",
+                "name": "MSSQL",
+                "groups": [
+                    {
+                        "name": "Templates/Databases"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "SQL General Statistics"
+                    },
+                    {
+                        "name": "SQL Memory"
+                    },
+                    {
+                        "name": "SQL Physical Disk"
+                    },
+                    {
+                        "name": "SQL Processor"
+                    },
+                    {
+                        "name": "SQL Server"
+                    },
+                    {
+                        "name": "SQL Services"
+                    },
+                    {
+                        "name": "SQL Statistics"
+                    },
+                    {
+                        "name": "SQL Transactions"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "SQL Server: Version",
+                        "type": "ODBC",
+                        "key": "db.odbc.select[dbversion,{$ODBC}]",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "params": "SELECT @@VERSION AS 'SQL Server Version'",
+                        "username": "{$USER}",
+                        "password": "{$PASSWORD}",
+                        "description": "Returns version, processor architecture, build date, and operating system for the current installation of SQL Server.",
+                        "applications": [
+                            {
+                                "name": "SQL Server"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{diff(0)}>0",
+                                "name": "SQL Server general information was changed on {HOST.NAME}",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Port Availability",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,1433]",
+                        "value_type": "FLOAT",
+                        "description": "Test the availability of SQL Server on TCP port 1433.",
+                        "applications": [
+                            {
+                                "name": "SQL Server"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "SQL Server port is Down on {HOST.NAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: % Processor Time",
+                        "key": "perf_counter[\\Process(sqlservr)\\% Processor Time]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "% Processor Time is the percentage of elapsed time that all of the threads of this process used the processor to execute instructions.",
+                        "applications": [
+                            {
+                                "name": "SQL Processor"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Number of Failed Jobs",
+                        "key": "perf_counter[\\SQLAgent:Jobs(_Total)\\Failed jobs]",
+                        "value_type": "FLOAT",
+                        "description": "The number of jobs with a last run status of \u201cFailed\u201d.",
+                        "applications": [
+                            {
+                                "name": "SQL General Statistics"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}<>0",
+                                "name": "SQL: {ITEM.VALUE} failed jobs exist on {HOST.NAME}",
+                                "priority": "INFO"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQLServer: Buffer Manager\\Background writer pages/sec",
+                        "key": "perf_counter[\\SQLServer:Buffer Manager\\Background writer pages/sec]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "SQL Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: % Buffer cache hit ratio",
+                        "key": "perf_counter[\\SQLServer:Buffer Manager\\Buffer cache hit ratio]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "Indicates the percentage of pages found in the buffer cache without having to read from disk. The ratio is the total number of cache hits divided by the total number of cache lookups over the last few thousand page accesses.",
+                        "applications": [
+                            {
+                                "name": "SQL Memory"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}<70",
+                                "name": "SQL Server is not obtaining enough memory from the operating system on {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Database Pages",
+                        "key": "perf_counter[\\SQLServer:Buffer Manager\\Database pages]",
+                        "value_type": "FLOAT",
+                        "description": "How many database pages are currently being occupied in the data cache.",
+                        "applications": [
+                            {
+                                "name": "SQL Memory"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Page Life Expectancy",
+                        "key": "perf_counter[\\SQLServer:Buffer Manager\\Page Life Expectancy]",
+                        "description": "Low if under 300 for a some time",
+                        "applications": [
+                            {
+                                "name": "SQL Memory"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(300)}<300",
+                                "name": "SQL: Page Life Expectancy low: {ITEM.VALUE}",
+                                "priority": "AVERAGE",
+                                "description": "Memory pressure in SQL Server"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Data File Size (Total)",
+                        "key": "perf_counter[\\SQLServer:Databases(_Total)\\Data File(s) Size (KB)]",
+                        "value_type": "FLOAT",
+                        "units": "b",
+                        "description": "Total size (in kilobytes) of all the data files.",
+                        "applications": [
+                            {
+                                "name": "SQL Physical Disk"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Log File Size (Total)",
+                        "key": "perf_counter[\\SQLServer:Databases(_Total)\\Log File(s) Size (KB)]",
+                        "value_type": "FLOAT",
+                        "units": "b",
+                        "description": "Total size (in kilobytes) of all the transaction log files.",
+                        "applications": [
+                            {
+                                "name": "SQL Physical Disk"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Log File Used Size (Total)",
+                        "key": "perf_counter[\\SQLServer:Databases(_Total)\\Log File(s) Used Size (KB)]",
+                        "value_type": "FLOAT",
+                        "units": "b",
+                        "description": "The cumulative used size of all the log files in the database.",
+                        "applications": [
+                            {
+                                "name": "SQL Physical Disk"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Transactions per second (Total)",
+                        "key": "perf_counter[\\SQLServer:Databases(_Total)\\Transactions/sec]",
+                        "value_type": "FLOAT",
+                        "description": "Total number of transactions started for all databases per second.",
+                        "applications": [
+                            {
+                                "name": "SQL Transactions"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Blocked Processes",
+                        "key": "perf_counter[\\SQLServer:General Statistics\\Processes blocked]",
+                        "applications": [
+                            {
+                                "name": "SQL General Statistics"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(600)}>10",
+                                "name": "SQL: Many Blocked Processes: {ITEM.VALUE}",
+                                "priority": "WARNING",
+                                "description": "Too many blocked processes i SQL Server, more than 10 over a 10 minutes period"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Number Users Connected",
+                        "key": "perf_counter[\\SQLServer:General Statistics\\User Connections]",
+                        "value_type": "FLOAT",
+                        "description": "Number of users connected to SQL Server.",
+                        "applications": [
+                            {
+                                "name": "SQL General Statistics"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Lock Average Wait Time",
+                        "key": "perf_counter[\\SQLServer:Locks(_Total)\\Average Wait Time (ms)]",
+                        "value_type": "FLOAT",
+                        "description": "The average amount of wait time (milliseconds) for each lock request that resulted in a wait.",
+                        "applications": [
+                            {
+                                "name": "SQL Statistics"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Lock Waits per second",
+                        "key": "perf_counter[\\SQLServer:Locks(_Total)\\Lock Waits/sec]",
+                        "value_type": "FLOAT",
+                        "description": "Number of lock requests that could not be satisfied immediately and required the caller to wait before being granted the lock.",
+                        "applications": [
+                            {
+                                "name": "SQL Statistics"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Number of Deadlocks per second",
+                        "key": "perf_counter[\\SQLServer:Locks(_Total)\\Number of Deadlocks/sec]",
+                        "value_type": "FLOAT",
+                        "description": "Number of lock requests that resulted in a deadlock.",
+                        "applications": [
+                            {
+                                "name": "SQL Statistics"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: Deadlocks exists on the {HOST.NAME}",
+                                "priority": "AVERAGE"
+                            },
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "SQL: We have a deadlocks at {HOSTNAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Total Server Memory",
+                        "key": "perf_counter[\\SQLServer:Memory Manager\\Total Server Memory (KB)]",
+                        "value_type": "FLOAT",
+                        "units": "b",
+                        "description": "The committed memory from the buffer pool (in kilobytes).\nNote: this is not the total memory used by SQL Server.",
+                        "applications": [
+                            {
+                                "name": "SQL Memory"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Errors per second",
+                        "key": "perf_counter[\\SQLServer:SQL Errors(DB Offline Errors)\\Errors/sec]",
+                        "value_type": "FLOAT",
+                        "description": "Tracks severe errors that cause SQL Server to take the current database offline.",
+                        "applications": [
+                            {
+                                "name": "SQL Statistics"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Batch Requests per second",
+                        "key": "perf_counter[\\SQLServer:SQL Statistics\\Batch Requests/sec]",
+                        "value_type": "FLOAT",
+                        "description": "Number of command batches received per second. It is usually a good indicator of the load on SQL Server.",
+                        "applications": [
+                            {
+                                "name": "SQL Statistics"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Longest Running Transaction",
+                        "key": "perf_counter[\\SQLServer:Transactions\\Longest Transaction Running Time]",
+                        "description": "The running time of the longest running transaction, in seconds",
+                        "applications": [
+                            {
+                                "name": "SQL Transactions"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>3600",
+                                "name": "SQL: Long running transaction on {HOSTNAME}: {ITEM.VALUE} seconds",
+                                "priority": "INFO",
+                                "description": "Too many blocked processes i SQL Server, more than 10 over a 10 minutes period"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL Server: Transactions Number (Total)",
+                        "key": "perf_counter[\\SQLServer:Transactions\\Transactions]",
+                        "value_type": "FLOAT",
+                        "description": "The number of currently active transactions of all types.",
+                        "applications": [
+                            {
+                                "name": "SQL Transactions"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - Integration Services",
+                        "key": "service_state[MsDtsServer110]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: Integration Services is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - Analysis Services",
+                        "snmp_oid": "interfaces.ifTable.ifEntry.ifInOctets.1",
+                        "key": "service_state[MSSQLServerOLAPService]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: Analysis Services is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - SQL Server",
+                        "snmp_oid": "interfaces.ifTable.ifEntry.ifInOctets.1",
+                        "key": "service_state[MSSQLSERVER]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: SQL Server is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - Reporting Services",
+                        "snmp_oid": "interfaces.ifTable.ifEntry.ifInOctets.1",
+                        "key": "service_state[ReportServer]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: Reporting Services is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - SQL Browser",
+                        "snmp_oid": "interfaces.ifTable.ifEntry.ifInOctets.1",
+                        "key": "service_state[SQLBrowser]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: SQL Browser is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SQL: Service State - SQL Agent",
+                        "key": "service_state[SQLSERVERAGENT]",
+                        "applications": [
+                            {
+                                "name": "SQL Services"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Windows service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "SQL: SQL Agent is not running on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Database discovery",
+                        "type": "ODBC",
+                        "key": "db.odbc.select[dbname,{$ODBC}]",
+                        "delay": "1h",
+                        "params": "select '{\"data\":[', (SELECT STUFF((SELECT ',' + '{\"{#DBNAME}\":\"' + [Name] + '\"}' FROM master..sysdatabases ORDER BY [Name] FOR XML PATH('')), 1, 1, '')) ,']}' FOR XML PATH('')",
+                        "username": "{$USER}",
+                        "password": "{$PASSWORD}",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#DBNAME}",
+                                    "value": "@MS SQL databases for discovery",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "lifetime": "3d",
+                        "description": "Discovery of Databases as defined in global regular expression \"Databases for discovery\".",
+                        "item_prototypes": [
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: State",
+                                "type": "ODBC",
+                                "key": "db.odbc.select[{#DBNAME}_state,{$ODBC}]",
+                                "delay": "5m",
+                                "history": "1w",
+                                "value_type": "FLOAT",
+                                "params": "select coalesce(max(state),7) from sys.databases where name = '{#DBNAME}'",
+                                "username": "{$USER}",
+                                "password": "{$PASSWORD}",
+                                "description": "State of a specific database. The values: 0 = ONLINE, 1 = RESTORING, 2 = RECOVERING, 3 = RECOVERY_PENDING, 4 = SUSPECT, 5 = EMERGENCY, 6 = OFFLINE, 7 = Database Does Not Exist on Server.",
+                                "applications": [
+                                    {
+                                        "name": "SQL Server"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "MS SQL Server database state"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last(0)}<>0",
+                                        "name": "The database '{#DBNAME}' state is no longer online",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: Number of Failed Jobs",
+                                "key": "perf_counter[\\SQLAgent:Jobs({#DBNAME})\\Failed jobs]",
+                                "applications": [
+                                    {
+                                        "name": "SQL General Statistics"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: Data File Size",
+                                "key": "perf_counter[\\SQLServer:Databases({#DBNAME})\\Data File(s) Size (KB)]",
+                                "delay": "5m",
+                                "value_type": "FLOAT",
+                                "units": "b",
+                                "description": "Cumulative size (in kilobytes) of all the data files in the database including any automatic growth.",
+                                "applications": [
+                                    {
+                                        "name": "SQL Physical Disk"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: Log File Size",
+                                "key": "perf_counter[\\SQLServer:Databases({#DBNAME})\\Log File(s) Size (KB)]",
+                                "delay": "5m",
+                                "value_type": "FLOAT",
+                                "units": "b",
+                                "description": "Cumulative size (in kilobytes) of all the transaction log files in the database.",
+                                "applications": [
+                                    {
+                                        "name": "SQL Physical Disk"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>50*1024*1024*1024",
+                                        "name": "Log file of database '{#DBNAME}' is exceeded 50GB. Shrink log file",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: Transactions per second",
+                                "key": "perf_counter[\\SQLServer:Databases({#DBNAME})\\Transactions/sec]",
+                                "value_type": "FLOAT",
+                                "description": "Number of transactions started for the database per second.",
+                                "applications": [
+                                    {
+                                        "name": "SQL Transactions"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SQL Server: Instance {#DBNAME}: Lock Waits per second",
+                                "key": "perf_counter[\\SQLServer:Locks({#DBNAME})\\Lock Waits/sec]",
+                                "delay": "5m",
+                                "applications": [
+                                    {
+                                        "name": "SQL Statistics"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$PASSWORD}",
+                        "value": "oldschool"
+                    },
+                    {
+                        "macro": "{$USER}",
+                        "value": "zabbix"
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "CPU/Memory load",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "color": "C80000",
+                        "item": {
+                            "host": "MSSQL",
+                            "key": "perf_counter[\\Process(sqlservr)\\% Processor Time]"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "00C800",
+                        "item": {
+                            "host": "MSSQL",
+                            "key": "perf_counter[\\SQLServer:Buffer Manager\\Buffer cache hit ratio]"
+                        }
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "MS SQL Server database state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "ONLINE"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "RESTORING"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "RECOVERING"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "RECOVERY PENDING"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "SUSPECT"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "EMERGENCY"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "OFFLINE"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Database Does Not Exist on Server"
+                    }
+                ]
+            },
+            {
+                "name": "Service state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Down"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Up"
+                    }
+                ]
+            },
+            {
+                "name": "Windows service state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Running"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Paused"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Start pending"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "Pause pending"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Continue pending"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Stop pending"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Stopped"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "Unknown"
+                    },
+                    {
+                        "value": "255",
+                        "newvalue": "No such service"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,14 @@
+- name: create Zabbix WEB Scenario triggers
+  uri:
+    url: "{{ zabbix_server_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: 2.0
+      method: trigger.create
+      params: "{{ item.triggers }}"
+      auth: "{{ zbx_api_token }}"
+      id: 1
+    status_code: 200
+  loop: "{{ (zabbix_hosts + zabbix_hosts_custom + zabbix_web_hosts_rc + zabbix_web_hosts_sum1 + zabbix_web_hosts_custom) | flatten(levels=1) }}"
+  when: item.triggers is defined

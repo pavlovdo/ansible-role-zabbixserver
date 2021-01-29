@@ -1,0 +1,65 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-10T11:46:10Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Puppet Service",
+                "name": "Puppet Service",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Puppet service"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Puppet service is running",
+                        "type": "SIMPLE",
+                        "key": "net.tcp.service[tcp,,8140]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Puppet service"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Service state"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{max(#3)}=0",
+                                "name": "Puppet service is down on {HOST.NAME}",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Service state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Down"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Up"
+                    }
+                ]
+            }
+        ]
+    }
+}

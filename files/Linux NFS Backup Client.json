@@ -1,0 +1,66 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-04T13:08:25Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Linux NFS Backup Client",
+                "name": "Linux NFS Backup Client",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Filesystem"
+                    },
+                    {
+                        "name": "Filesystems"
+                    },
+                    {
+                        "name": "NFS"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Mounted NFS  discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "nfs.mount.discovery",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Mount point of NFS filesystem {#MOUNTEDNFS}",
+                                "key": "nfs.mountpoint[{#MOUNTEDNFS}]",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Filesystems"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Mount point of  {#MOUNTEDNFS} changed",
+                                        "priority": "INFO"
+                                    },
+                                    {
+                                        "expression": "{nodata(2m)}=1",
+                                        "name": "There is no mount point of {#MOUNTEDNFS}",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

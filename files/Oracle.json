@@ -1,0 +1,254 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-22T12:18:09Z",
+        "groups": [
+            {
+                "name": "Templates/Databases"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Oracle",
+                "name": "Oracle",
+                "groups": [
+                    {
+                        "name": "Templates/Databases"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Oracle Database Backups"
+                    },
+                    {
+                        "name": "Oracle Logs"
+                    },
+                    {
+                        "name": "Oracle Processes"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Discovery Oracle started databases",
+                        "key": "oracle.dbs.started.discovery",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#ORASTARTEDDBNAME}",
+                                    "value": "@Oracle databases for discovery",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "Oracle database {#ORASTARTEDDBNAME} Archive Logs errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt[{$ORADBBACKUPDIR}/{#ORASTARTEDDBNAME}/arch/BackupLog.log$,\"(Error|error|ERROR|Fatal|fatal|FATAL|Failure|FAILURE|failure)\",\"UTF-8\"]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(1h)}=0",
+                                        "name": "Oracle database {#ORASTARTEDDBNAME} archive logs error is detected",
+                                        "priority": "HIGH",
+                                        "dependencies": [
+                                            {
+                                                "name": "Database {#ORASTARTEDDBNAME} is down",
+                                                "expression": "{Oracle:oracle.db.smon.start[{#ORASTARTEDDBNAME}].avg(5)}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Oracle database {#ORASTARTEDDBNAME} Full Backup errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "logrt[{$ORADBBACKUPDIR}/{#ORASTARTEDDBNAME}/full/BackupLog.log$,\"(Error|error|ERROR|Fatal|fatal|FATAL|Failure|FAILURE|failure)\",\"UTF-8\"]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(1h)}=0",
+                                        "name": "Oracle database {#ORASTARTEDDBNAME} full backup errors is detected",
+                                        "priority": "HIGH",
+                                        "dependencies": [
+                                            {
+                                                "name": "Database {#ORASTARTEDDBNAME} is down",
+                                                "expression": "{Oracle:oracle.db.smon.start[{#ORASTARTEDDBNAME}].avg(5)}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Oracle database {#ORASTARTEDDBNAME} alert log errors",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[{$ORADIAGDIR}/{#ORASTARTEDDBNAMELC}/{#ORASTARTEDDBNAME}/trace/alert_{#ORASTARTEDDBNAME}.log,\"(Error|error|ERROR|Fatal|fatal|FATAL|Failure|FAILURE|failure)\",\"UTF-8\"]",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Logs"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{nodata(2m)}=0",
+                                        "name": "Oracle database {#ORASTARTEDDBNAME} alert log error is detected",
+                                        "priority": "AVERAGE",
+                                        "description": "Last value: {ITEM.LASTVALUE1}",
+                                        "dependencies": [
+                                            {
+                                                "name": "Database {#ORASTARTEDDBNAME} is down",
+                                                "expression": "{Oracle:oracle.db.smon.start[{#ORASTARTEDDBNAME}].avg(5)}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Oracle database {#ORASTARTEDDBNAME} alert log",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "log[{$ORADIAGDIR}/{#ORASTARTEDDBNAMELC}/{#ORASTARTEDDBNAME}/trace/alert_{#ORASTARTEDDBNAME}.log,,\"UTF-8\"]",
+                                "trends": "0",
+                                "value_type": "LOG",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Logs"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Count of archive logs of database {#ORASTARTEDDBNAME} for 2 last hours",
+                                "key": "oracle.db.archlogs.files.count[{$ORADBBACKUPDIR},{#ORASTARTEDDBNAME}]",
+                                "delay": "30m;0/1-7,21:00-24:00;0/1-7,00:00-11:00",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=0",
+                                        "name": "There aren't any archive logs for started database {#ORASTARTEDDBNAME} for 2 last hours",
+                                        "priority": "HIGH",
+                                        "dependencies": [
+                                            {
+                                                "name": "Database {#ORASTARTEDDBNAME} is down",
+                                                "expression": "{Oracle:oracle.db.smon.start[{#ORASTARTEDDBNAME}].avg(5)}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Size of directory with archive logs of database {#ORASTARTEDDBNAME}",
+                                "key": "oracle.db.backupdir.arch.size[{$ORADBBACKUPDIR},{#ORASTARTEDDBNAME}]",
+                                "delay": "30m;0/1-7,00:00-11:00",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Size of directory with full backups of database {#ORASTARTEDDBNAME}",
+                                "key": "oracle.db.backupdir.full.size[{$ORADBBACKUPDIR},{#ORASTARTEDDBNAME}]",
+                                "delay": "1h;0/1-7,00:00-10:00",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Full backup files count of database {#ORASTARTEDDBNAME} for the last day",
+                                "key": "oracle.db.fullbackup.files.count[{$ORADBBACKUPDIR},{#ORASTARTEDDBNAME}]",
+                                "delay": "1h;0/1-7,22:00-23:59;0/1-7,00:00-10:00",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Backups"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=0",
+                                        "name": "There aren't any full backups for started database {#ORASTARTEDDBNAME} for the last day",
+                                        "priority": "HIGH",
+                                        "dependencies": [
+                                            {
+                                                "name": "Database {#ORASTARTEDDBNAME} is down",
+                                                "expression": "{Oracle:oracle.db.smon.start[{#ORASTARTEDDBNAME}].avg(5)}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "State of smon process of of database {#ORASTARTEDDBNAME}",
+                                "key": "oracle.db.smon.start[{#ORASTARTEDDBNAME}]",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Processes"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Service state"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(5)}=0",
+                                        "name": "Database {#ORASTARTEDDBNAME} is down",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$ORADBBACKUPDIR}",
+                        "value": "/mnt/backupdbs/oracle"
+                    },
+                    {
+                        "macro": "{$ORADIAGDIR}",
+                        "value": "/u00/oracle/app/oracle/diag/rdbms"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Service state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Down"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Up"
+                    }
+                ]
+            }
+        ]
+    }
+}

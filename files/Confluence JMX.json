@@ -1,0 +1,449 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-04T11:12:16Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Confluence JMX",
+                "name": "Confluence JMX",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Java Confluence"
+                    },
+                    {
+                        "name": "Java Tomcat"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Java Tomcat http-8090 threads allocated",
+                        "type": "JMX",
+                        "key": "jmx[\"Catalina:type=ThreadPool,name=\\\"http-nio-8090\\\"\",currentThreadCount]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Confluence LastElapsedMilliseconds",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=IndexingStatistics\",LastElapsedMilliseconds]",
+                        "delay": "60",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "description": "Time taken during last indexing",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi",
+                        "triggers": [
+                            {
+                                "expression": "{last()}>10000",
+                                "name": "Time elapsed for indexing > 10s",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Java Confluence TaskQueueLength",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=IndexingStatistics\",TaskQueueLength]",
+                        "delay": "60",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Confluence AverageExecutionTimeForLastTenRequests",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=RequestMetrics\",AverageExecutionTimeForLastTenRequests]",
+                        "delay": "60",
+                        "units": "ms",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "description": "Average execution time for the last ten requests.",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi",
+                        "triggers": [
+                            {
+                                "expression": "{last()}>600000",
+                                "name": "Java Confluence Average Execution Time For Last Ten Requests > 600s",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Java Confluence CurrentNumberOfRequestsBeingServed",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=RequestMetrics\",CurrentNumberOfRequestsBeingServed]",
+                        "delay": "60",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "description": "Number of requests being served at this instant.",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Confluence NumberOfRequestsInLastTenSeconds",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=RequestMetrics\",NumberOfRequestsInLastTenSeconds]",
+                        "delay": "60",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "description": "The number of requests in the last ten seconds",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Confluence DatabaseExampleLatency",
+                        "type": "JMX",
+                        "key": "jmx[\"Confluence:name=SystemInformation\",DatabaseExampleLatency]",
+                        "delay": "60",
+                        "units": "ms",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "description": "Shows the latency of an example query performed against the database",
+                        "applications": [
+                            {
+                                "name": "Java Confluence"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi",
+                        "triggers": [
+                            {
+                                "expression": "{last()}>10",
+                                "name": "Java Confluence Database Latency > 10ms",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 bytes received per second",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=GlobalRequestProcessor,name=\\\"http-nio-8090\\\"\",bytesReceived]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 bytes sent per second",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=GlobalRequestProcessor,name=\\\"http-nio-8090\\\"\",bytesSent]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 errors per second",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=GlobalRequestProcessor,name=\\\"http-nio-8090\\\"\",errorCount]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 request processing time",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=GlobalRequestProcessor,name=\\\"http-nio-8090\\\"\",processingTime]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.001"
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 requests per second",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=GlobalRequestProcessor,name=\\\"http-nio-8090\\\"\",requestCount]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat Number of active sessions at this moment",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Manager,path=/,host=localhost\",activeSessions]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat Maximum number of active Sessions allowed, or -1 for no limit",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Manager,path=/,host=localhost\",maxActiveSessions]",
+                        "delay": "1h",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat Maximum number of active sessions so far",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Manager,path=/,host=localhost\",maxActive]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat Number of sessions we rejected due to maxActive being reached",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Manager,path=/,host=localhost\",rejectedSessions]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat Number of sessions created by this manager per second",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Manager,path=/,host=localhost\",sessionCounter]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 gzip compression",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=ProtocolHandler,port=8090\",compression]",
+                        "delay": "1h",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat version",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=Server\",serverInfo]",
+                        "delay": "1h",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 threads busy",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=ThreadPool,name=\\\"http-nio-8090\\\"\",currentThreadsBusy]",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Java Tomcat http-8090 threads max",
+                        "type": "JMX",
+                        "key": "jmx[\"Standalone:type=ThreadPool,name=\\\"http-nio-8090\\\"\",maxThreads]",
+                        "delay": "1h",
+                        "history": "1w",
+                        "applications": [
+                            {
+                                "name": "Java Tomcat"
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Confluence MBeans Atributes",
+                        "type": "JMX",
+                        "key": "jmx.discovery[attributes,\"Confluence:name=*\"]",
+                        "delay": "3600",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "item_prototypes": [
+                            {
+                                "name": "java.confluence.{#JMXATTR}",
+                                "type": "JMX",
+                                "key": "jmx[{#JMXOBJ},{#JMXATTR}]",
+                                "delay": "3600",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "username": "{$JMX_USERNAME}",
+                                "password": "{$JMX_PASSWORD}",
+                                "applications": [
+                                    {
+                                        "name": "Java Confluence"
+                                    }
+                                ],
+                                "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi",
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "java.confluence.{#JMXATTR} is changed",
+                                        "priority": "INFO",
+                                        "description": "Previous value: {ITEM.LASTVALUE2}\nLast value: {ITEM.LASTVALUE1}"
+                                    }
+                                ]
+                            }
+                        ],
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    },
+                    {
+                        "name": "Tomcat MBeans Atributes",
+                        "type": "JMX",
+                        "key": "jmx.discovery[attributes,\"Standalone:name=*\"]",
+                        "delay": "3600",
+                        "username": "{$JMX_USERNAME}",
+                        "password": "{$JMX_PASSWORD}",
+                        "jmx_endpoint": "service:jmx:rmi:///jndi/rmi://{HOST.CONN}:{HOST.PORT}/jmxrmi"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Confluence JMX:jmx[\"Standalone:type=ThreadPool,name=\\\"http-nio-8090\\\"\",currentThreadsBusy].last(0)} > ({Confluence JMX:jmx[\"Standalone:type=ThreadPool,name=\\\"http-nio-8090\\\"\",maxThreads].last(0)} * 0.7)",
+                "name": "70% Tomcat http-8090 worker threads busy",
+                "priority": "WARNING"
+            }
+        ]
+    }
+}

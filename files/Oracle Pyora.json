@@ -1,0 +1,1005 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-04T11:04:39Z",
+        "groups": [
+            {
+                "name": "Templates/Databases"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Oracle Pyora",
+                "name": "Oracle Pyora",
+                "groups": [
+                    {
+                        "name": "Templates/Databases"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Oracle ASM Volumes"
+                    },
+                    {
+                        "name": "Oracle Database Backups"
+                    },
+                    {
+                        "name": "Oracle Database Users"
+                    },
+                    {
+                        "name": "Oracle Perfomance"
+                    },
+                    {
+                        "name": "Oracle Tablespaces"
+                    },
+                    {
+                        "name": "Oracle Temp Tablespaces"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Oracle/Active user count on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "activeusercount",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Buffer busy waits on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "bufbusywaits",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Instance is active and open on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "check_active",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{regexp(ORA)}=1",
+                                "name": "Database {$DATABASE} is down or ORA error found",
+                                "priority": "DISASTER",
+                                "description": "Contact DBA."
+                            },
+                            {
+                                "expression": "{nodata(800)}=1",
+                                "name": "Database {$DATABASE} is not responding",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Archive {$ARCHIVE} on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "check_archive[{$ARCHIVE}]",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/User Commits on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "commits",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Size of all datafiles on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbfilesize",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/dbprllwrite on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbprllwrite",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "BOOL_TO_DECIMAL",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/dbscattread on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbscattread",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/dbseqread on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbseqread",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "BOOL_TO_DECIMAL",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Size of user data (without temp) on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbsize",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/dbsnglwrite {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dbsnglwrite",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Deadlocks on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "deadlocks",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Directread on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "directread",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Disk sorts ratio on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "dsksortratio",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Enqueue on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "enqueue",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Zabbix failed checks on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "failedchecks",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "triggers": [
+                            {
+                                "expression": "{last()}<>0",
+                                "name": "Zabbix sender failed checks count: {ITEM.LASTVALUE1}",
+                                "status": "DISABLED",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/fra_use on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "fra_use",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>90",
+                                "name": "fra_use used on {$DATABASE} > 90%",
+                                "priority": "HIGH",
+                                "description": "Fast Recovery Area usage > 90%"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/freebufwaits on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "freebufwaits",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Hard parse ratio on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "hparsratio",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Index fast full scans (full) on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "indexffs",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Lastapplarclog on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "lastapplarclog",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Lastarclog on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "lastarclog",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "BOOL_TO_DECIMAL",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Latchfree on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "latchfree",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Logfilesync on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "logfilesync",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Logonscurrent on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "logonscurrent",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Logprllwrite on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "logprllwrite",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Logswcompletion on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "logswcompletion",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Netresv on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "netresv",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Netroundtrips on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "netroundtrips",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Netsent on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "netsent",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Zabbix items list",
+                        "key": "pyora-items-list[{$ZABBIXURL},{$ZABBIXUSER},{$ZABBIXPASSWORD},{HOST.HOST},{$ADDRESS},{$PORT},{$DATABASE}]",
+                        "delay": "1h",
+                        "history": "1w",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{regexp(OK)}=0",
+                                "name": "Can't create items list",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Query Lock on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_lock",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>0",
+                                "name": "Query Lock on {$DATABASE} > 1",
+                                "status": "DISABLED",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Query Lock list on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_lock_list2",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{strlen()}>3",
+                                "name": "Query Lock list on {$DATABASE} not empty",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Query Redologs on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_redologs",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Query Rollbacks on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_rollbacks",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Query Sessions on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_sessions",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>250",
+                                "name": "Query Sessions on {$DATABASE} > 250",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Database CPU Time Ratio on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_sysmetrics[Database_CPU_Time_Ratio]",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Database Wait Time Ratio on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_sysmetrics[Database_Wait_Time_Ratio]",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/User Transaction Per Sec on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "query_sysmetrics[User_Transaction_Per_Sec]",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Read Cache hit ratio on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "rcachehit",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Redo Writes on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "redowrites",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Table scan rows gotten on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "tblrowsscans",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Table scans (long tables) on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "tblscans",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Uptime on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "uptime",
+                        "delay": "0",
+                        "history": "1w",
+                        "trends": "90d",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oracle/Version on {$DATABASE}",
+                        "type": "TRAP",
+                        "key": "version",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "Oracle Perfomance"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Discovery Oracle ASM volumes",
+                        "key": "pyora-discovery[{$ADDRESS},{$PORT},{$DATABASE},show_asm_volumes]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#ASMVOLUME}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "ASM Volume Free on {#ASMVOLUME}",
+                                "type": "TRAP",
+                                "key": "asm_volume_free[{#ASMVOLUME}]",
+                                "delay": "0",
+                                "history": "1w",
+                                "trends": "90d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Oracle ASM Volumes"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1048576"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "ASM Volume Size on {#ASMVOLUME}",
+                                "type": "TRAP",
+                                "key": "asm_volume_size[{#ASMVOLUME}]",
+                                "delay": "0",
+                                "history": "1w",
+                                "trends": "90d",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Oracle ASM Volumes"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1048576"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "ASM Volume Use on {#ASMVOLUME}",
+                                "type": "TRAP",
+                                "key": "asm_volume_use[{#ASMVOLUME}]",
+                                "delay": "0",
+                                "history": "1w",
+                                "trends": "90d",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "applications": [
+                                    {
+                                        "name": "Oracle ASM Volumes"
+                                    }
+                                ]
+                            }
+                        ],
+                        "trigger_prototypes": [
+                            {
+                                "expression": "({Oracle Pyora:asm_volume_size[{#ASMVOLUME}].last()} - {Oracle Pyora:asm_volume_free[{#ASMVOLUME}].last()}) / {Oracle Pyora:asm_volume_size[{#ASMVOLUME}].last()} *100 > {$ASMHIGH}",
+                                "name": "ASM Volume {#ASMVOLUME} used > {$ASMHIGH}% ({ITEM.LASTVALUE2} / {ITEM.LASTVALUE1})",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Discovery Oracle tablespaces",
+                        "key": "pyora-discovery[{$ADDRESS},{$PORT},{$DATABASE},show_tablespaces]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#TABLESPACE}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "Tablespace percentual use on {#TABLESPACE}",
+                                "type": "TRAP",
+                                "key": "tablespace[{#TABLESPACE}]",
+                                "delay": "0",
+                                "history": "1w",
+                                "trends": "90d",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Tablespaces"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>{$HIGH}",
+                                        "name": "Tablespace {#TABLESPACE} used on {$DATABASE} > {$HIGH} %",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Tablespace free on {#TABLESPACE}",
+                                "type": "TRAP",
+                                "key": "tablespace_abs[{#TABLESPACE}]",
+                                "delay": "0",
+                                "history": "1w",
+                                "trends": "90d",
+                                "units": "bytes",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Tablespaces"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Discovery Oracle temp tablespaces",
+                        "key": "pyora-discovery[{$ADDRESS},{$PORT},{$DATABASE},show_tablespaces_temp]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#TABLESPACE_TEMP}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "Temp Tablespace Use on {#TABLESPACE_TEMP}",
+                                "type": "TRAP",
+                                "key": "tablespace_temp[{#TABLESPACE_TEMP}]",
+                                "delay": "0",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Temp Tablespaces"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Discovery Oracle users",
+                        "key": "pyora-discovery[{$ADDRESS},{$PORT},{$DATABASE},show_users]",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#DBUSER}",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "{#DBUSER} user status",
+                                "type": "TRAP",
+                                "key": "user_status[{#DBUSER}]",
+                                "delay": "0",
+                                "trends": "0",
+                                "status": "DISABLED",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Oracle Database Users"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$ADDRESS}",
+                        "value": "localhost"
+                    },
+                    {
+                        "macro": "{$ASMHIGH}",
+                        "value": "95"
+                    },
+                    {
+                        "macro": "{$HIGH}",
+                        "value": "90"
+                    },
+                    {
+                        "macro": "{$ZABBIXPASSWORD}",
+                        "value": "26%nRx2jBj2S6"
+                    },
+                    {
+                        "macro": "{$ZABBIXURL}",
+                        "value": "http://rcmon.forum.lo"
+                    },
+                    {
+                        "macro": "{$ZABBIXUSER}",
+                        "value": "itpanelspb"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Oracle Pyora:query_lock.last()}>0 and {Oracle Pyora:query_lock_list2.strlen()}>3",
+                "name": "Query Lock on {$DATABASE} > 1",
+                "priority": "AVERAGE"
+            }
+        ]
+    }
+}

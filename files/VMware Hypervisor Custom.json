@@ -1,0 +1,45 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-25T08:44:12Z",
+        "groups": [
+            {
+                "name": "Templates/Virtualization"
+            }
+        ],
+        "templates": [
+            {
+                "template": "VMware Hypervisor Custom",
+                "name": "VMware Hypervisor Custom",
+                "templates": [
+                    {
+                        "name": "VMware Hypervisor"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Virtualization"
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$VMWARE_PERF_INTERVAL}",
+                        "value": "1m"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{VMware Hypervisor Custom:vmware.hv.cpu.usage[{$VMWARE.URL},{HOST.HOST}].avg(300)}/({VMware Hypervisor Custom:vmware.hv.hw.cpu.num[{$VMWARE.URL},{HOST.HOST}].last(0)}*{VMware Hypervisor Custom:vmware.hv.hw.cpu.freq[{$VMWARE.URL},{HOST.HOST}].last(0)})>0.9",
+                "name": "CPU usage for 5 minutes is above 90%",
+                "priority": "AVERAGE"
+            },
+            {
+                "expression": "{VMware Hypervisor Custom:vmware.hv.memory.used[{$VMWARE.URL},{HOST.HOST}].avg(300)}/{VMware Hypervisor Custom:vmware.hv.hw.memory[{$VMWARE.URL},{HOST.HOST}].last(0)}>0.9",
+                "name": "Memory usage for 5 minutes is above 90%",
+                "priority": "AVERAGE"
+            }
+        ]
+    }
+}

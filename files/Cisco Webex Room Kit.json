@@ -1,0 +1,194 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-24T13:09:32Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Webex Room Kit",
+                "name": "Cisco Webex Room Kit",
+                "description": "Template for monitoring devices Cisco Webex Room Kit",
+                "templates": [
+                    {
+                        "name": "ICMP Ping"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "HTTP feedback status",
+                        "type": "TRAP",
+                        "key": "httpfeedbackstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(OK,60)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(OK,60)}=1",
+                                "name": "HTTP feedback status is NOT ok",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "NTP status",
+                        "type": "TRAP",
+                        "key": "ntpstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Synced)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Synced)}=1",
+                                "name": "NTP status is NOT synced",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Provisioning status",
+                        "type": "TRAP",
+                        "key": "provisioningstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Provisioned)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Provisioned)}=1",
+                                "name": "Device  is NOT provisioned",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SIP status",
+                        "type": "TRAP",
+                        "key": "sipregstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "inventory_link": "NAME",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Registered)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Registered)}=1",
+                                "name": "SIP registration FAILED",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Speaker track status",
+                        "type": "TRAP",
+                        "key": "speakertrackstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Active,60)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Active,60)}=1",
+                                "name": "Speaker track is NOT active",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Temperature status",
+                        "type": "TRAP",
+                        "key": "tempstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Normal)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Normal)}=1",
+                                "name": "Temperature is NOT normal",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Touch panel status",
+                        "type": "TRAP",
+                        "key": "touchstatus",
+                        "delay": "0",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{str(Connected,60)}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{str(Connected,60)}=1",
+                                "name": "Touch panel is NOT connected",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Cisco Webex Room Kit:sipregstatus.nodata(180)}=1 or {Cisco Webex Room Kit:tempstatus.nodata(180)}=1 or {Cisco Webex Room Kit:ntpstatus.nodata(180)}=1 or\n{Cisco Webex Room Kit:touchstatus.nodata(180)}=1 or {Cisco Webex Room Kit:speakertrackstatus.nodata(180)}=1 or \n{Cisco Webex Room Kit:httpfeedbackstatus.nodata(180)}=1 or\n{Cisco Webex Room Kit:provisioningstatus.nodata(180)}=1",
+                "recovery_mode": "RECOVERY_EXPRESSION",
+                "recovery_expression": "{Cisco Webex Room Kit:sipregstatus.nodata(60)}=0 and\n{Cisco Webex Room Kit:tempstatus.nodata(60)}=0 and {Cisco Webex Room Kit:ntpstatus.nodata(60)}=0 and \n{Cisco Webex Room Kit:touchstatus.nodata(60)}=0 and\n{Cisco Webex Room Kit:speakertrackstatus.nodata(60)}=0 and\n{Cisco Webex Room Kit:httpfeedbackstatus.nodata(60)}=0 and\n{Cisco Webex Room Kit:provisioningstatus.nodata(180)}=0",
+                "name": "No data received",
+                "priority": "AVERAGE"
+            }
+        ]
+    }
+}

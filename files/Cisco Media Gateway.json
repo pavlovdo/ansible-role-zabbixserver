@@ -1,0 +1,173 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T16:02:17Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Media Gateway",
+                "name": "Cisco Media Gateway",
+                "templates": [
+                    {
+                        "name": "Cisco IOS SNMP Custom"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "VoIP"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Using Channels on DSP module 1",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.9.9.86.1.2.1.1.7.17",
+                        "key": "cdspInUseChannels[module 1]",
+                        "delay": "30s",
+                        "description": "The number of channels that are reserved for\nserving calls. The value is incremented when the\nDSP channel is reserved for call setup and\nis decremented after the DSP channel is free\ndue to call disconnection.\"",
+                        "applications": [
+                            {
+                                "name": "VoIP"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Using Channels on DSP module 2",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.9.9.86.1.2.1.1.7.18",
+                        "key": "cdspInUseChannels[module 2]",
+                        "delay": "30s",
+                        "description": "The number of channels that are reserved for\nserving calls. The value is incremented when the\nDSP channel is reserved for call setup and\nis decremented after the DSP channel is free\ndue to call disconnection.\"",
+                        "applications": [
+                            {
+                                "name": "VoIP"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Using Channels on DSP module 3",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.9.9.86.1.2.1.1.7.21",
+                        "key": "cdspInUseChannels[module 3]",
+                        "delay": "30s",
+                        "description": "The number of channels that are reserved for\nserving calls. The value is incremented when the\nDSP channel is reserved for call setup and\nis decremented after the DSP channel is free\ndue to call disconnection.\"",
+                        "applications": [
+                            {
+                                "name": "VoIP"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of DS0s that are currently in use",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.4.1.9.10.19.1.1.4.0",
+                        "key": "cpmActiveDS0s",
+                        "delay": "30s",
+                        "description": "The number of DS0s that are currently in use",
+                        "applications": [
+                            {
+                                "name": "VoIP"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Total number of B channels (bearer channels) on ISDN VWIC3-1MFT-T1/E1 card",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.10.20.1.3.2.1.6.2",
+                        "key": "isdnSignalingBchannelCount",
+                        "delay": "30s",
+                        "description": "The total number of B channels (bearer channels)\nmanaged by this signaling channel. The default value\nof this object depends on the physical interface type\nand is either 2 for Basic Rate interfaces or\n24 (30) for Primary Rate interfaces",
+                        "applications": [
+                            {
+                                "name": "VoIP"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}<24",
+                                "name": "The total number of B channels (bearer channels) on {HOSTNAME} < 24",
+                                "priority": "INFO"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "LAPD (D channel Data Link) interfaces",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},IF-MIB::ifDescr]",
+                        "key": "isdnLapdInterfaces",
+                        "delay": "1h",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#SNMPVALUE}",
+                                    "value": "@LAPD interfaces for discvovery",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "item_prototypes": [
+                            {
+                                "name": "Operational status of ISDN LAPD interface $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.10.20.1.3.4.1.2.{#SNMPINDEX}",
+                                "key": "isdnLapdOperStatus[{#SNMPVALUE}]",
+                                "delay": "30s",
+                                "applications": [
+                                    {
+                                        "name": "VoIP"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "isdnLapdOperStatus"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=1",
+                                        "name": "Operational status of ISDN LAPD interface {#SNMPVALUE} on {HOSTNAME} is inactive",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "isdnLapdOperStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "inactive"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "l1Active"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "l2Active"
+                    }
+                ]
+            }
+        ]
+    }
+}

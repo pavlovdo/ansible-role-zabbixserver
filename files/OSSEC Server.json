@@ -1,0 +1,73 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-10T11:44:08Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "OSSEC Server",
+                "name": "OSSEC Server",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Processes"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Memory consumption of ossec-analysisd processes",
+                        "key": "proc.mem[ossec-analysisd,,,,rss]",
+                        "delay": "30s",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "Processes"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory consumption of ossec-logcollector processes",
+                        "key": "proc.mem[ossec-logcollector,,,,rss]",
+                        "delay": "30s",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "Processes"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory consumption of ossec-maild processes",
+                        "key": "proc.mem[ossec-maild,,,,rss]",
+                        "delay": "30s",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "Processes"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Memory consumption of ossec-remoted processes",
+                        "key": "proc.mem[ossec-remoted,,,,rss]",
+                        "delay": "30s",
+                        "units": "b",
+                        "applications": [
+                            {
+                                "name": "Processes"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

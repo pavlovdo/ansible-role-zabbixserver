@@ -1,0 +1,249 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-07T08:44:57Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Printer Generic",
+                "name": "Printer Generic",
+                "templates": [
+                    {
+                        "name": "Network Generic Device SNMP"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Load"
+                    },
+                    {
+                        "name": "Parameters"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Device Status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.25.3.2.1.5.1",
+                        "key": "hrDeviceStatus",
+                        "description": "The current operational state of the device described by this row of the table. \nA value unknown(1) indicates that the current state of the device is unknown. running(2) indicates that the device is up and running and that no unusual error conditions are known. \nThe warning(3) state indicates that agent has been informed of an unusual error condition by the\noperational software (e.g., a disk device driver) but that the device is still 'operational'. An example would be a high number of soft errors on a disk. \nA value of testing(4), indicates that the device is not available for use because it is in the testing state.\nThe state of down(5) is used only when the agent has been informed that the device is not available for any use.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "hrDeviceStatus"
+                        }
+                    },
+                    {
+                        "name": "Printer Detected Error State",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.25.3.5.1.2.1",
+                        "key": "hrPrinterDetectedErrorState",
+                        "description": "This object represents any error conditions detected by the printer.",
+                        "applications": [
+                            {
+                                "name": "Parameters"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "hrPrinterDetectedErrorState"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "HEX_TO_DECIMAL",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(600)}>49151 and {avg(600)}<65536",
+                                "name": "No paper in printer {HOSTNAME}",
+                                "status": "DISABLED",
+                                "priority": "WARNING"
+                            },
+                            {
+                                "expression": "{avg(600)}>33280 and {avg(600)}<33793",
+                                "name": "Paper jammed in printer {HOSTNAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Printer Status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.25.3.5.1.1.1",
+                        "key": "hrPrinterStatus",
+                        "description": "The current status of this printer device.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "hrPrinterStatus"
+                        }
+                    },
+                    {
+                        "name": "Processor Load",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.25.3.3.1.2.10",
+                        "key": "hrProcessorLoad",
+                        "applications": [
+                            {
+                                "name": "Load"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Marker Life Count",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.43.10.2.1.4.1.1",
+                        "key": "prtMarkerLifeCount",
+                        "description": "The count of the number of units of measure counted during the life of printer using units of measure as specified by CounterUnit.",
+                        "applications": [
+                            {
+                                "name": "Status"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "hrDeviceStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "running"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "warning"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "testing"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "down"
+                    }
+                ]
+            },
+            {
+                "name": "hrPrinterDetectedErrorState",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "lowPaper"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "noPaper"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "lowToner"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "noToner"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "doorOpen"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "jammed"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "offline"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "serviceRequested"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "inputTrayMissing"
+                    },
+                    {
+                        "value": "9",
+                        "newvalue": "outputTrayMissing"
+                    },
+                    {
+                        "value": "10",
+                        "newvalue": "markerSupplyMissing"
+                    },
+                    {
+                        "value": "11",
+                        "newvalue": "outputNearFull"
+                    },
+                    {
+                        "value": "12",
+                        "newvalue": "outputFull"
+                    },
+                    {
+                        "value": "13",
+                        "newvalue": "inputTrayEmpty"
+                    },
+                    {
+                        "value": "14",
+                        "newvalue": "overduePreventMaint"
+                    }
+                ]
+            },
+            {
+                "name": "hrPrinterStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "other"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "unknown"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "idle"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "printing"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "warmup"
+                    }
+                ]
+            }
+        ]
+    }
+}

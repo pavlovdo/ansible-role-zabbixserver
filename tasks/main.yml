@@ -1,0 +1,78 @@
+---
+# tasks file for zabbixserver
+- name: ensure zabbix services are running after factory reset
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+    - php-fpm
+    - zabbix-server
+  when: zabbix_factory_reset is defined and zabbix_factory_reset
+
+- name: Install zabbix-api module
+  pip:
+    name:
+      - zabbix-api
+    umask: "0022"
+    executable: pip3.6
+  become: yes
+
+- name: Creating zabbix-api user
+  community.zabbix.zabbix_user:
+    server_url: "{{ zabbix_server_url }}"
+    login_user: Admin
+    login_password: zabbix
+    alias: "{{ zabbix_api_user }}"
+    name: Zabbix
+    surname: API
+    usrgrps:
+      - Zabbix administrators
+    passwd: "{{ zabbix_api_password }}"
+    role_name: Super admin role
+    state: present
+  failed_when: no
+  ignore_errors: yes
+
+- name: Block default superuser
+  community.zabbix.zabbix_user:
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    alias: Admin
+    passwd: zabbix
+    usrgrps:
+      - Disabled
+      - Zabbix administrators
+    role_name: Super admin role
+    state: present
+  ignore_errors: yes
+
+- include_tasks: 'create_mediatypes.yml'
+- include_tasks: 'create_hostgroups.yml'
+  when: zabbix_create_hostgroups is defined and zabbix_create_hostgroups
+- include_tasks: 'create_usergroups.yml'
+  when: zabbix_create_usergroups is defined and zabbix_create_usergroups
+- include_tasks: 'create_users.yml'
+  when: zabbix_create_users is defined and zabbix_create_users
+- include_tasks: 'create_actions.yml'
+  when: zabbix_create_actions is defined and zabbix_create_actions
+- include_tasks: 'import_templates.yml'
+  when: zabbix_create_templates is defined and zabbix_create_templates
+- include_tasks: 'create_hosts.yml'
+  when: zabbix_create_hosts is defined and zabbix_create_hosts
+
+- block:
+  - include_tasks: 'get_api_token.yml'
+  - include_tasks: 'create_web_scenarios.yml'
+    when: zabbix_create_web_scenarios is defined and zabbix_create_web_scenarios
+  - include_tasks: 'create_triggers.yml'
+    when: zabbix_create_triggers is defined and zabbix_create_triggers
+  when:
+    - (zabbix_create_web_scenarios is defined and zabbix_create_web_scenarios) or
+      (zabbix_create_triggers is defined and zabbix_create_triggers)
+
+- block:      
+  - include_tasks: 'get_api_token.yml'
+  - include_tasks: 'config_housekeeping.yml'
+  when: zabbix_config_housekeeping is defined and zabbix_config_housekeeping      

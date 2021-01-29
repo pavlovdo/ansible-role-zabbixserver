@@ -1,0 +1,267 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T16:02:37Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Stackwise",
+                "name": "Cisco Stackwise",
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "StackWise"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Stackwise switch ID",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.4.1.9.9.500.1.2.1.1.1]",
+                        "key": "cswSwitchNumCurrent",
+                        "delay": "1h",
+                        "description": "This object contains the current switch identification number.\nThis number should match any logical labeling on the switch.\nFor example, a switch whose interfaces are labeled\n'interface #3' this value should be 3",
+                        "item_prototypes": [
+                            {
+                                "name": "Hardware priority of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.5.{#SNMPINDEX}",
+                                "key": "cswSwitchHwPriority.[{#SNMPVALUE}]",
+                                "description": "his object contains the hardware priority of a switch. If\ntwo or more entries in this table have the same\ncswSwitchSwPriority value during the master election time,\nthe switch with the highest cswSwitchHwPriority will become\nthe master.\n\nNote: This object will contain the value of 0 if the\ncswSwitchState value is other than 'ready'.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "MAC address of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.7.{#SNMPINDEX}",
+                                "key": "cswSwitchMacAddress.[{#SNMPVALUE}]",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "The MAC address of the switch.\n\nNote: This object will contain the value of 0000:0000:0000\nif the cswSwitchState value is other than 'ready'.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Poe Devices High Priority of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.13.{#SNMPINDEX}",
+                                "key": "cswSwitchPoeDevicesHighPriority.[{#SNMPVALUE}]",
+                                "description": "This object specifies the priority of the system's high\npriority POE devices. In order to avoid losing the high \npriority POE devices before the low priority POE devices, \nthis object's value must be greater than value of \ncswSwitchPoeDevicesLowPriority",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Poe Devices Low Priority of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.12.{#SNMPINDEX}",
+                                "key": "cswSwitchPoeDevicesLowPriority.[{#SNMPVALUE}]",
+                                "description": "This object specifies the priority of the system's low\npriority POE devices.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Power Budget of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.9.{#SNMPINDEX}",
+                                "key": "cswSwitchPowerBudget.[{#SNMPVALUE}]",
+                                "description": "This object indicates the power budget of the switch.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Power Commited to the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.10.{#SNMPINDEX}",
+                                "key": "cswSwitchPowerCommited.[{#SNMPVALUE}]",
+                                "description": "This object indicates the power committed to the POE devices connected to the switch.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Role of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.3.{#SNMPINDEX}",
+                                "key": "cswSwitchRole.[{#SNMPVALUE}]",
+                                "description": "This object describes the function of the switch:\nmaster - stack master.\nmember - active member of the stack.\nnotMember - none-active stack member, see\ncswSwitchState for status.\nstandby - stack standby switch.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Cisco Stackwise Switch Role"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Role of the switch ID {#SNMPVALUE} in stack {HOSTNAME} is changed",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Software Image of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.8.{#SNMPINDEX}",
+                                "key": "cswSwitchSoftwareImage.[{#SNMPVALUE}]",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "The software image type running on the switch.\n\nNote: This object will contain an empty string if the\ncswSwitchState value is other than 'ready'.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "State of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.6.{#SNMPINDEX}",
+                                "key": "cswSwitchState.[{#SNMPVALUE}]",
+                                "description": "The current state of a switch:\n\nwaiting - Waiting for a limited time on other\nswitches in the stack to come online.\n\nprogressing - Master election or mismatch checks in\nprogress.\n\nadded - The switch is added to the stack.\n\nready - The switch is operational.\n\nsdmMismatch - The SDM template configured on the master\nis not supported by the new member.\n\nverMismatch - The operating system version running on the\nmaster is different from the operating\nsystem version running on this member.\n\nfeatureMismatch - Some of the features configured on the\nmaster are not supported on this member.\n\nnewMasterInit - Waiting for the new master to finish\ninitialization after master switchover\n(Master Re-Init).\n\nprovisioned - The switch is not an active member of the\nstack.\n\ninvalid - The switch's state machine is in an\ninvalid state.\n\nremoved - The switch is removed from the stack.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "Cisco Stackwise Switch State"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}<>4",
+                                        "name": "State of the switch ID {#SNMPVALUE} in stack {HOSTNAME} is not ready",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Priority of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.4.{#SNMPINDEX}",
+                                "key": "cswSwitchSwPriority.[{#SNMPVALUE}]",
+                                "description": "A number containing the priority of a switch. The switch with\nthe highest priority will become the master. The maximum value\nfor this object is defined by the cswMaxSwitchConfigPriority\nobject.\n\nIf after a reload the value of cswMaxSwitchConfigPriority\nchanges to a smaller value, and the value of cswSwitchSwPriority\nhas been previously set to a value greater or equal to the\nnew cswMaxSwitchConfigPriority, then the SNMP agent must set\ncswSwitchSwPriority to the new cswMaxSwitchConfigPriority.\n\nNote: This object will contain the value of 0 if the\ncswSwitchState value is other than 'ready'.",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Power Priority of the switch ID $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.500.1.2.1.1.11.{#SNMPINDEX}",
+                                "key": "cswSwitchSystemPowerPriority.[{#SNMPVALUE}]",
+                                "description": "This specifies the system's power priority. In case of\na power failure then the system with the highest system priority will be brought down last",
+                                "applications": [
+                                    {
+                                        "name": "StackWise"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Cisco Stackwise Switch Role",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "master"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "member"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "notMember"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "standby"
+                    }
+                ]
+            },
+            {
+                "name": "Cisco Stackwise Switch State",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "waiting"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "progressing"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "added"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "ready"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "sdmMismatch"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "verMismatch"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "featureMismatch"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "newMasterInit"
+                    },
+                    {
+                        "value": "9",
+                        "newvalue": "provisioned"
+                    },
+                    {
+                        "value": "10",
+                        "newvalue": "invalid"
+                    },
+                    {
+                        "value": "11",
+                        "newvalue": "removed"
+                    }
+                ]
+            }
+        ]
+    }
+}

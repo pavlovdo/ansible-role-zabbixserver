@@ -1,0 +1,421 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T12:38:27Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Linux Block Device Status",
+                "name": "Linux Block Device Status",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Block device status"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "lsblk block device discovery",
+                        "key": "lsblk.devices.discovery",
+                        "delay": "1h",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Filesystem type of device {#DEVICE}",
+                                "key": "lsblk.fstype[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Filesystem type of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SCSI Host:Channel:Target:Lun of device {#DEVICE}",
+                                "key": "lsblk.hctl[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "SCSI Host:Channel:Target:Lun of device {#DEVICE}",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Logical sector size of device {#DEVICE}",
+                                "key": "lsblk.log-sec[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Logical sector size of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Minimum I/O size of device {#DEVICE}",
+                                "key": "lsblk.min-io[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Minimum I/O size of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Model of device {#DEVICE}",
+                                "key": "lsblk.model[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Model of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Mount point of device {#DEVICE}",
+                                "key": "lsblk.mountpoint[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Mount point of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Physical sector size of device {#DEVICE}",
+                                "key": "lsblk.phy-sec[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Physical sector size of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Read-ahead of device {#DEVICE}",
+                                "key": "lsblk.ra[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Read-ahead of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Revision of device {#DEVICE}",
+                                "key": "lsblk.rev[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Revision of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Removable status of device {#DEVICE}",
+                                "key": "lsblk.rm[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Removable status of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Rotational status of device {#DEVICE}",
+                                "key": "lsblk.rota[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Rotational status of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Read-only status of {#DEVICE}",
+                                "key": "lsblk.ro[{#DEVICE}]",
+                                "delay": "1h",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Read-only status of {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Scheduler name of device {#DEVICE}",
+                                "key": "lsblk.sched[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Scheduler name of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Serial of device {#DEVICE}",
+                                "key": "lsblk.serial[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Serial of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Size of device {#DEVICE}",
+                                "key": "lsblk.size[{#DEVICE}]",
+                                "delay": "1h",
+                                "units": "B",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Size of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "State of device {#DEVICE}",
+                                "key": "lsblk.state[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "State of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Transport type of device {#DEVICE}",
+                                "key": "lsblk.tran[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Transport type of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Type of device {#DEVICE}",
+                                "key": "lsblk.type[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Type of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "UUID of device {#DEVICE}",
+                                "key": "lsblk.uuid[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "UUID of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Vendor of device {#DEVICE}",
+                                "key": "lsblk.vendor[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "Vendor of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "WWN of device {#DEVICE}",
+                                "key": "lsblk.wwn[{#DEVICE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Block device status"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1",
+                                        "name": "WWN of device {#DEVICE} is changed",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

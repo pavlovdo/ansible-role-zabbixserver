@@ -1,0 +1,51 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T14:43:14Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Linux Process Status",
+                "name": "Linux Process Status",
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "General"
+                    },
+                    {
+                        "name": "Processes"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Number of {$PROC.NAME} processes",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "proc.num[{$PROC.NAME}]",
+                        "applications": [
+                            {
+                                "name": "Processes"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "recovery_mode": "RECOVERY_EXPRESSION",
+                                "recovery_expression": "{last()}>=1",
+                                "name": "Service {$PROC.NAME}  is not running",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

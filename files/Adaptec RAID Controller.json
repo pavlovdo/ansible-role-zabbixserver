@@ -1,0 +1,270 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-12T17:10:01Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Adaptec RAID Controller",
+                "name": "Adaptec RAID Controller",
+                "description": "Based on the work here\nhttps://github.com/GOID1989/zbx-adaptec-raid",
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Adaptec Controllers"
+                    },
+                    {
+                        "name": "Adaptec Logical Drives"
+                    },
+                    {
+                        "name": "Adaptec Physical Drives"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Adaptec Controllers Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "adaptec.raid[lld,ad]",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "Adaptec Controller No.{#CTRL.ID} state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[health,ad,{#CTRL.ID},main]",
+                                "delay": "15m",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{regexp(Optimal)}=0",
+                                        "name": "Adaptec Controller No.{#CTRL.ID} Status",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Adaptec Controller No.{#CTRL.ID} Temperature",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[health,ad,{#CTRL.ID},temperature]",
+                                "delay": "5m",
+                                "history": "30d",
+                                "trends": "90d",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>85",
+                                        "name": "Adaptec Controller No.{#CTRL.ID} Temperature",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Adaptec Controller Battery Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "adaptec.raid[lld,bt]",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "Adaptec Controller No.{#CTRL.ID} Battery state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[health,ad,{#CTRL.ID},battery]",
+                                "delay": "15m",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Controllers"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{regexp(Charging)}=1",
+                                        "name": "Adaptec Controller No.{#CTRL.ID} Battery is charging",
+                                        "priority": "INFO"
+                                    },
+                                    {
+                                        "expression": "{regexp(Optimal)}=0",
+                                        "name": "Adaptec Controller No.{#CTRL.ID} Battery Status",
+                                        "priority": "WARNING",
+                                        "dependencies": [
+                                            {
+                                                "name": "Adaptec Controller No.{#CTRL.ID} Battery is charging",
+                                                "expression": "{Adaptec RAID Controller:adaptec.raid[health,ad,{#CTRL.ID},battery].regexp(Charging)}=1"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Adaptec Logical Drives Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "adaptec.raid[lld,ld]",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "Adaptec Logical Drive {#CTRL.ID}:{#LD.NAME} state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[health,ld,{#CTRL.ID},{#LD.ID}]",
+                                "delay": "30m",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Logical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{regexp(Optimal)}=0",
+                                        "name": "Adaptec Logical Drive {#LD.NAME} status",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Adaptec Physical Drives Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "adaptec.raid[lld,pd]",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "Adaptec Physical Drive {#CTRL.ID}:{#PD.ID} state",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[health,pd,{#CTRL.ID},{#PD.ID}]",
+                                "delay": "15m",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Physical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{regexp(Online)}=0",
+                                        "name": "Adaptec Physical Drive {#CTRL.ID}:{#PD.ID} Status",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Adaptec SMART Drives Discovery",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "adaptec.raid[lld,smart]",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "name": "SMART disk defects {#ADAPTEC_DISK}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[smart,defects,{#ADAPTEC_DISK}]",
+                                "delay": "15m",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Physical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{delta(3d)}>0",
+                                        "name": "SMART disk defects {#ADAPTEC_DISK}",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SMART disk health {#ADAPTEC_DISK}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[smart,health,{#ADAPTEC_DISK}]",
+                                "delay": "15m",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Physical Drives"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(OK)}<>1",
+                                        "name": "SMART disk health not OK {#ADAPTEC_DISK}",
+                                        "priority": "HIGH"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SMART disk temperature {#ADAPTEC_DISK}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[smart,temp,{#ADAPTEC_DISK}]",
+                                "delay": "5m",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Physical Drives"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SMART disk trip temperature {#ADAPTEC_DISK}",
+                                "type": "ZABBIX_ACTIVE",
+                                "key": "adaptec.raid[smart,triptemp,{#ADAPTEC_DISK}]",
+                                "delay": "5m",
+                                "applications": [
+                                    {
+                                        "name": "Adaptec Physical Drives"
+                                    }
+                                ]
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "SMART disk temperatur  {#ADAPTEC_DISK}",
+                                "ymin_type_1": "FIXED",
+                                "graph_items": [
+                                    {
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "Adaptec RAID Controller",
+                                            "key": "adaptec.raid[smart,temp,{#ADAPTEC_DISK}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "F63100",
+                                        "item": {
+                                            "host": "Adaptec RAID Controller",
+                                            "key": "adaptec.raid[smart,triptemp,{#ADAPTEC_DISK}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

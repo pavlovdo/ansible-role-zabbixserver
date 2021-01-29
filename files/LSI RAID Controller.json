@@ -1,0 +1,1185 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T13:35:41Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "LSI RAID Controller",
+                "name": "LSI RAID Controller",
+                "description": "https://github.com/mykolq/zabbix_lsi_template",
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "LSI battery"
+                    },
+                    {
+                        "name": "LSI controllers"
+                    },
+                    {
+                        "name": "LSI Internal items"
+                    },
+                    {
+                        "name": "LSI Logical disks"
+                    },
+                    {
+                        "name": "LSI Physical disks"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "All bbus info",
+                        "key": "lsi.bbusinfo",
+                        "delay": "{$ADAP_REQUEST_PERIOD}",
+                        "history": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "LSI Internal items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "All Ctls info",
+                        "key": "lsi.ctlsinfo",
+                        "delay": "{$ADAP_REQUEST_PERIOD}",
+                        "history": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "LSI Internal items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "All cvs info",
+                        "key": "lsi.cvsinfo",
+                        "delay": "{$ADAP_REQUEST_PERIOD}",
+                        "history": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "LSI Internal items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "All Lds info",
+                        "key": "lsi.ldsinfo",
+                        "delay": "{$LD_REQUEST_PERIOD}",
+                        "history": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "LSI Internal items"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "All Pds info",
+                        "key": "lsi.pdsinfo",
+                        "delay": "{$PD_REQUEST_PERIOD}",
+                        "history": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "applications": [
+                            {
+                                "name": "LSI Internal items"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Controllers discovery",
+                        "key": "lsi.ctllld",
+                        "delay": "{$ADAP_DISCOVERY_PERIOD}",
+                        "item_prototypes": [
+                            {
+                                "name": "Controller \"{#CTLID}\" cache bbu data",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbu.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Internal items"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][{#CTLID}]"
+                                        ]
+                                    },
+                                    {
+                                        "type": "CHECK_REGEX_ERROR",
+                                        "parameters": [
+                                            "(\"Status\"\\s:\\s\"Failure\")",
+                                            "\\1"
+                                        ]
+                                    },
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Response Data']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.bbusinfo"
+                                }
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" bbu low charge level",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbulowcharge.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['BBU_Firmware_Status'][10]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.bbu.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(No)}=0 and {strlen()}>0",
+                                        "name": "LSI controller {#CTLID} battery charge level is low",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" bbu need to replace",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbureplace.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['BBU_Firmware_Status'][9]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.bbu.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({str(No)}=0 and {strlen()}>0)",
+                                        "name": "LSI controller {#CTLID} bbu battery is need to be replaced",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" bbu serial number",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbusn.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['BBU_Design_Info'][4]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.bbu.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({diff()}=1 and {strlen()}>0)",
+                                        "recovery_mode": "NONE",
+                                        "name": "LSI controller {#CTLID} bbu battery was replaced",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" bbu state",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbustate.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['BBU_Info'][4]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.bbu.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({str(Optimal)}=0 and {strlen()}>0)",
+                                        "name": "LSI controller {#CTLID} bbu battery state is {ITEM.LASTVALUE}",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" bbu type",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.bbutype.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['BBU_Info'][0]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.bbu.[\"{#CTLID}\"]"
+                                }
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" cache vault data",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.cvdata.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Internal items"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][{#CTLID}]"
+                                        ]
+                                    },
+                                    {
+                                        "type": "CHECK_REGEX_ERROR",
+                                        "parameters": [
+                                            "(\"Status\"\\s:\\s\"Failure\")",
+                                            "\\1"
+                                        ]
+                                    },
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Response Data']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.cvsinfo"
+                                }
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" cache vault need to replace",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.cvreplace.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Firmware_Status'][0]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.cvdata.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({str(No)}=0 and {strlen()}>0)",
+                                        "name": "LSI controller {#CTLID} cachevault battery is need to be replaced",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" cache vault serial number",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.cvsn.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Design_Info'][1]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.cvdata.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({diff()}=1 and {strlen()}>0)",
+                                        "recovery_mode": "NONE",
+                                        "name": "LSI controller {#CTLID} cachevault battery was replaced",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" cache vault state",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.cvstate.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Cachevault_Info'][2]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.cvdata.[\"{#CTLID}\"]"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({str(Optimal)}=0 and {strlen()}>0)",
+                                        "name": "LSI controller {#CTLID} cachevault battery state is {ITEM.LASTVALUE}",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" cache vault type",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.cvtype.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI battery"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Cachevault_Info'][0]['Value']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctl.cvdata.[\"{#CTLID}\"]"
+                                }
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" model",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.model.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI controllers"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][{#CTLID}]['Response Data']['Basics']['Model']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctlsinfo"
+                                }
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" serial number",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.sn.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI controllers"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][{#CTLID}]['Response Data']['Basics']['Serial Number']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctlsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1 and {strlen()}>0",
+                                        "recovery_mode": "NONE",
+                                        "name": "LSI controller {#CTLID} was replaced",
+                                        "priority": "INFO",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Controller \"{#CTLID}\" state (health)",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ctl.state.[\"{#CTLID}\"]",
+                                "delay": "0",
+                                "history": "{$ADAP_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI controllers"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][{#CTLID}]['Response Data']['Status']['Controller Status']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$ADAP_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ctlsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(Opt)}=0",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{str(Opt)}=1",
+                                        "name": "LSI controller {#CTLID} status is {ITEM.LASTVALUE}",
+                                        "priority": "HIGH",
+                                        "tags": [
+                                            {
+                                                "tag": "RAID_CTL_STATE",
+                                                "value": "{ITEM.LASTVALUE}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#CTLID}",
+                                "path": "$.Ctl"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "CHECK_JSON_ERROR",
+                                "parameters": [
+                                    "$['Controllers'][0]['Command Status']['Detailed Status'][0]['ErrMsg']"
+                                ]
+                            },
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$['Controllers'][0]['Response Data']['System Overview']"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "{$ADAP_THROTTLING_HB_PERIOD}"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Logical disks discovery",
+                        "key": "lsi.ldlld",
+                        "delay": "{$LD_DISCOVERY_PERIOD}",
+                        "item_prototypes": [
+                            {
+                                "name": "Logical disk \"{#LDNAME}\" (id {#LDID}) level",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ld.level.[\"{#LDID}\"]",
+                                "delay": "0",
+                                "history": "{$LD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Logical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['{#LDID}'][0]['TYPE']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$LD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ldsinfo"
+                                }
+                            },
+                            {
+                                "name": "Logical disk \"{#LDNAME}\" (id {#LDID})  state",
+                                "type": "DEPENDENT",
+                                "key": "lsi.ld.state.[\"{#LDID}\"]",
+                                "delay": "0",
+                                "history": "{$LD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Logical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['{#LDID}'][0]['State']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$LD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    },
+                                    {
+                                        "type": "JAVASCRIPT",
+                                        "parameters": [
+                                            "switch(value)\n{\ncase 'Optl':\nvalue='Optimal';\nbreak;\ncase 'OfLn':\nvalue='Offline';\nbreak;\ncase 'Pdgd':\nvalue='Partially degraded';\nbreak;\ncase 'Dgrd':\nvalue='Degraded';\nbreak;\n}\nreturn value"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.ldsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(Optimal)}=0",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{str(Optimal)}=1",
+                                        "name": "LSI logical disk \"{#LDNAME}\" (\"{#LDID}\") state is \"{ITEM.LASTVALUE}\"",
+                                        "priority": "HIGH",
+                                        "tags": [
+                                            {
+                                                "tag": "LD STATE",
+                                                "value": "{ITEM.LASTVALUE}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#LDID}",
+                                "path": "$.LDID"
+                            },
+                            {
+                                "lld_macro": "{#LDNAME}",
+                                "path": "$.Name"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var JsonValue = JSON.parse(value);\nvar ResponseStatus=JsonValue.Controllers[0]['Command Status']['Status'];\nvar TxtValue='';\nif (ResponseStatus.match(/Success/g)) {\nvar ResponseData = JsonValue.Controllers[0]['Response Data'];\nvar NeedData = [];\nvar i=0;\nfor (var key in ResponseData) {\n\tif (key.match(/\\/c\\d{1,}\\/v\\d{1,}/g)) {\n\t\t JsonValue.Controllers[0]['Response Data'][key][0]['LDID'] = key;\n\t\t NeedData[i] = JsonValue.Controllers[0]['Response Data'][key][0];\n\t\t i = i + 1;\n\t}\n}\nTxtValue = JSON.stringify(NeedData);\n}\nelse {\nTxtValue = JsonValue.Controllers[0]['Command Status']['Description'];\n}\nreturn TxtValue"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "{$LD_THROTTLING_HB_PERIOD}"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Physical disks discovery",
+                        "key": "lsi.pdlld",
+                        "delay": "{$PD_DISCOVERY_PERIOD}",
+                        "item_prototypes": [
+                            {
+                                "name": "Physical disk \"{#PDID}\" media error count",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.merrcount.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "{$PD_TRENDS_PERIOD}",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID} - Detailed Information']['Drive {#PDID} State']['Media Error Count']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>0",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{last()}=0",
+                                        "name": "LSI physical disk \"{#PDID}\" media error count is \"{ITEM.LASTVALUE}\"",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" model",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.model.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID}'][0]['Model']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                }
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" other error count",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.otherrcount.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "{$PD_TRENDS_PERIOD}",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID} - Detailed Information']['Drive {#PDID} State']['Other Error Count']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                }
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" predictive failure count",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.predicterrcount.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "{$PD_TRENDS_PERIOD}",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID} - Detailed Information']['Drive {#PDID} State']['Predictive Failure Count']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>0",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{last()}=0",
+                                        "name": "LSI physical disk \"{#PDID}\" predictive failure count is \"{ITEM.LASTVALUE}\"",
+                                        "priority": "WARNING",
+                                        "manual_close": "YES"
+                                    },
+                                    {
+                                        "expression": "{last()}>0 and {diff()}=1",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{last()}=0",
+                                        "name": "LSI physical disk \"{#PDID}\" predictive failure count is \"{ITEM.LASTVALUE}\". Growing up",
+                                        "priority": "WARNING",
+                                        "manual_close": "YES",
+                                        "dependencies": [
+                                            {
+                                                "name": "LSI physical disk \"{#PDID}\" predictive failure count is \"{ITEM.LASTVALUE}\"",
+                                                "expression": "{LSI RAID Controller:lsi.pd.predicterrcount.[\"{#PDID}\"].last()}>0",
+                                                "recovery_expression": "{LSI RAID Controller:lsi.pd.predicterrcount.[\"{#PDID}\"].last()}=0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" SMART flag",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.smartflag.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID} - Detailed Information']['Drive {#PDID} State']['S.M.A.R.T alert flagged by drive']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{str(Yes)}=1",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{str(No)}=1",
+                                        "name": "LSI physical disk: SMART flag was raised up on \"{#PDID}\"",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES",
+                                        "tags": [
+                                            {
+                                                "tag": "PD SMART",
+                                                "value": "{ITEM.LASTVALUE}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" serial number",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.sn.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID} - Detailed Information']['Drive {#PDID} Device attributes']['SN']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{diff()}=1 and {strlen(#2)}>0",
+                                        "recovery_mode": "NONE",
+                                        "name": "LSI physical disk \"{#PDID}\" was replaced by sn  \"{ITEM.LASTVALUE1}\".  Previous sn: \"{ITEM.LASTVALUE2}\"",
+                                        "priority": "INFO",
+                                        "manual_close": "YES",
+                                        "tags": [
+                                            {
+                                                "tag": "PD REPLACE",
+                                                "value": "{ITEM.LASTVALUE1}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Physical disk \"{#PDID}\" state",
+                                "type": "DEPENDENT",
+                                "key": "lsi.pd.state.[\"{#PDID}\"]",
+                                "delay": "0",
+                                "history": "{$PD_HISTORY_PERIOD}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "applications": [
+                                    {
+                                        "name": "LSI Physical disks"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$['Controllers'][0]['Response Data']['Drive {#PDID}'][0]['State']"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "{$PD_THROTTLING_HB_PERIOD}"
+                                        ]
+                                    },
+                                    {
+                                        "type": "JAVASCRIPT",
+                                        "parameters": [
+                                            "switch(value)\n{\ncase 'Onln':\nvalue='Online';\nbreak;\ncase 'Ugood':\nvalue='Unconfigured-Good';\nbreak;\ncase 'Ubad':\nvalue='Unconfigured-Bad';\nbreak;\ncase 'Msng':\nvalue='Missing';\nbreak;\ncase 'Offln':\nvalue='Offline';\nbreak;\ncase 'F':\nvalue='Foreign';\nbreak;\ncase 'GHS':\nvalue='Global Hot Spare';\nbreak;\ncase 'DHS':\nvalue='Dedicated Hot Spare';\nbreak;\ncase 'Rbld':\nvalue='Rebuild';\nbreak;\n}\nreturn value"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "lsi.pdsinfo"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "({str(Unconfigured-Bad)}=1 or {str(Unconfigured-Good)}=1 or {str(Missing)}=1 or {str(Offline)}=1 or {str(Foreign)}=1) and {diff()}=1 and {strlen()}>0",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{str(Unconfigured-Good)}=1 or {str(Online)}=1",
+                                        "name": "LSI physical disk \"{#PDID}\" is \"{ITEM.LASTVALUE}\"",
+                                        "priority": "HIGH",
+                                        "manual_close": "YES",
+                                        "tags": [
+                                            {
+                                                "tag": "PD STATE",
+                                                "value": "{ITEM.LASTVALUE}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#PDID}",
+                                "path": "$.PDID"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var JsonValue = JSON.parse(value);\nvar ResponseStatus=JsonValue.Controllers[0]['Command Status']['Status'];\nvar TxtValue='';\nif (ResponseStatus.match(/Success/g)) {\nvar ResponseData = JsonValue.Controllers[0]['Response Data'];\nvar NeedData = [];\nvar i=0;\nfor (var key in ResponseData) {\n\tvar KeySplitted = key.split(' ');\n\tif (KeySplitted.length === 2) {\n\t\t JsonValue.Controllers[0]['Response Data'][key][0]['PDID'] = KeySplitted[1];\n\t\t NeedData[i] = JsonValue.Controllers[0]['Response Data'][key][0];\n\t\t i = i + 1;\n\t}\n}\nTxtValue = JSON.stringify(NeedData);\n}\nelse{\nTxtValue = JsonValue.Controllers[0]['Description'];\n}\nreturn TxtValue"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "{$PD_THROTTLING_HB_PERIOD}"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$ADAP_DISCOVERY_PERIOD}",
+                        "value": "1d"
+                    },
+                    {
+                        "macro": "{$ADAP_HISTORY_PERIOD}",
+                        "value": "30d"
+                    },
+                    {
+                        "macro": "{$ADAP_REQUEST_PERIOD}",
+                        "value": "1h"
+                    },
+                    {
+                        "macro": "{$ADAP_THROTTLING_HB_PERIOD}",
+                        "value": "10800"
+                    },
+                    {
+                        "macro": "{$INTERNAL_ITEMS_HISTORY_PEIOD}",
+                        "value": "0"
+                    },
+                    {
+                        "macro": "{$LD_DISCOVERY_PERIOD}",
+                        "value": "6h"
+                    },
+                    {
+                        "macro": "{$LD_HISTORY_PERIOD}",
+                        "value": "30d"
+                    },
+                    {
+                        "macro": "{$LD_REQUEST_PERIOD}",
+                        "value": "5m"
+                    },
+                    {
+                        "macro": "{$LD_THROTTLING_HB_PERIOD}",
+                        "value": "10800"
+                    },
+                    {
+                        "macro": "{$PD_DISCOVERY_PERIOD}",
+                        "value": "30m"
+                    },
+                    {
+                        "macro": "{$PD_HISTORY_PERIOD}",
+                        "value": "30d"
+                    },
+                    {
+                        "macro": "{$PD_REQUEST_PERIOD}",
+                        "value": "5m"
+                    },
+                    {
+                        "macro": "{$PD_THROTTLING_HB_PERIOD}",
+                        "value": "10800"
+                    },
+                    {
+                        "macro": "{$PD_TRENDS_PERIOD}",
+                        "value": "365d"
+                    }
+                ]
+            }
+        ]
+    }
+}

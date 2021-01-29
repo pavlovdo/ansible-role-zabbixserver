@@ -1,0 +1,27 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-03T18:01:49Z",
+        "groups": [
+            {
+                "name": "Templates/Printers"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Ricoh BW",
+                "name": "Ricoh BW",
+                "templates": [
+                    {
+                        "name": "Printer Generic BW"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Printers"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,472 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-02T16:04:11Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco BGPv4",
+                "name": "Cisco BGPv4",
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "BGP4 Peer(s)"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "BGP4 Peer(s)",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#BGPPEER},1.3.6.1.2.1.15.3.1.7]",
+                        "key": "bgpPeerRemoteAddr",
+                        "delay": "1h",
+                        "lifetime": "3d",
+                        "description": "The remote IP address of this entry's BGP peer.",
+                        "item_prototypes": [
+                            {
+                                "name": "AS Name for IPv4 peer {#BGPPEER}",
+                                "type": "EXTERNAL",
+                                "key": "as.name[\"-p\",\"{#BGPPEER}\"]",
+                                "history": "30d",
+                                "trends": "0",
+                                "status": "DISABLED",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Administrative status for peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.15.3.1.3.{#BGPPEER}",
+                                "key": "bgpPeerAdminStatus[{#BGPPEER}]",
+                                "history": "30d",
+                                "description": "The desired state of the BGP connection. A transition from 'stop' to 'start' will\ncause the BGP Start Event to be generated. A transition from 'start' to 'stop' will\ncause the BGP Stop Event to be generated. This parameter can be used to restart BGP peer connections. Care should be used in providing write access to this object without adequate authentication.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bgpPeerAdminStatus"
+                                }
+                            },
+                            {
+                                "name": "Established time for peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.15.3.1.16.{#BGPPEER}",
+                                "key": "bgpPeerFsmEstablishedTime[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "units": "uptime",
+                                "description": "This timer indicates how long (in seconds) this peer has been in the\nEstablished state or how long since this peer was last in the\nEstablished state. It is set to zero when a new peer is configured or the router is\nbooted.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Remote AS for peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.15.3.1.9.{#BGPPEER}",
+                                "key": "bgpPeerRemoteAs[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "description": "The remote autonomous system number.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "BGP peer {#BGPPEER} connection state",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.15.3.1.2.{#BGPPEER}",
+                                "key": "bgpPeerState[{#BGPPEER}]",
+                                "history": "30d",
+                                "description": "The BGP peer connection state.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "bgpPeerState"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last(#2)}<>6",
+                                        "name": "BGP peer {#BGPPEER} is DOWN",
+                                        "priority": "HIGH",
+                                        "description": "Trigger for peer that has a remote AS matching {$BGP_PEER_AS} macro."
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Accepted prefixes for IPv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.1.{#BGPPEER}.1.1",
+                                "key": "cbgpPeerAcceptedPrefixes[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Denied prefixes for IPv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.2.{#BGPPEER}.1.1",
+                                "key": "cbgpPeerDeniedPrefixes[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "units": "Prefix",
+                                "description": "This counter is incremented when a route prefix, which belongs to an address family, received on this connection is denied. It is initialized to zero when \nthe connection is undergone a hard reset.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Advertised prefixes for IPv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.4.{#BGPPEER}.1.128",
+                                "key": "cbgpPeerPrefixThreshold[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "units": "Prefix",
+                                "description": "Prefix threshold value ( - ) for an address family on this connection at which warning message stating the prefix count is crossed the threshold or \ncorresponding SNMP notification is generated.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Suppressed prefixes for IPv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.9.9.187.1.2.4.1.7.{#BGPPEER}.1.1",
+                                "key": "cbgpPeerSuppressedPrefixes[{#BGPPEER}]",
+                                "delay": "1h",
+                                "history": "30d",
+                                "units": "Prefix",
+                                "description": "This counter is incremented when a route prefix,\nwhich belongs to an address family is suppressed\nfrom being sent on this connection. It is \ninitialized to zero when the connection is undergone\na hard reset.",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Prefixes limit for IPv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.3.{#BGPPEER}.1.1",
+                                "key": "ciscoIPv4cbgpPeerPrefixLimit[{#BGPPEER}]",
+                                "history": "30d",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Accepted prefixes for VPNv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.4.1.9.9.187.1.2.4.1.1.{#BGPPEER}.1.128",
+                                "key": "ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}]",
+                                "history": "30d",
+                                "status": "DISABLED",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Advertised prefixes for VPNv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.4.{#BGPPEER}.1.128",
+                                "key": "ciscoVPNv4cbgpPeerPrefixAdvertised[{#BGPPEER}]",
+                                "history": "30d",
+                                "status": "DISABLED",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Denied prefixes for VPNv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.2.{#BGPPEER}.1.128",
+                                "key": "ciscoVPNv4cbgpPeerPrefixDenied[{#BGPPEER}]",
+                                "history": "30d",
+                                "status": "DISABLED",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Prefixes limit for VPNv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.3.{#BGPPEER}.1.128",
+                                "key": "ciscoVPNv4cbgpPeerPrefixLimit[{#BGPPEER}]",
+                                "history": "30d",
+                                "status": "DISABLED",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Suppressed prefixes for VPNv4 peer {#BGPPEER}",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.4.1.9.9.187.1.2.4.1.7.{#BGPPEER}.1.128",
+                                "key": "ciscoVPNv4cbgpPeerSuppressedPrefixes[{#BGPPEER}]",
+                                "history": "30d",
+                                "status": "DISABLED",
+                                "units": "Prefix",
+                                "applications": [
+                                    {
+                                        "name": "BGP4 Peer(s)"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "trigger_prototypes": [
+                            {
+                                "expression": "{Cisco BGPv4:ciscoIPv4cbgpPeerPrefixLimit[{#BGPPEER}].last(0)}>0 and ({Cisco BGPv4:cbgpPeerAcceptedPrefixes[{#BGPPEER}].avg(3600)})>0.9*({Cisco BGPv4:ciscoIPv4cbgpPeerPrefixLimit[{#BGPPEER}].last(0)})",
+                                "name": "Accepted prefixes for IPv4 peer {#BGPPEER} as reached the maximum limit",
+                                "priority": "AVERAGE"
+                            },
+                            {
+                                "expression": "{Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixLimit[{#BGPPEER}].last(0)}>0 and ({Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}].avg(3600)})>0.9*({Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixLimit[{#BGPPEER}].last(0)})",
+                                "name": "Accepted prefixes for VPNv4 peer {#BGPPEER} as reached the maximum limit",
+                                "status": "DISABLED",
+                                "priority": "AVERAGE"
+                            },
+                            {
+                                "expression": "{Cisco BGPv4:bgpPeerState[{#BGPPEER}].last(0)}=6 and {Cisco BGPv4:cbgpPeerAcceptedPrefixes[{#BGPPEER}].last(0)}<0.8*{Cisco BGPv4:cbgpPeerAcceptedPrefixes[{#BGPPEER}].avg(86400)}",
+                                "name": "IPv4 BGP peer {#BGPPEER} has lost more than 20% of prefixes on {HOST.NAME}",
+                                "priority": "AVERAGE"
+                            },
+                            {
+                                "expression": "{Cisco BGPv4:bgpPeerState[{#BGPPEER}].last(0)}=6 and {Cisco BGPv4:cbgpPeerAcceptedPrefixes[{#BGPPEER}].last(0)}=0",
+                                "name": "No prefixes received for IPv4 peer {#BGPPEER}",
+                                "priority": "INFO"
+                            },
+                            {
+                                "expression": "{Cisco BGPv4:bgpPeerState[{#BGPPEER}].last(0)}=6 and {Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}].last(0)}=0",
+                                "name": "No prefixes received for VPNv4 peer {#BGPPEER}",
+                                "status": "DISABLED",
+                                "priority": "INFO"
+                            },
+                            {
+                                "expression": "{Cisco BGPv4:bgpPeerState[{#BGPPEER}].last(0)}=6 and {Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}].last(0)}<0.8*{Cisco BGPv4:ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}].avg(86400)}",
+                                "name": "VPNv4 BGP peer {#BGPPEER} has lost more than 20% of prefixes on {HOST.NAME}",
+                                "status": "DISABLED",
+                                "priority": "AVERAGE"
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "BGP informations for IPv4 peer {#BGPPEER}",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "C80000",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "cbgpPeerAcceptedPrefixes[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "00C800",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "cbgpPeerPrefixThreshold[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "0000C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "cbgpPeerDeniedPrefixes[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "C800C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "ciscoIPv4cbgpPeerPrefixLimit[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "4",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "00C8C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "cbgpPeerSuppressedPrefixes[{#BGPPEER}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "BGP informations for VPNv4 peer {#BGPPEER}",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "C80000",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "ciscoVPNv4cbgpPeerPrefixAccepted[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "00C800",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "ciscoVPNv4cbgpPeerPrefixAdvertised[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "0000C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "ciscoVPNv4cbgpPeerPrefixDenied[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "C800C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "ciscoVPNv4cbgpPeerPrefixLimit[{#BGPPEER}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "4",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "00C8C8",
+                                        "item": {
+                                            "host": "Cisco BGPv4",
+                                            "key": "cbgpPeerSuppressedPrefixes[{#BGPPEER}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$BGP_PEER_AS}",
+                        "value": "AS20632|AS25408"
+                    },
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "bgpPeerAdminStatus",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "stop"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "start"
+                    }
+                ]
+            },
+            {
+                "name": "bgpPeerState",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "idle"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "connect"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "active"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "opensent"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "openconfirm"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "established"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,9 @@
+- name: create zabbix host groups
+  local_action:
+    module: community.zabbix.zabbix_group
+    server_url: "{{ zabbix_server_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_password }}"
+    host_groups: "{{ item }}"
+    state: present
+  loop: "{{ (zabbix_hostgroups + zabbix_hostgroups_custom) | flatten(levels=1) }}"

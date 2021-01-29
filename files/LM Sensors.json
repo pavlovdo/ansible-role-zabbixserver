@@ -1,0 +1,254 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-25T11:07:47Z",
+        "groups": [
+            {
+                "name": "Templates/Hardware"
+            }
+        ],
+        "templates": [
+            {
+                "template": "LM Sensors",
+                "name": "LM Sensors",
+                "description": "Based on the work: https://github.com/IvanBayan/Zabbix-lm-sensors-lld",
+                "groups": [
+                    {
+                        "name": "Templates/Hardware"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Lm-sensors"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Discovery fan sensors",
+                        "key": "discovery.sensor.f",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Fan {#CHIP}: {#NAME}",
+                                "key": "sensor[{#CHIP},{#FSENSOR}]",
+                                "delay": "3m",
+                                "value_type": "FLOAT",
+                                "units": "RPM",
+                                "description": "Fan {#NAME}, at least {#MIN}RPM",
+                                "applications": [
+                                    {
+                                        "name": "Lm-sensors"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{avg(#3)}<={#MIN}",
+                                        "name": "Fan {#CHIP}: {#NAME} rotation is below {#MIN}RPM",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#CHIP}",
+                                "path": "$.CID"
+                            },
+                            {
+                                "lld_macro": "{#DIV}",
+                                "path": "$.div"
+                            },
+                            {
+                                "lld_macro": "{#FSENSOR}",
+                                "path": "$.SID"
+                            },
+                            {
+                                "lld_macro": "{#MIN}",
+                                "path": "$.min"
+                            },
+                            {
+                                "lld_macro": "{#NAME}",
+                                "path": "$.name"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var chips = JSON.parse(value);\nvar OutData = [];\nvar i = 0;\n\nfor (var chip in chips) {\n  for (var sensor in chips[chip]) {\n    for (var prop in chips[chip][sensor]) {\n      if (prop.includes(\"_input\")) {\n        if (prop.startsWith(\"fan\")) {\n          var sid = prop.split(\"_\")[0];\n          if (chips[chip][sensor][sid + '_fault'] === 1) break;\n          if (chips[chip][sensor][sid + '_input'] === 0) break;\n\n          chips[chip][sensor]['min'] = chips[chip][sensor][sid + '_min'];\n          chips[chip][sensor]['div'] = chips[chip][sensor][sid + '_div'] || 1;\n\n          chips[chip][sensor]['CID'] = chip;\n          chips[chip][sensor]['name'] = sensor;\n          chips[chip][sensor]['SID'] = sid;\n\n          OutData[i] = chips[chip][sensor];\n          i = i + 1;\n        }\n        break;\n      }\n    }\n  }\n}\n\nreturn JSON.stringify(OutData);"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Discovery temp sensors",
+                        "key": "discovery.sensor.t",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Temp {#CHIP}: {#NAME}",
+                                "key": "sensor[{#CHIP},{#TSENSOR}]",
+                                "delay": "3m",
+                                "value_type": "FLOAT",
+                                "units": "\u00b0C",
+                                "description": "Temp {#CHIP}: {#NAME} from {#MIN}\u00b0C to {#MAX}\u00b0C",
+                                "applications": [
+                                    {
+                                        "name": "Lm-sensors"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{max(#3)}>={#CRIT}",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{max(#3)}<={#CRIT_HYST}",
+                                        "name": "Sensor {#CHIP}: {#NAME} has reached CRITICAL {#CRIT}\u00b0C",
+                                        "priority": "DISASTER",
+                                        "manual_close": "YES"
+                                    },
+                                    {
+                                        "expression": "{avg(#3)}>=(273+{#CRIT})*0.95-273",
+                                        "name": "Sensor {#CHIP}: {#NAME} is high",
+                                        "priority": "WARNING",
+                                        "dependencies": [
+                                            {
+                                                "name": "Sensor {#CHIP}: {#NAME} has reached CRITICAL {#CRIT}\u00b0C",
+                                                "expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}>={#CRIT}",
+                                                "recovery_expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}<={#CRIT_HYST}"
+                                            },
+                                            {
+                                                "name": "Sensor {#CHIP}: {#NAME} is over allowed {#MAX}\u00b0C",
+                                                "expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}>={#MAX}",
+                                                "recovery_expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}<={#MAX_HYST}"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "expression": "{max(#3)}>={#MAX}",
+                                        "recovery_mode": "RECOVERY_EXPRESSION",
+                                        "recovery_expression": "{max(#3)}<={#MAX_HYST}",
+                                        "name": "Sensor {#CHIP}: {#NAME} is over allowed {#MAX}\u00b0C",
+                                        "priority": "HIGH",
+                                        "manual_close": "YES",
+                                        "dependencies": [
+                                            {
+                                                "name": "Sensor {#CHIP}: {#NAME} has reached CRITICAL {#CRIT}\u00b0C",
+                                                "expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}>={#CRIT}",
+                                                "recovery_expression": "{LM Sensors:sensor[{#CHIP},{#TSENSOR}].max(#3)}<={#CRIT_HYST}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#CHIP}",
+                                "path": "$.CID"
+                            },
+                            {
+                                "lld_macro": "{#CRIT}",
+                                "path": "$.crit"
+                            },
+                            {
+                                "lld_macro": "{#CRIT_HYST}",
+                                "path": "$.crit_hyst"
+                            },
+                            {
+                                "lld_macro": "{#MAX}",
+                                "path": "$.max"
+                            },
+                            {
+                                "lld_macro": "{#MAX_HYST}",
+                                "path": "$.max_hyst"
+                            },
+                            {
+                                "lld_macro": "{#MIN}",
+                                "path": "$.min"
+                            },
+                            {
+                                "lld_macro": "{#NAME}",
+                                "path": "$.name"
+                            },
+                            {
+                                "lld_macro": "{#TSENSOR}",
+                                "path": "$.SID"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var chips = JSON.parse(value);\nvar OutData = [];\nvar i = 0;\n\nfor (var chip in chips) {\n  for (var sensor in chips[chip]) {\n    for (var prop in chips[chip][sensor]) {\n      if (prop.includes(\"_input\")) {\n        if (prop.startsWith(\"temp\")) {\n          var sid = prop.split(\"_\")[0];\n          if (chips[chip][sensor][sid + '_fault'] === 1) break;\n          chips[chip][sensor]['max'] = chips[chip][sensor][sid + '_max'];\n          chips[chip][sensor]['min'] = chips[chip][sensor][sid + '_min'] || 0;\n          chips[chip][sensor]['crit'] = chips[chip][sensor][sid + '_crit'] || 1.1*chips[chip][sensor][sid + '_max'];\n          chips[chip][sensor]['crit_hyst'] = chips[chip][sensor][sid + '_crit_hyst'] || 0.95*chips[chip][sensor]['crit'];\n          chips[chip][sensor]['max_hyst'] = chips[chip][sensor][sid + '_max_hyst'] || 0.95*chips[chip][sensor]['max'];\n          chips[chip][sensor]['CID'] = chip;\n          chips[chip][sensor]['name'] = sensor;\n          chips[chip][sensor]['SID'] = sid;\n\n          OutData[i] = chips[chip][sensor];\n          i = i + 1;\n        }\n       break;\n      }\n    }\n  }\n}\n\nreturn JSON.stringify(OutData);"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Discovery voltage sensors",
+                        "key": "discovery.sensor.v",
+                        "delay": "1d",
+                        "lifetime": "3d",
+                        "item_prototypes": [
+                            {
+                                "name": "Voltage {#CHIP}: {#NAME}",
+                                "key": "sensor[{#CHIP},{#VSENSOR}]",
+                                "delay": "3m",
+                                "value_type": "FLOAT",
+                                "units": "V",
+                                "description": "{#NAME} voltage from {#MIN}V to {#MAX}V",
+                                "applications": [
+                                    {
+                                        "name": "Lm-sensors"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{#MAX} <> {#MIN} and ({avg(#3)}>={#MAX} or  {avg(#3)}<={#MIN})",
+                                        "name": "Sensor {#CHIP}: {#NAME} is not within allowed range",
+                                        "priority": "HIGH",
+                                        "description": "{#NAME} voltage from {#MIN}V to {#MAX}V",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            }
+                        ],
+                        "lld_macro_paths": [
+                            {
+                                "lld_macro": "{#CHIP}",
+                                "path": "$.CID"
+                            },
+                            {
+                                "lld_macro": "{#MAX}",
+                                "path": "$.max"
+                            },
+                            {
+                                "lld_macro": "{#MIN}",
+                                "path": "$.min"
+                            },
+                            {
+                                "lld_macro": "{#NAME}",
+                                "path": "$.name"
+                            },
+                            {
+                                "lld_macro": "{#VSENSOR}",
+                                "path": "$.SID"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var chips = JSON.parse(value);\nvar OutData = [];\nvar i = 0;\n\nfor (var chip in chips) {\n  for (var sensor in chips[chip]) {\n    for (var prop in chips[chip][sensor]) {\n      if (prop.includes(\"_input\")) {\n        if (prop.startsWith(\"in\")) {\n          var sid = prop.split(\"_\")[0];\n          if (Math.abs(chips[chip][sensor][sid + '_input']) < 0.1) break;\n          if (chips[chip][sensor][sid + '_fault'] === 1) break;\n          chips[chip][sensor]['max'] = chips[chip][sensor][sid + '_max'];\n          chips[chip][sensor]['min'] = chips[chip][sensor][sid + '_min'];\n\n          chips[chip][sensor]['CID'] = chip;\n          chips[chip][sensor]['name'] = sensor;\n          chips[chip][sensor]['SID'] = sid;\n\n          OutData[i] = chips[chip][sensor];\n          i = i + 1;\n\n        }\n        break;\n      }\n    }\n  }\n}\n\nreturn JSON.stringify(OutData);"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

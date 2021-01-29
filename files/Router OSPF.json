@@ -1,0 +1,378 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-04T07:02:21Z",
+        "groups": [
+            {
+                "name": "Templates/Network devices"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Router OSPF",
+                "name": "Router OSPF",
+                "groups": [
+                    {
+                        "name": "Templates/Network devices"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "OSPF"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "OSPF Router Admin Status",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": ".1.3.6.1.2.1.14.1.2.0",
+                        "key": "ospfAdminStat",
+                        "applications": [
+                            {
+                                "name": "OSPF"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "SNMP OSPF Interface Admin Status"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last()}>1",
+                                "name": "OSPF Router Admin Status",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "OSPF Router ID",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "1.3.6.1.2.1.14.1.1.0",
+                        "key": "ospfRouterId",
+                        "delay": "1h",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "applications": [
+                            {
+                                "name": "OSPF"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "OSPF Areas",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.2.1.14.2.1.1]",
+                        "key": "ospfAreaId",
+                        "delay": "1h",
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "OSPF Area Status $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.2.1.14.2.1.10.{#SNMPINDEX}",
+                                "key": "ospfAreaStatus[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "SNMP OSPF Area Status"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>1",
+                                        "name": "OSPF Area Status",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "OSPF Interfaces",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.2.1.14.7.1.1]",
+                        "key": "ospfIfIpAddress",
+                        "delay": "1h",
+                        "lifetime": "1d",
+                        "description": "Identifies OSPF Interfaces.",
+                        "item_prototypes": [
+                            {
+                                "name": "OSPF Interface Admin Status $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.2.1.14.7.1.5.{#SNMPINDEX}",
+                                "key": "ospfIfAdminStat[{#SNMPVALUE}]",
+                                "delay": "30s",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "SNMP OSPF Interface Admin Status"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=2",
+                                        "name": "OSPF Interface {#SNMPVALUE} on {HOSTNAME} is administratively down",
+                                        "priority": "AVERAGE",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "OSPF IP address of Interface $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.14.7.1.1.{#SNMPINDEX}",
+                                "key": "ospfIfIpAddress[{#SNMPVALUE}]",
+                                "description": "The IP address of this OSPF interface",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "OSPF Interface State $1",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.14.7.1.12.{#SNMPINDEX}",
+                                "key": "ospfIfState[{#SNMPVALUE}]",
+                                "delay": "30s",
+                                "description": "The OSPF Interface State",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "SNMP OSPF Interface State"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}=1",
+                                        "name": "OSPF Interface {#SNMPVALUE} State on {HOSTNAME} is down",
+                                        "priority": "HIGH",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "OSPF Neighbors",
+                        "type": "SNMP_AGENT",
+                        "snmp_oid": "discovery[{#SNMPVALUE},1.3.6.1.2.1.14.10.1.1]",
+                        "key": "ospfNbrIpAddr",
+                        "delay": "1h",
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "name": "ICMP ping response time from OSPF Neighbor with IP $1",
+                                "type": "SIMPLE",
+                                "key": "icmppingsec[{#SNMPVALUE}]",
+                                "value_type": "FLOAT",
+                                "units": "s",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last(0)}=0",
+                                        "name": "OSPF Neighbor {#SNMPVALUE} associated with {HOSTNAME} is not responding",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "OSPF NBMA Neighbor $1 Status",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.2.1.14.10.1.9.{#SNMPVALUE}.0",
+                                "key": "ospfNbmaNbrStatus[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "SNMP OSPF Area Status"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>1",
+                                        "name": "OSPF NBMA Neighbor Status",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "OSPF Neighbor $1 Router ID",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": "1.3.6.1.2.1.14.10.1.3.{#SNMPVALUE}.0",
+                                "key": "ospfNbrRtrId[{#SNMPVALUE}]",
+                                "delay": "1h",
+                                "trends": "0",
+                                "value_type": "CHAR",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "OSPF Neighbor $1 State",
+                                "type": "SNMP_AGENT",
+                                "snmp_oid": ".1.3.6.1.2.1.14.10.1.6.{#SNMPINDEX}",
+                                "key": "ospfNbrState[{#SNMPVALUE}]",
+                                "applications": [
+                                    {
+                                        "name": "OSPF"
+                                    }
+                                ],
+                                "valuemap": {
+                                    "name": "SNMP OSPF Neighbor State (ospfNbrState)"
+                                },
+                                "trigger_prototypes": [
+                                    {
+                                        "expression": "{last()}>2 and {last()}<8",
+                                        "name": "Attempt to OSPF Neighborhood on {HOSTNAME} with {#SNMPVALUE}",
+                                        "priority": "INFO"
+                                    },
+                                    {
+                                        "expression": "{last()}=1",
+                                        "name": "OSPF Neighbor {#SNMPVALUE} on {HOSTNAME} is down",
+                                        "priority": "HIGH",
+                                        "manual_close": "YES"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$SNMP_COMMUNITY}",
+                        "value": "public"
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "SNMP OSPF Area Status",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "Active"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "Not In Service"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "No Ready"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "Create and Go"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "Create and Wait"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "Destroy"
+                    }
+                ]
+            },
+            {
+                "name": "SNMP OSPF Interface Admin Status",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "enabled"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "disabled"
+                    }
+                ]
+            },
+            {
+                "name": "SNMP OSPF Interface State",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "down"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "loopback"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "waiting"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "pointToPoint"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "designatedRouter"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "backupDesignatedRouter"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "otherDesignatedRouter"
+                    }
+                ]
+            },
+            {
+                "name": "SNMP OSPF Neighbor State (ospfNbrState)",
+                "mappings": [
+                    {
+                        "value": "1",
+                        "newvalue": "down"
+                    },
+                    {
+                        "value": "2",
+                        "newvalue": "attempt"
+                    },
+                    {
+                        "value": "3",
+                        "newvalue": "init"
+                    },
+                    {
+                        "value": "4",
+                        "newvalue": "twoway"
+                    },
+                    {
+                        "value": "5",
+                        "newvalue": "exchangeStart"
+                    },
+                    {
+                        "value": "6",
+                        "newvalue": "exchange"
+                    },
+                    {
+                        "value": "7",
+                        "newvalue": "LOADING"
+                    },
+                    {
+                        "value": "8",
+                        "newvalue": "FULL"
+                    }
+                ]
+            }
+        ]
+    }
+}

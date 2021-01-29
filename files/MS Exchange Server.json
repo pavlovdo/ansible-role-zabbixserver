@@ -1,0 +1,673 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-12-17T17:25:50Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "MS Exchange Server",
+                "name": "MS Exchange Server",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Logs"
+                    },
+                    {
+                        "name": "MS Exchange"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Log Application Warning Dismount",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eventlog[Application,dismount,\"Warning|Error\"]",
+                        "delay": "5m",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "dd.MM.YYYY hh:mm:ss",
+                        "triggers": [
+                            {
+                                "expression": "{nodata(600)}=0",
+                                "name": "Dismount event on {HOSTNAME}",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of mounted databases",
+                        "key": "perf_counter[\"\\MSExchange Active Manager(_total)\\Database Mounted\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of ActiveSync Current Requests",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\Current Requests\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of searches using Global Address Book",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\GAL Search Total\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ActiveSync ping command pending",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\Ping Commands Pending\"]",
+                        "value_type": "FLOAT",
+                        "description": "Shows the number of ping commands currently pending in the queue",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of HTTP requests received from the client via ASP.NET per second",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\Requests/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ActiveSync sync commands per second",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\Sync Commands/sec\"]",
+                        "value_type": "FLOAT",
+                        "description": "Shows the number of sync commands processed per second. Clients use this command to synchronize items within a folder.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of pending ActiveSync Commands",
+                        "key": "perf_counter[\"\\MSExchange ActiveSync\\Sync Commands Pending\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of Events in Queues for all Mailbox Assisstants",
+                        "key": "perf_counter[\"\\MSExchange Assistants - Per Assistant(*)\\Events in Queue\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Autodiscover requests per second",
+                        "key": "perf_counter[\"\\MSExchangeAutodiscover\\Requests/sec\"]",
+                        "value_type": "FLOAT",
+                        "description": "Shows the number of Autodiscover service requests processed each second. Determines current user load.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Availability Service availability requests per second",
+                        "key": "perf_counter[\"\\MSExchange Availability Service\\Availability Requests (sec)\"]",
+                        "value_type": "FLOAT",
+                        "description": "Shows the number of requests serviced per second. The request can be only for free/ busy information or include suggestions. One request may contain multiple mailboxes. Determines the rate at which Availability service requests are occurring.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Reads (Attached) Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Reads (Attached) Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(300)}>20",
+                                "name": "I/O Database Reads (Attached) Average Latency is above 20ms",
+                                "priority": "WARNING",
+                                "description": "Last value: {ITEM.LASTVALUE1}."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Reads (Recovery) Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Reads (Recovery) Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Reads Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Reads Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Writes (Attached) Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Writes (Attached) Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(300)}>50",
+                                "name": "I/O Database Writes (Attached) Average Latency is above 50ms",
+                                "priority": "WARNING",
+                                "description": "Last value: {ITEM.LASTVALUE1}."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Writes (Recovery) Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Writes (Recovery) Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "I/O Database Writes Average Latency",
+                        "key": "perf_counter[\"\\MSExchange Database(*)\\I/O Database Writes Average Latency\"]",
+                        "value_type": "FLOAT",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of IMAP connections",
+                        "key": "perf_counter[\"\\MSExchangeImap4(_Total)\\Current Connections\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of HTTP-MAPI active users",
+                        "key": "perf_counter[\"\\MSExchange MapiHttp Emsmdb\\Active User Count\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of HTTP-MAPI connections",
+                        "key": "perf_counter[\"\\MSExchange MapiHttp Emsmdb\\Connection Count\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Average response time for requests sent to OWA",
+                        "key": "perf_counter[\"\\MSExchange OWA\\Average Response Time\"]",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(300)}>1000",
+                                "name": "OWA Average Response Time on {HOSTNAME} is above 1s",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of unique users currently logged on to Outlook Web App",
+                        "key": "perf_counter[\"\\MSExchange OWA\\Current Unique Users\"]",
+                        "description": "Shows the number of unique users currently logged on to Outlook Web App. This value monitors the number of unique active user sessions, so that users are only removed from this counter after they log off or their session times out. Determines current user load.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of users logged in through OWA",
+                        "key": "perf_counter[\"\\MSExchange OWA\\Current Users\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of requests initiated per sec through OWA",
+                        "key": "perf_counter[\"\\MSExchange OWA\\Requests/sec\"]",
+                        "value_type": "FLOAT",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of POP3 connections",
+                        "key": "perf_counter[\"\\MSExchangePop3(_Total)\\Current Connections\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of items in Copy Queue Length of Active Databases",
+                        "key": "perf_counter[\"\\MSExchange Replication(_total)\\CopyQueueLength\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(600)}>2",
+                                "name": "Copy Queue Length on {HOSTNAME} is high",
+                                "priority": "WARNING",
+                                "description": "Please read Technet Article for more details of this counter\nhttp://technet.microsoft.com/en-us/library/bb201689%28EXCHG.80%29.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of items in Replay Queue (on Passive Databases)",
+                        "key": "perf_counter[\"\\MSExchange Replication(_total)\\ReplayQueueLength\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of RPC active users",
+                        "key": "perf_counter[\"\\MSExchange RpcClientAccess\\Active User Count\"]",
+                        "description": "Shows the number of unique users that have shown some activity in the last 2 minutes.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Count of RPC connections",
+                        "key": "perf_counter[\"\\MSExchange RpcClientAccess\\Connection Count\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "RPC Averaged Latency",
+                        "key": "perf_counter[\"\\MSExchange RpcClientAccess\\RPC Averaged Latency\"]",
+                        "units": "ms",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of client requests currently being processed by the RPC Client Access service",
+                        "key": "perf_counter[\"\\MSExchange RpcClientAccess\\RPC Requests\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(300)}>40",
+                                "name": "Number of client requests currently being processed by the RPC Client Access service is too high",
+                                "priority": "WARNING",
+                                "description": "Last value: {ITEM.LASTVALUE1}."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of RPC Users",
+                        "key": "perf_counter[\"\\MSExchange RpcClientAccess\\User Count\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of RPC Requests Failed Percentage",
+                        "key": "perf_counter[\"\\MSExchange Store Interface(_Total)\\RPC Requests failed (%)\"]",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(600)}>=1",
+                                "name": "RPCs Request Failed Percentage on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Please read Technet Article for more details of this counter\nhttp://technet.microsoft.com/en-us/library/bb201689%28EXCHG.80%29.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in the active mailbox queues.",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Active Mailbox Delivery Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>250",
+                                "name": "Active Mailbox Delivery Queue Length on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Active Mailbox Delivery Queue Length is too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in the drop directory used by a Foreign connector",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Active Non-Smtp Delivery Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>250",
+                                "name": "Active Non-Smtp Delivery Queue Length on {HOSTNAME} too high",
+                                "priority": "WARNING",
+                                "description": "Active Non-Smtp Delivery Queue Length too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in the poison message queue",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Poison Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}<>0",
+                                "name": "Poison Queue Length on {HOSTNAME} is high",
+                                "description": "Poison Queue Length is high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in a retry state attempting to deliver a message to a remote mailbox",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Retry Mailbox Delivery Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>250",
+                                "name": "Retry Mailbox Delivery Queue Length on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Retry Mailbox Delivery Queue Length too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in a retry state in the non-SMTP gateway delivery queues",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Retry Non-Smtp Delivery Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>100",
+                                "name": "Retry Non-Smtp Delivery Queue Length on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Retry Non-Smtp Delivery Queue Length too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in the submission queue",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Submission Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>100",
+                                "name": "Submission Queue Length on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Submission Queue Length too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of messages in the Unreachable queue",
+                        "key": "perf_counter[\"\\MSExchangeTransport Queues(_total)\\Unreachable Queue Length\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last(0)}>100",
+                                "name": "Unreachable Queue Length on {HOSTNAME} is too high",
+                                "priority": "WARNING",
+                                "description": "Unreachable Queue too high.\nhttp://technet.microsoft.com/en-us/library/ff367923.aspx"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "WS requests per second",
+                        "key": "perf_counter[\"\\MSExchangeWS\\Requests/sec\"]",
+                        "value_type": "FLOAT",
+                        "description": "Shows the number of requests processed each second. Determines current user load.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of RPC/HTTP Proxy of Unique Users",
+                        "key": "perf_counter[\"\\RPC/HTTP Proxy\\Current Number of Unique Users\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of MSExchange MAPI Front Active Requests",
+                        "key": "perf_counter[\"\\W3SVC_W3WP(*MSExchangeMapiFront*)\\Active Requests\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of MSExchange MAPI Mailbox Active Requests",
+                        "key": "perf_counter[\"\\W3SVC_W3WP(*MSExchangeMapiMailbox*)\\Active Requests\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of IIS Active Requests",
+                        "key": "perf_counter[\"\\W3SVC_W3WP(*msexchangeservicesapppool)\\Active Requests\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of Web Service Default Web Site Current connections",
+                        "key": "perf_counter[\"\\Web Service(Default Web Site)\\Current Connections\"]",
+                        "description": "Shows the current number of connections established to the Default website which corresponds to the number of connections hitting the Front End CAS server role. Determines current user load.",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of IIS Current Connections",
+                        "key": "perf_counter[\"\\Web Service(_Total)\\Current Connections\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of IIS Maximum Connections",
+                        "key": "perf_counter[\"\\Web Service(_Total)\\Maximum Connections\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Number of Microsoft.Exchange.Store.Worker processes",
+                        "key": "proc.num[\"Microsoft.Exchange.Store.Worker.exe\"]",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Working set summary of Microsoft.Exchange.Store.Worker processes",
+                        "key": "proc_info[\"Microsoft.Exchange.Store.Worker.exe\",wkset,sum]",
+                        "units": "B",
+                        "description": "Microsoft.Exchange.Store.Worker.exe processes working set summary",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Working set of MSExchangeFrontendTransport processes",
+                        "key": "proc_info[\"MSExchangeFrontendTransport.exe\",wkset]",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Working set of MSExchangeTransport processes",
+                        "key": "proc_info[\"MSExchangeTransport.exe\",wkset]",
+                        "units": "B",
+                        "applications": [
+                            {
+                                "name": "MS Exchange"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,86 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2021-01-05T12:30:06Z",
+        "groups": [
+            {
+                "name": "Templates/Cisco"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Cisco Syslog",
+                "name": "Cisco Syslog",
+                "groups": [
+                    {
+                        "name": "Templates/Cisco"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Syslog"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Log internet gateways hardware limits",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[/var/log/hardware/inetgateways.log,\"(Limit|limit|LIMIT)\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Syslog"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{nodata(1m)}=0",
+                                "name": "Limits exceeded at internet gateways",
+                                "priority": "AVERAGE"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Router spb-bp-9fl-sw1 problem: High CPU detected",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[/var/log/hardware/lanrouters.log,\"High CPU detected\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Syslog"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{nodata(1m)}=0",
+                                "name": "High CPU usage on spb-bp-9fl-sw1",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Router problem: MATM dropped learn cache",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[/var/log/hardware/lanrouters.log,\"PLATFORM_MATM-4-QUEUE_OVERLIMIT\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Syslog"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{nodata(1m)}=0",
+                                "name": "MATM dropped learn cache",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,236 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-06T13:34:26Z",
+        "groups": [
+            {
+                "name": "Templates/Modules"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Linux Custom",
+                "name": "Linux Custom",
+                "templates": [
+                    {
+                        "name": "Linux Block Device Status"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates/Modules"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "CPU"
+                    },
+                    {
+                        "name": "Filesystems"
+                    },
+                    {
+                        "name": "General"
+                    },
+                    {
+                        "name": "Logs"
+                    },
+                    {
+                        "name": "Memory"
+                    },
+                    {
+                        "name": "Network interfaces"
+                    },
+                    {
+                        "name": "OS"
+                    },
+                    {
+                        "name": "Performance"
+                    },
+                    {
+                        "name": "Postfix"
+                    },
+                    {
+                        "name": "Processes"
+                    },
+                    {
+                        "name": "Security"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Number of active semaphore sets",
+                        "key": "linux.activesemsetscount",
+                        "applications": [
+                            {
+                                "name": "OS"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Maximum number of active semaphore sets",
+                        "key": "linux.kernel.sem.set",
+                        "delay": "1h",
+                        "applications": [
+                            {
+                                "name": "OS"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Log Maillog",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/maillog\",,\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "MM dd hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Messages Cannot",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/messages\",\"cannot\",\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "MM dd hh:mm:ss"
+                    },
+                    {
+                        "name": "Log Messages",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "log[\"/var/log/messages\",,\"UTF-8\",100]",
+                        "trends": "0",
+                        "value_type": "LOG",
+                        "applications": [
+                            {
+                                "name": "Logs"
+                            }
+                        ],
+                        "logtimefmt": "MM dd hh:mm:ss"
+                    },
+                    {
+                        "name": "Mail queue size",
+                        "key": "postfix.mailqsize",
+                        "applications": [
+                            {
+                                "name": "Postfix"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(5m)}>{$MAILQ_MESSAGES_LIMIT}",
+                                "name": "Postfix: Number of messages in queue exceeds {$MAILQ_MESSAGES_LIMIT}",
+                                "priority": "AVERAGE"
+                            },
+                            {
+                                "expression": "{nodata(30m)}",
+                                "name": "Postfix: Failed to fetch queue status (or no data for 30m)",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Processor load (1 min average per core)",
+                        "key": "system.cpu.load[percpu,avg1]",
+                        "history": "1w",
+                        "value_type": "FLOAT",
+                        "description": "The processor load is calculated as system CPU load divided by number of CPU cores.",
+                        "applications": [
+                            {
+                                "name": "CPU"
+                            },
+                            {
+                                "name": "Performance"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{avg(5m)}>1",
+                                "name": "Processor load is too high on {HOST.NAME}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$FREE_DISK_SPACE_MIN}",
+                        "value": "5"
+                    },
+                    {
+                        "macro": "{$MAILQ_MESSAGES_LIMIT}",
+                        "value": "10"
+                    },
+                    {
+                        "macro": "{$MAILQ_MESSAGES_LIMIT_RCMX}",
+                        "value": "200"
+                    },
+                    {
+                        "macro": "{$MAILQ_MESSAGES_LIMIT_SUM1MX}",
+                        "value": "1500"
+                    },
+                    {
+                        "macro": "{$SEM_ACT_SET_RATIO}",
+                        "value": "0.9"
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "name": "System performance",
+                        "widgets": [
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "width": "24",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "CPU load",
+                                            "host": "Linux Custom"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "expression": "{Linux Custom:linux.activesemsetscount.avg(5m)}/{Linux Custom:linux.kernel.sem.set.last()}>{$SEM_ACT_SET_RATIO}",
+                "name": "Count of free semaphore sets is too small",
+                "priority": "AVERAGE"
+            }
+        ],
+        "graphs": [
+            {
+                "name": "CPU load",
+                "ymin_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "color": "009900",
+                        "item": {
+                            "host": "Linux Custom",
+                            "key": "system.cpu.load[percpu,avg1]"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

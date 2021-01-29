@@ -1,0 +1,1253 @@
+{
+    "zabbix_export": {
+        "version": "5.2",
+        "date": "2020-11-09T10:54:23Z",
+        "groups": [
+            {
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "template": "Apache-scale by Zabbix agent",
+                "name": "Apache-scale by Zabbix agent",
+                "description": "Get metrics from mod_status module using HTTP agent.\nhttps://httpd.apache-scale.org/docs/current/mod/mod_status.html\n\nYou can discuss this template or leave feedback on our forum https://www.zabbix.com/forum/zabbix-suggestions-and-feedback/384764-discussion-thread-for-official-zabbix-template-apache\n\nTemplate tooling version used: 0.33",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "applications": [
+                    {
+                        "name": "Apache-scale"
+                    },
+                    {
+                        "name": "Zabbix raw items"
+                    }
+                ],
+                "items": [
+                    {
+                        "name": "Apache-scale: Total bytes",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.bytes",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "B",
+                        "description": "Total bytes served",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$[\"Total kBytes\"]"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Bytes per second",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.bytes.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "Bps",
+                        "description": "Calculated as change rate for 'Total bytes' stat.\nBytesPerSec is not used, as it counts average since last Apache server start.",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$[\"Total kBytes\"]"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Total requests",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.requests",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "A total number of accesses",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$[\"Total Accesses\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Requests per second",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.requests.rate",
+                        "delay": "0",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "description": "Calculated as change rate for 'Total requests' stat.\nReqPerSec is not used, as it counts average since last Apache server start.",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$[\"Total Accesses\"]"
+                                ]
+                            },
+                            {
+                                "type": "CHANGE_PER_SECOND",
+                                "parameters": [
+                                    ""
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Uptime",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.uptime",
+                        "delay": "0",
+                        "history": "7d",
+                        "units": "uptime",
+                        "description": "Service uptime in seconds",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.ServerUptimeSeconds"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{last()}<10m",
+                                "name": "Apache-scale: has been restarted (uptime < 10m)",
+                                "priority": "INFO",
+                                "description": "Uptime is less than 10 minutes",
+                                "manual_close": "YES"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Version",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.version",
+                        "delay": "0",
+                        "history": "7d",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Service version",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Server"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "1d"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        },
+                        "triggers": [
+                            {
+                                "expression": "{diff()}=1 and {strlen()}>0",
+                                "recovery_mode": "NONE",
+                                "name": "Apache-scale: Version has changed (new version: {ITEM.VALUE})",
+                                "priority": "INFO",
+                                "description": "Apache version has changed. Ack to close.",
+                                "manual_close": "YES"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Workers idle cleanup",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.cleanup",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in cleanup state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.cleanup"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers closing connection",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.closing",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in closing state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.closing"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers DNS lookup",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.dnslookup",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in dnslookup state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.dnslookup"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers finishing",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.finishing",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in finishing state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.finishing"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers keepalive (read)",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.keepalive",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in keepalive state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.keepalive"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers logging",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.logging",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in logging state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.logging"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers reading request",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.reading",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in reading state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.reading"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers sending reply",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.sending",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in sending state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.sending"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers slot with no current process",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.slot",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of slots with no current process",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.slot"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers starting up",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.starting",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in starting state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.starting"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Workers waiting for connection",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers.waiting",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of workers in waiting state",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.Workers.waiting"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Total workers busy",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers_total.busy",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Total number of busy worker threads/processes",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.BusyWorkers"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Total workers idle",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.workers_total.idle",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Total number of idle worker threads/processes",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.IdleWorkers"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        }
+                    },
+                    {
+                        "name": "Apache-scale: Service response time",
+                        "key": "net.tcp.service.perf[http,\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PORT}\"]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "s",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{min(5m)}>{$APACHE_SCALE.RESPONSE_TIME.MAX.WARN}",
+                                "name": "Apache-scale: Service response time is too high (over {$APACHE_SCALE.RESPONSE_TIME.MAX.WARN}s for 5m)",
+                                "priority": "WARNING",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Apache-scale: Process is not running",
+                                        "expression": "{Apache-scale by Zabbix agent:proc.num[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale].last()}=0"
+                                    },
+                                    {
+                                        "name": "Apache-scale: Service is down",
+                                        "expression": "{Apache-scale by Zabbix agent:net.tcp.service[http,\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PORT}\"].last()}=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Service ping",
+                        "key": "net.tcp.service[http,\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PORT}\"]",
+                        "history": "7d",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "valuemap": {
+                            "name": "Service state"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "10m"
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "Apache-scale: Service is down",
+                                "priority": "AVERAGE",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Apache-scale: Process is not running",
+                                        "expression": "{Apache-scale by Zabbix agent:proc.num[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale].last()}=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: CPU utilization",
+                        "key": "proc.cpu.util[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale]",
+                        "history": "7d",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "Process CPU utilization percentage.",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Memory usage (rss)",
+                        "key": "proc.mem[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale,rss]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Resident set size memory used by process in bytes.",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Memory usage (vsize)",
+                        "key": "proc.mem[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale,vsize]",
+                        "history": "7d",
+                        "units": "B",
+                        "description": "Virtual memory size used by process in bytes.",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Number of processes running",
+                        "key": "proc.num[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale]",
+                        "history": "7d",
+                        "applications": [
+                            {
+                                "name": "Apache-scale"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{last()}=0",
+                                "name": "Apache-scale: Process is not running",
+                                "priority": "HIGH"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Apache-scale: Get status",
+                        "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Getting data from a machine-readable version of the Apache status page.\nhttps://httpd.apache-scale.org/docs/current/mod/mod_status.html",
+                        "applications": [
+                            {
+                                "name": "Zabbix raw items"
+                            }
+                        ],
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "// Convert Apache status to JSON\nvar lines = value.split(\"\\n\");\nvar fields = {},\n    output = {},\n    workers = {\n        \"_\": 0, \"S\": 0, \"R\": 0,\n        \"W\": 0, \"K\": 0, \"D\": 0,\n        \"C\": 0, \"L\": 0, \"G\": 0,\n        \"I\": 0, \".\": 0\n    };\n\n// Get all \"Key: Value\" pairs as an object\nfor (var i = 0; i < lines.length; i++) {\n    var line = lines[i].match(/([A-z0-9 ]+): (.*)/);\n    if (line !== null) {\n        output[line[1]] = isNaN(line[2]) ? line[2] : Number(line[2]);\n    }\n}\n\n// For versions without \"ServerUptimeSeconds\" metric\noutput.ServerUptimeSeconds = output.ServerUptimeSeconds || output.Uptime\n \n// Parse \"Scoreboard\" to get worker count\nif (typeof output.Scoreboard === 'string') {\n    for (var i = 0; i < output.Scoreboard.length; i++) {\n        var char = output.Scoreboard[i];\n        workers[char]++;\n    }\n}\n \n// Add worker data to the output\noutput.Workers = {\n    waiting: workers[\"_\"], starting: workers[\"S\"], reading: workers[\"R\"],\n    sending: workers[\"W\"], keepalive: workers[\"K\"], dnslookup: workers[\"D\"],\n    closing: workers[\"C\"], logging: workers[\"L\"], finishing: workers[\"G\"],\n    cleanup: workers[\"I\"], slot: workers[\".\"]\n};\n \n// Return JSON string\nreturn JSON.stringify(output);"
+                                ]
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "expression": "{nodata(30m)}=1",
+                                "name": "Apache-scale: Failed to fetch status page (or no data for 30m)",
+                                "priority": "WARNING",
+                                "description": "Zabbix has not received data for items for the last 30 minutes.",
+                                "manual_close": "YES",
+                                "dependencies": [
+                                    {
+                                        "name": "Apache-scale: Process is not running",
+                                        "expression": "{Apache-scale by Zabbix agent:proc.num[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale].last()}=0"
+                                    },
+                                    {
+                                        "name": "Apache-scale: Service is down",
+                                        "expression": "{Apache-scale by Zabbix agent:net.tcp.service[http,\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PORT}\"].last()}=0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "name": "Event MPM discovery",
+                        "type": "DEPENDENT",
+                        "key": "apache-scale.mpm.event.discovery",
+                        "delay": "0",
+                        "description": "Additional metrics if event MPM is used\nhttps://httpd.apache-scale.org/docs/current/mod/event.html",
+                        "item_prototypes": [
+                            {
+                                "name": "Apache-scale: Bytes per request",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.bytes[per_request{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "value_type": "FLOAT",
+                                "units": "B",
+                                "description": "Average number of client requests per second",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.BytesPerReq"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            },
+                            {
+                                "name": "Apache-scale: Connections async closing",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.connections[async_closing{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "description": "Number of async connections in closing state (only applicable to event MPM)",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.ConnsAsyncClosing"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            },
+                            {
+                                "name": "Apache-scale: Connections async keep alive",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.connections[async_keep_alive{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "description": "Number of async connections in keep-alive state (only applicable to event MPM)",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.ConnsAsyncKeepAlive"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            },
+                            {
+                                "name": "Apache-scale: Connections async writing",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.connections[async_writing{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "description": "Number of async connections in writing state (only applicable to event MPM)",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.ConnsAsyncWriting"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            },
+                            {
+                                "name": "Apache-scale: Connections total",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.connections[total{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "description": "Number of total connections",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.ConnsTotal"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            },
+                            {
+                                "name": "Apache-scale: Number of async processes",
+                                "type": "DEPENDENT",
+                                "key": "apache-scale.process[num{#SINGLETON}]",
+                                "delay": "0",
+                                "history": "7d",
+                                "description": "Number of async processes",
+                                "applications": [
+                                    {
+                                        "name": "Apache-scale"
+                                    }
+                                ],
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.Processes"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                                }
+                            }
+                        ],
+                        "graph_prototypes": [
+                            {
+                                "name": "Apache-scale: Current async connections{#SINGLETON}",
+                                "graph_items": [
+                                    {
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "Apache-scale by Zabbix agent",
+                                            "key": "apache-scale.connections[async_closing{#SINGLETON}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "1",
+                                        "color": "2774A4",
+                                        "item": {
+                                            "host": "Apache-scale by Zabbix agent",
+                                            "key": "apache-scale.connections[async_keep_alive{#SINGLETON}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "2",
+                                        "color": "F63100",
+                                        "item": {
+                                            "host": "Apache-scale by Zabbix agent",
+                                            "key": "apache-scale.connections[async_writing{#SINGLETON}]"
+                                        }
+                                    },
+                                    {
+                                        "sortorder": "3",
+                                        "drawtype": "BOLD_LINE",
+                                        "color": "A54F10",
+                                        "item": {
+                                            "host": "Apache-scale by Zabbix agent",
+                                            "key": "apache-scale.connections[total{#SINGLETON}]"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Apache-scale: Current async processes{#SINGLETON}",
+                                "graph_items": [
+                                    {
+                                        "drawtype": "GRADIENT_LINE",
+                                        "color": "1A7C11",
+                                        "item": {
+                                            "host": "Apache-scale by Zabbix agent",
+                                            "key": "apache-scale.process[num{#SINGLETON}]"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "web.page.get[\"{$APACHE_SCALE.STATUS.HOST}\",\"{$APACHE_SCALE.STATUS.PATH}\",\"{$APACHE_SCALE.STATUS.PORT}\"]"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.ServerMPM"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "return JSON.stringify(value === 'event' ? [{'{#SINGLETON}': ''}] : []);"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$APACHE_SCALE.PROCESS_NAME}",
+                        "value": "httpd",
+                        "description": "Apache server process name"
+                    },
+                    {
+                        "macro": "{$APACHE_SCALE.RESPONSE_TIME.MAX.WARN}",
+                        "value": "10",
+                        "description": "Maximum Apache response time in seconds for trigger expression"
+                    },
+                    {
+                        "macro": "{$APACHE_SCALE.STATUS.HOST}",
+                        "value": "127.0.0.1",
+                        "description": "Hostname or IP address of the Apache status page"
+                    },
+                    {
+                        "macro": "{$APACHE_SCALE.STATUS.PATH}",
+                        "value": "server-status?auto",
+                        "description": "The URL path"
+                    },
+                    {
+                        "macro": "{$APACHE_SCALE.STATUS.PORT}",
+                        "value": "809",
+                        "description": "The port of Apache status page"
+                    }
+                ],
+                "dashboards": [
+                    {
+                        "name": "Apache performance",
+                        "widgets": [
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Apache-scale: Requests per second",
+                                            "host": "Apache-scale by Zabbix agent"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "x": "12",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Apache-scale: Workers total",
+                                            "host": "Apache-scale by Zabbix agent"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "y": "5",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Apache-scale: Current async connections{#SINGLETON}",
+                                            "host": "Apache-scale by Zabbix agent"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_PROTOTYPE",
+                                "x": "12",
+                                "y": "5",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "columns",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "rows",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "type": "GRAPH_PROTOTYPE",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Apache-scale: Current async processes{#SINGLETON}",
+                                            "host": "Apache-scale by Zabbix agent"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "GRAPH_CLASSIC",
+                                "y": "10",
+                                "width": "12",
+                                "height": "5",
+                                "fields": [
+                                    {
+                                        "type": "INTEGER",
+                                        "name": "source_type",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "type": "GRAPH",
+                                        "name": "graphid",
+                                        "value": {
+                                            "name": "Apache-scale: Worker states",
+                                            "host": "Apache-scale by Zabbix agent"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "name": "Apache-scale: Memory usage",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "proc.mem[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale,vsize]"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "proc.mem[\"{$APACHE_SCALE.PROCESS_NAME}\",,,httpd-scale,rss]"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Apache-scale: Requests per second",
+                "graph_items": [
+                    {
+                        "drawtype": "GRADIENT_LINE",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.requests.rate"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Apache-scale: Worker states",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.dnslookup"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.cleanup"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.logging"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "A54F10",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.reading"
+                        }
+                    },
+                    {
+                        "sortorder": "4",
+                        "color": "FC6EA3",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.sending"
+                        }
+                    },
+                    {
+                        "sortorder": "5",
+                        "color": "6C59DC",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.starting"
+                        }
+                    },
+                    {
+                        "sortorder": "6",
+                        "color": "AC8C14",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.closing"
+                        }
+                    },
+                    {
+                        "sortorder": "7",
+                        "color": "611F27",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.finishing"
+                        }
+                    },
+                    {
+                        "sortorder": "8",
+                        "color": "F230E0",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.keepalive"
+                        }
+                    },
+                    {
+                        "sortorder": "9",
+                        "color": "FFAD40",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.slot"
+                        }
+                    },
+                    {
+                        "sortorder": "10",
+                        "color": "40CDFF",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers.waiting"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Apache-scale: Workers total",
+                "type": "STACKED",
+                "graph_items": [
+                    {
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers_total.busy"
+                        }
+                    },
+                    {
+                        "sortorder": "1",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Apache-scale by Zabbix agent",
+                            "key": "apache-scale.workers_total.idle"
+                        }
+                    }
+                ]
+            }
+        ],
+        "value_maps": [
+            {
+                "name": "Service state",
+                "mappings": [
+                    {
+                        "value": "0",
+                        "newvalue": "Down"
+                    },
+                    {
+                        "value": "1",
+                        "newvalue": "Up"
+                    }
+                ]
+            }
+        ]
+    }
+}
